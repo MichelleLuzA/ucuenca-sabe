@@ -1,0 +1,18 @@
+# === Escudo de Seguridad Medallion ===
+data/
+data/bronze/
+data/silver/
+data/gold/
+
+# === Bloqueo de archivos de datos por extensión ===
+*.xlsx
+*.csv
+*.parquet
+*.sav
+
+# === Archivos del Sistema e IDEs ===
+.ipynb_checkpoints/
+__pycache__/
+*.pyc
+.vscode/
+.idea/
