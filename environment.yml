@@ -10,8 +10,9 @@ dependencies:
   - pandas=2.2.2
   - numpy=1.26.4
   - openpyxl=3.1.2
-  - pyarrow=15.0.0
-  
+  - pyarrow
+  - matplotlib=3.8.0
+  - seaborn
   # Fuzzy Matching (CRÍTICO para DSpace)
   - python-levenshtein=0.25.0
   
