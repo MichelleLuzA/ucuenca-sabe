@@ -1,0 +1,31 @@
+name: ucuenca-sabe
+channels:
+  - conda-forge
+  - defaults
+dependencies:
+  # Lenguaje base (versión fija para reproducibilidad)
+  - python=3.11.9
+  
+  # Core Data Processing (versiones fijas)
+  - pandas=2.2.2
+  - numpy=1.26.4
+  - openpyxl=3.1.2
+  - pyarrow=15.0.0
+  
+  # Fuzzy Matching (CRÍTICO para DSpace)
+  - python-levenshtein=0.25.0
+  
+  # Jupyter para VS Code (Quitamos el meta-paquete jupyter para aligerar)
+  - ipykernel=6.29.4
+  
+  # Utilidades esenciales
+  - python-dotenv=1.0.1
+  - pyyaml=6.0.1
+  - tqdm=4.66.2  # Excelente para ver la barra de progreso del Fuzzy Matching
+  
+  # pip para paquetes no disponibles en conda
+  - pip=24.0
+  
+  # Paquetes solo via pip
+  - pip:
+    - thefuzz==0.22.1  # Reemplaza por completo a fuzzywuzzy
