@@ -47,15 +47,18 @@ class Config:
     DSPACE_FILE = BRONZE_INTERNAS / "BIBLIOTECA_DSPACE.xlsx"
     
     # ==========================================
-    # ARCHIVOS DE SALIDA (SILVER)
+    # ARCHIVOS DE SALIDA SANEADOS (SILVER)
     # ==========================================
     CATRASTRO_DOCENTES = SILVER_DIR / "catastro_docentes.parquet"
-    PRODUCCION_DSPACE = SILVER_DIR / "produccion_dspace.parquet"
-    TESIS_DSPACE = SILVER_DIR / "tesis_dspace.parquet"
+    # 2. Las tres vertientes independientes de la Biblioteca
+    TESIS_SILVER = SILVER_DIR / "tesis_silver.parquet"
+    ARTICULOS_SILVER = SILVER_DIR / "articulos_silver.parquet"
+    PUBLICACIONES_SILVER = SILVER_DIR / "publicaciones_silver.parquet"
     
     # ==========================================
     # ARCHIVOS GOLD
     # ==========================================
+    PRODUCCION_DSPACE = GOLD_DIR / "experto_produccion_consolidado.parquet"
     KPI_RECTORADO = GOLD_DIR / "kpi_rectorado.csv"
     
     # ==========================================
