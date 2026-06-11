@@ -36,6 +36,7 @@ class Config:
     BRONZE_DIR = DATA_DIR / 'bronze'
     BRONZE_INTERNAS = BRONZE_DIR / 'internas'
     BRONZE_EXTERNAS = BRONZE_DIR / 'externas'
+    BRONZE_INVESTIGACION = BRONZE_DIR / 'investigacion'
     SILVER_DIR = DATA_DIR / 'silver'
     GOLD_DIR = DATA_DIR / 'gold'
     
@@ -45,6 +46,9 @@ class Config:
     GTH_FILE = BRONZE_INTERNAS / "MATRIZ_ENVIADA_2.xlsx"
     ANALITICA_FILE = BRONZE_INTERNAS / "docentes_titulo_unesco.xlsx"
     DSPACE_FILE = BRONZE_INTERNAS / "BIBLIOTECA_DSPACE.xlsx"
+    INVESTIGACION_FILE = BRONZE_INVESTIGACION / "investigadores_ucuenca.xlsx"
+    ORGANIZACIONES_BRONZE = BRONZE_INVESTIGACION / "organizaciones_raw.json"
+    INVESTIGADORES_BRONZE = BRONZE_INVESTIGACION / "investigadores_raw.csv"
     
     # ==========================================
     # ARCHIVOS DE SALIDA SANEADOS (SILVER)
@@ -54,6 +58,7 @@ class Config:
     TESIS_SILVER = SILVER_DIR / "tesis_silver.parquet"
     ARTICULOS_SILVER = SILVER_DIR / "articulos_silver.parquet"
     PUBLICACIONES_SILVER = SILVER_DIR / "publicaciones_silver.parquet"
+    INVESTIGADORES_SILVER = SILVER_DIR / "investigadores.parquet"
     
     # ==========================================
     # ARCHIVOS GOLD

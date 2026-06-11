@@ -2,7 +2,6 @@
 data/
 data/bronze/
 data/silver/
-data/gold/
 
 # === Bloqueo de archivos de datos por extensión ===
 *.xlsx
