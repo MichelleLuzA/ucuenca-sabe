@@ -62,12 +62,12 @@ for page_num in range(1, 9):
     if page_num == 1:
         print("\n⏳ ESPERA MANUAL DE 60 SEGUNDOS")
         print("👉 Resuelve el CAPTCHA visualmente si aparece")
-        for i in range(60, 0, -10):
+        for i in range(40, 0, -10):
             print(f"   ... {i} segundos restantes")
             time.sleep(10)
     else:
-        print("⏳ Esperando 10 segundos...")
-        time.sleep(10)
+        print("⏳ Esperando 5 segundos...")
+        time.sleep(5)
     
     # Verificar error 403
     page_text = driver.page_source
@@ -150,11 +150,7 @@ df.to_excel(bronze_excel, index=False)
 
 # Guardar en SILVER (datos procesados)
 silver_parquet = config.SILVER_DIR / "investigadores.parquet"
-silver_csv = config.SILVER_DIR / "investigadores.csv"
-
 df.to_parquet(silver_parquet, index=False)
-df.to_csv(silver_csv, index=False, encoding='utf-8-sig')
-
 print("\n" + "="*60)
 print("RESULTADOS FINALES")
 print("="*60)
@@ -167,7 +163,6 @@ print(f"   📋 JSON:  {bronze_json}")
 
 print(f"\n📁 Archivos guardados en SILVER:")
 print(f"   🗄️ Parquet: {silver_parquet}")
-print(f"   📄 CSV:     {silver_csv}")
 
 if len(df) > 0:
     print("\n📊 TOP 5 FACULTADES:")
