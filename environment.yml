@@ -19,14 +19,18 @@ dependencies:
   # Jupyter para VS Code (Quitamos el meta-paquete jupyter para aligerar)
   - ipykernel=6.29.4
   
+  
   # Utilidades esenciales
   - python-dotenv=1.0.1
   - pyyaml=6.0.1
   - tqdm=4.66.2  # Excelente para ver la barra de progreso del Fuzzy Matching
-  
+  - nest-asyncio=1.5.8  # Para evitar problemas de event loop en Jupyter
   # pip para paquetes no disponibles en conda
   - pip=24.0
   
   # Paquetes solo via pip
   - pip:
     - thefuzz==0.22.1  # Reemplaza por completo a fuzzywuzzy
+    - python-Levenshtein==0.25.0  # Asegura que la versión de python-Levenshtein sea compatible con thefuzz
+    - playwright==1.40.0  # Para scraping de datos adicionales si es necesario
+    - openai==1.0.0  # Para integración con modelos de lenguaje si
