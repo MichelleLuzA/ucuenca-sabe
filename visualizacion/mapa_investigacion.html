@@ -1,0 +1,883 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grupos de Investigación · Universidad de Cuenca</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        :root {
+            --bg: #F8F9FA; --primary: #003156; --accent: #A51008;
+            --gray: #6F6F6F; --light-gray: #DADADA; --text: #111111; --white: #FFFFFF;
+            --dpe-gold: #B8860B;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background: var(--bg); color: var(--text);
+            overflow: hidden; height: 100vh;
+            display: flex; flex-direction: column; user-select: none;
+        }
+        header {
+            text-align: center; padding: 18px 16px 6px; flex-shrink: 0; z-index: 10;
+        }
+        header h1 { font-size: 24px; font-weight: 300; color: var(--primary); letter-spacing: 2px; text-transform: uppercase; }
+        header p { font-size: 10px; font-weight: 700; color: var(--gray); letter-spacing: 3px; text-transform: uppercase; }
+        .total-inv { font-size: 11px; font-weight: 600; color: var(--gray); margin-top: 4px; letter-spacing: 1px; }
+        .total-inv span { color: var(--primary); font-weight: 700; }
+        #stats-panel {
+            position: absolute; top: 100px; left: 50%; transform: translateX(-50%);
+            display: flex; background: var(--white); border: 1px solid var(--light-gray);
+            border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.06);
+            z-index: 20; opacity: 0; transition: all 0.5s ease; pointer-events: none; overflow: hidden;
+        }
+        #stats-panel.visible { opacity: 1; pointer-events: auto; }
+        #stats-panel .stat { text-align: center; padding: 12px 22px; }
+        #stats-panel .stat:not(:last-child) { border-right: 1px solid var(--light-gray); }
+        #stats-panel .stat .number { font-size: 22px; font-weight: 700; color: var(--primary); line-height: 1; }
+        #stats-panel .stat .label { font-size: 9px; font-weight: 700; color: var(--gray); text-transform: uppercase; letter-spacing: 1px; margin-top: 3px; }
+        
+        /* CONTENEDOR PRINCIPAL QUE ENVUELVE SVG + DPE */
+        #main-wrapper {
+            flex: 1; display: flex; flex-direction: column; align-items: center;
+            justify-content: center; position: relative; overflow: hidden; padding: 16px;
+        }
+        main { width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; }
+        main svg { width: 100%; height: 100%; max-width: 1000px; max-height: 70vh; }
+        
+        /* DPE BADGE FLOTANTE - Paralelo a los vicerrectorados */
+        #dpe-flotante {
+            position: absolute; bottom: 60px; left: 50%; transform: translateX(-50%);
+            z-index: 15; opacity: 1; transition: opacity 0.5s ease;
+            pointer-events: none; /* No interfiere con clics en el mapa */
+        }
+        #dpe-flotante.oculto { opacity: 0; }
+        .dpe-badge {
+            display: inline-flex; flex-direction: column; align-items: center; gap: 4px;
+            padding: 10px 28px;
+            background: var(--white);
+            border: 2px dashed var(--dpe-gold);
+            border-radius: 50px;
+            box-shadow: 0 4px 16px rgba(184,134,11,0.08);
+            text-align: center;
+        }
+        .dpe-badge .dpe-title {
+            font-size: 12px; font-weight: 700; color: var(--dpe-gold);
+            letter-spacing: 1px; text-transform: uppercase;
+        }
+        .dpe-badge .dpe-sub {
+            font-size: 9px; color: var(--gray); font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+        
+        #instruction {
+            position: absolute; bottom: 12px; left: 50%; transform: translateX(-50%);
+            font-size: 11px; color: var(--gray); font-weight: 500; letter-spacing: 1px;
+            transition: opacity 0.4s; pointer-events: none; z-index: 5;
+        }
+        /* PIE DE PÁGINA */
+        footer {
+            display: flex; flex-direction: column; align-items: center; gap: 10px;
+            padding-bottom: 16px; flex-shrink: 0; z-index: 10;
+        }
+        /* BREADCRUMB CENTRADO Y COMPACTO */
+        #breadcrumb {
+            background: var(--white); border: 1px solid var(--light-gray); border-radius: 30px;
+            padding: 8px 20px;
+            display: inline-flex;
+            align-items: center; gap: 2px;
+            font-size: 11px; font-weight: 700; color: var(--gray);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.04);
+            max-width: fit-content;
+            margin: 0 auto;
+        }
+        #breadcrumb button {
+            background: none; border: none; font-size: 11px; font-weight: 600; color: var(--gray);
+            cursor: pointer; padding: 4px 8px; border-radius: 12px; transition: all 0.2s; font-family: inherit;
+            white-space: nowrap;
+        }
+        #breadcrumb button:hover { color: var(--primary); background: rgba(0,49,86,0.04); }
+        #breadcrumb button.current { color: var(--primary); }
+        #breadcrumb .sep { color: var(--light-gray); pointer-events: none; }
+        /* HUD INFERIOR SIMÉTRICO */
+        .bottom-hud {
+            display: flex; justify-content: center; align-items: center; gap: 30px;
+            padding: 8px 20px; width: 100%; max-width: 1000px; margin: 0 auto;
+        }
+        .hud-badge {
+            display: flex; align-items: center; gap: 8px; padding: 8px 18px;
+            background: var(--white); border: 1px solid var(--light-gray); border-radius: 50px;
+            font-size: 11px; color: var(--gray); box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+        .hud-badge .hud-label { font-weight: 700; color: var(--primary); }
+        .hud-badge .hud-text { font-weight: 500; }
+        .hud-right .hud-text { color: var(--accent); }
+        /* SIDEBAR */
+        #sidebar {
+            position: fixed; top: 0; right: 0; height: 100%; width: 300px;
+            background: var(--white); border-left: 1px solid var(--light-gray);
+            box-shadow: -8px 0 30px rgba(0,0,0,0.08); transform: translateX(100%);
+            transition: transform 0.4s ease; z-index: 50; display: flex; flex-direction: column;
+        }
+        #sidebar.open { transform: translateX(0); }
+        #sidebar-header {
+            padding: 20px; border-bottom: 1px solid var(--light-gray);
+            display: flex; justify-content: space-between; align-items: flex-start; background: var(--bg);
+        }
+        #sidebar-header h3 { font-size: 14px; font-weight: 700; color: var(--primary); padding-right: 8px; }
+        #sidebar-header button { background: none; border: none; font-size: 22px; color: var(--gray); cursor: pointer; line-height: 1; }
+        #sidebar-body { padding: 20px; overflow-y: auto; flex: 1; }
+        #sidebar-body p { font-size: 10px; font-weight: 700; color: var(--gray); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 12px; }
+        #sidebar-body ul { list-style: none; }
+        #sidebar-body li {
+            padding: 10px 12px; background: #F8F9FA; border: 1px solid var(--light-gray);
+            border-radius: 8px; margin-bottom: 6px; font-size: 13px; font-weight: 500;
+            display: flex; align-items: center; gap: 8px;
+        }
+        /* TOOLTIP */
+        #tooltip {
+            position: absolute; opacity: 0; pointer-events: none; background: var(--white);
+            border: 1px solid var(--light-gray); border-radius: 8px; padding: 10px 14px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1); z-index: 100; font-size: 12px; transition: opacity 0.15s;
+        }
+        #tooltip .tt-name { font-weight: 700; color: var(--primary); margin-bottom: 2px; }
+        #tooltip .tt-count { color: var(--gray); font-weight: 600; }
+        @media (max-width: 768px) {
+            header h1 { font-size: 20px; }
+            #stats-panel .stat { padding: 10px 14px; }
+            #stats-panel .stat .number { font-size: 18px; }
+            #sidebar { width: 260px; }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Grupos de Investigación</h1>
+        <p>Universidad de Cuenca · Ecuador</p>
+        <p class="total-inv">Investigadores únicos en el catálogo: <span>375</span></p>
+    </header>
+    <div id="stats-panel">
+        <div class="stat"><div class="number" id="stat-unidades">-</div><div class="label" id="stat-label-unidades">Unidades</div></div>
+        <div class="stat"><div class="number" id="stat-grupos">-</div><div class="label">Grupos</div></div>
+        <div class="stat"><div class="number" id="stat-investigadores">-</div><div class="label">Investigadores</div></div>
+    </div>
+    <div id="main-wrapper">
+        <main>
+            <svg id="canvas"></svg>
+        </main>
+        <!-- DPE: Badge flotante sobre el área del mapa, visible solo en vista raíz -->
+        <div id="dpe-flotante">
+            <div class="dpe-badge">
+                <div class="dpe-title">⚡ Dirección de Proyectos Estratégicos</div>
+                <div class="dpe-sub">Unidad Transversal │ Coordinación inter‑vicerrectorados │ Apoyo a formulación de proyectos</div>
+            </div>
+        </div>
+        <div id="instruction">Haz clic en un círculo para explorar</div>
+    </div>
+    <footer>
+        <div id="breadcrumb"><button class="current">Universidad de Cuenca</button></div>
+        <div id="bottom-hud" class="bottom-hud">
+            <div class="hud-badge hud-left">
+                <span class="hud-label">Fuente:</span>
+                <span class="hud-text">Pure, Scopus & Elsevier Fingerprint Engine™ │ Vicerrectorado de Investigación</span>
+            </div>
+            <div class="hud-badge hud-right">
+                <span class="hud-label">Elaborado por:</span>
+                <span class="hud-text">Karen Michelle Luzuriaga</span>
+            </div>
+        </div>
+    </footer>
+    <div id="sidebar">
+        <div id="sidebar-header"><h3 id="sidebar-title">Grupo</h3><button id="close-sidebar">&times;</button></div>
+        <div id="sidebar-body"><p>Investigadores del Grupo</p><ul id="sidebar-list"></ul></div>
+    </div>
+    <div id="tooltip"></div>
+    <script id="csv-data" type="text/csv">
+investigador;grupo_investigacion;Vicerrectorado;Unidad_Investigacion
+Cristian Gustavo Abad Coronel, PhD;Odontología Digital y Materiales CAD/CAM;Vicerrectorado Académico;Facultad de Odontología
+Manuel Estuardo Bravo Calderon;Odontología Digital y Materiales CAD/CAM;Vicerrectorado Académico;Facultad de Odontología
+Cristian Gustavo Abad Coronel, PhD;Periodoncia e implantología oral (GIPIO);Vicerrectorado Académico;Facultad de Odontología
+Jacinto Jose Alvarado Cordero;Periodoncia e implantología oral (GIPIO);Vicerrectorado Académico;Facultad de Odontología
+Fausto David Acurio Paez, PhD;Ciudad Patrimonio Mundial;Vicerrectorado Académico;Facultad de Arquitectura y Urbanismo
+Jaime Sebastian Astudillo Cordero;Ciudad Patrimonio Mundial;Vicerrectorado Académico;Facultad de Arquitectura y Urbanismo
+Monica Patricia Abad Celleri, PhD;EFL Teacher Education;Vicerrectorado de Investigación e Innovación;Departamento de Educación
+Juanita Catalina Argudo Serrano, PhD;EFL Teacher Education;Vicerrectorado de Investigación e Innovación;Departamento de Educación
+Jaime Sebastian Astudillo Cordero;Entorno Construido Sostenible (ECOS);Vicerrectorado Académico;Facultad de Arquitectura y Urbanismo
+Monica Patricia Abad Celleri, PhD;Lenguaje, culturas y representaciones;Vicerrectorado Académico;Facultad de Filosofía, Letras y Ciencias de la Educación
+Juanita Catalina Argudo Serrano, PhD;Lenguaje, culturas y representaciones;Vicerrectorado Académico;Facultad de Filosofía, Letras y Ciencias de la Educación
+Sandra Leonor Cabrera Moreno;Lenguaje, culturas y representaciones;Vicerrectorado Académico;Facultad de Filosofía, Letras y Ciencias de la Educación
+Ana Maria Calle Calle, PhD;Lenguaje, culturas y representaciones;Vicerrectorado Académico;Facultad de Filosofía, Letras y Ciencias de la Educación
+Yulissa Raquel Abad Salinas;Biomateriales y Tecnologías Dentales Aplicadas;Vicerrectorado Académico;Facultad de Odontología
+Juan Pablo Carvallo Ochoa;PROYEKTA;Vicerrectorado Académico;Facultad de Arquitectura y Urbanismo
+Yulissa Raquel Abad Salinas;Rehabilitación Oral (GIRO);Vicerrectorado Académico;Facultad de Odontología
+Wilson Daniel Bravo Torres;Rehabilitación Oral (GIRO);Vicerrectorado Académico;Facultad de Odontología
+Jaime Asdrubal Bojorque Iñeguez, PhD;Territorium;Vicerrectorado Académico;Facultad de Arquitectura y Urbanismo
+Sandra Victoria Abril Ulloa, PhD;Salud pública, alimentación y actividad física en el ciclo de la vida;Vicerrectorado Académico;Facultad de Ciencias Médicas
+Fausto David Acurio Paez, PhD;Salud pública, alimentación y actividad física en el ciclo de la vida;Vicerrectorado Académico;Facultad de Ciencias Médicas
+Xavier Ricardo Cardenas Haro, PhD;VirtualTech;Vicerrectorado Académico;Facultad de Arquitectura y Urbanismo
+Sandra Victoria Abril Ulloa, PhD;Tecnologías aplicadas en Salud;Vicerrectorado Académico;Facultad de Ingeniería
+David Ricardo Achig Balarezo, PhD;Salud Intercultural;Vicerrectorado Académico;Facultad de Ciencias Médicas
+Galo Bernardo Carrion Andrade;MediaLab: Arte, Diseño y Tecnología;Vicerrectorado Académico;Facultad de Artes
+Ivanna Solmayra Agreda Orellana;Sin grupo asignado;Vicerrectorado Académico;Facultad de Ciencias Médicas
+Hernan Marcelo Aguirre Bermeo, PhD;Sin grupo asignado;Vicerrectorado Académico;Facultad de Ciencias Médicas
+Yralis Juanita Alcala Aristimuño;Sin grupo asignado;Vicerrectorado Académico;Facultad de Ciencias Médicas
+Luz Maria Ayavaca Tapia;Sin grupo asignado;Vicerrectorado Académico;Facultad de Ciencias Médicas
+Luis Arturo Carpio Rodas;Sin grupo asignado;Vicerrectorado Académico;Facultad de Ciencias Médicas
+Maria Gabriela Aguilar Feijoo, PhD;Sexualidad, género y educación sexual (HUMSEX);Vicerrectorado de Investigación e Innovación;Departamento de Educación
+Jessica Ercilia Castillo Nuñez, PhD;Sexualidad, género y educación sexual (HUMSEX);Vicerrectorado de Investigación e Innovación;Departamento de Educación
+Patricio Salvador Castro Quezada, PhD;Biotecnología agropecuaria;Vicerrectorado Académico;Facultad de Ciencias Agropecuarias
+Victor Gerardo Aguilar Feijo, PhD;Economía Regional;Vicerrectorado de Investigación e Innovación;Departamento de Economía, Empresa y Desarrollo Sostenible
+Pablo Anibal Beltran Romero;Economía Regional;Vicerrectorado de Investigación e Innovación;Departamento de Economía, Empresa y Desarrollo Sostenible
+Ramón Patricio Cárdenas Jaramillo;Economía Regional;Vicerrectorado de Investigación e Innovación;Departamento de Economía, Empresa y Desarrollo Sostenible
+Luis Eduardo Ayala Guanga, PhD;Biotecnología de la Reproducción Animal;Vicerrectorado Académico;Facultad de Ciencias Agropecuarias
+Victor Gerardo Aguilar Feijo, PhD;Water Law and Management;Vicerrectorado de Investigación e Innovación;Departamento de Economía, Empresa y Desarrollo Sostenible
+Hugo Alberto Cedillo Tapia;Ecología Forestal, Agroecosistemas y Silvopasturas en Sistemas Ganaderos.;Vicerrectorado Académico;Facultad de Ciencias Agropecuarias
+Juan Carlos Aguirre Quezada, PhD;Acompañamiento Organizaciónal al Desarrollo (ACORDES);Vicerrectorado de Investigación e Innovación;Departamento de Economía, Empresa y Desarrollo Sostenible
+Nubia Gabriela Alava Atiencie, PhD;Acompañamiento Organizaciónal al Desarrollo (ACORDES);Vicerrectorado de Investigación e Innovación;Departamento de Economía, Empresa y Desarrollo Sostenible
+Jose Efrain Astudillo Banegas, PhD;Acompañamiento Organizaciónal al Desarrollo (ACORDES);Vicerrectorado de Investigación e Innovación;Departamento de Economía, Empresa y Desarrollo Sostenible
+Juan Carlos Aguirre Quezada, PhD;Empresarial;Vicerrectorado de Investigación e Innovación;Departamento de Economía, Empresa y Desarrollo Sostenible
+Silvana Vanessa Astudillo Duran, PhD;Empresarial;Vicerrectorado de Investigación e Innovación;Departamento de Economía, Empresa y Desarrollo Sostenible
+Jorge Arturo Campoverde Campoverde;Empresarial;Vicerrectorado de Investigación e Innovación;Departamento de Economía, Empresa y Desarrollo Sostenible
+Maria Elena Aucancela Yunganaula;Sanidad animal y salud pública;Vicerrectorado Académico;Facultad de Ciencias Agropecuarias
+Pablo Marcelo Borja Ramon;Suelos y producción;Vicerrectorado Académico;Facultad de Ciencias Agropecuarias
+Angeles Imelda Avecillas Torres;Desarrollo local a través del turismo (PREIT-TOUR);Vicerrectorado Académico;Facultad de Ciencias de la Hospitalidad
+Helder Guillermo Aldas Arcos, PhD;Educación Física, Deporte y Salud (EDFIDYS);Vicerrectorado Académico;Facultad de Filosofía, Letras y Ciencias de la Educación
+Jorge Antonio Barreto Andrade, PhD;Educación Física, Deporte y Salud (EDFIDYS);Vicerrectorado Académico;Facultad de Filosofía, Letras y Ciencias de la Educación
+Cristina Andrea Barzallo Neira, PhD;Turismo, Sostenibilidad y Patrimonio (TUR-Ecuador);Vicerrectorado Académico;Facultad de Ciencias de la Hospitalidad
+Jannet Emperatriz Alvarado Delgado, PhD;Estudios Interculturales (GEI);Vicerrectorado Académico;Facultad de Filosofía, Letras y Ciencias de la Educación
+Maria Teresa Arteaga Auquilla;Estudios Interculturales (GEI);Vicerrectorado Académico;Facultad de Filosofía, Letras y Ciencias de la Educación
+Freddy Patricio Cabrera Ortiz;Estudios Interculturales (GEI);Vicerrectorado Académico;Facultad de Filosofía, Letras y Ciencias de la Educación
+Jose Luis Alvarez Vasquez;Sin grupo asignado;Vicerrectorado Académico;Facultad de Odontología
+Diego Mauricio Bravo Calderon, PhD;Sin grupo asignado;Vicerrectorado Académico;Facultad de Odontología
+Leonardo Flavio Cabrera Maldonado;Sin grupo asignado;Vicerrectorado Académico;Facultad de Odontología
+Fernanda De Lourdes Cardenas Vidal;Sin grupo asignado;Vicerrectorado Académico;Facultad de Odontología
+Lourdes Ximena Alvarez Palomeque;Ingeniería Industrial e Innovación (GI3);Vicerrectorado de Investigación e Innovación;Departamento de Química Aplicada y Sistemas de Producción
+Milton Francisco Barragan Landy, PhD;Ingeniería Industrial e Innovación (GI3);Vicerrectorado de Investigación e Innovación;Departamento de Química Aplicada y Sistemas de Producción
+Manuel Alfredo Campoverde Cisneros, PhD;Inmuno-reumatología;Vicerrectorado Académico;Facultad de Ciencias Médicas
+Oscar Patricio Alvear Alvear, PhD;GSigma – Grupo de Sistemas Inteligentes para la Gestión, Modelado y Aprendizaje;Vicerrectorado de Investigación e Innovación;Departamento de Ciencias de la Computación
+Johanna Lucia Campoverde Vizhñay;Neurodesarrollo;Vicerrectorado Académico;Facultad de Ciencias Médicas
+Oscar Patricio Alvear Alvear, PhD;Etnografía Interdisciplinaria (KALEIDOS);Vicerrectorado de Investigación e Innovación;Departamento Interdisciplinario de Espacio y Población
+Silvana Mireya Amoroso Peralta;Sin grupo asignado;Vicerrectorado Académico;Facultad de Artes
+Patricio Ismael Carpio Padilla;Sin grupo asignado;Vicerrectorado Académico;Facultad de Artes
+Augusto Alonso Carrion Ordoñez;Sin grupo asignado;Vicerrectorado Académico;Facultad de Artes
+Dolores Susana Andrade Tenesaca, PhD;Alimentación, Nutrición, Salud y Actividad Física;Vicerrectorado de Investigación e Innovación;Departamento de Biociencias
+Omar Santiago Andrade Guzman;Sin grupo asignado;Vicerrectorado Académico;Facultad de Ciencias Agropecuarias
+Cristina Bernardi Villavicencio, PhD;Sin grupo asignado;Vicerrectorado Académico;Facultad de Ciencias Agropecuarias
+Francisca Burgueño Alcalde, PhD;Salud Mental;Vicerrectorado Académico;Facultad de Ciencias Médicas
+Rodrigo Nicanor Arcentales Carrion;Contabilidad, Finanzas y Tributación (GiCOFT);Vicerrectorado de Investigación e Innovación;Departamento de Economía, Empresa y Desarrollo Sostenible
+Rodrigo Nicanor Arcentales Carrion;Industrial Management and Innovation Research (IMAGINE);Vicerrectorado de Investigación e Innovación;Departamento de Química Aplicada y Sistemas de Producción
+Nancy Eulalia Auquilla Diaz, PhD;Salud Sexual y Reproductiva;Vicerrectorado Académico;Facultad de Ciencias Médicas
+Gabriele Davide Bigoni Ordoñez, PhD;Salud Sexual y Reproductiva;Vicerrectorado Académico;Facultad de Ciencias Médicas
+Wilian Paul Arevalo Cordero, PhD;Sin grupo asignado;Vicerrectorado Académico;Facultad de Ingeniería
+Pablo Andres Barbecho Bautista, PhD;Sin grupo asignado;Vicerrectorado Académico;Facultad de Ingeniería
+Francisco Alexander Arias Pallaroso;Feminismo, Derechos humanos y Tecnología;Vicerrectorado Académico;Facultad de Jurisprudencia y Ciencias Políticas y Sociales
+Irene Priscila Cedillo Orellana, PhD;Feminismo, Derechos humanos y Tecnología;Vicerrectorado Académico;Facultad de Jurisprudencia y Ciencias Políticas y Sociales
+Francisco Alexander Arias Pallaroso;Población y Desarrollo Local Sustentable (PYDLOS);Vicerrectorado de Investigación e Innovación;Departamento Interdisciplinario de Espacio y Población
+William Paul Arias Medina;Procesos Psicológicos Básicos;Vicerrectorado Académico;Facultad de Psicología
+Walter Marcelo Bernal Arellano, PhD;Procesos Psicológicos Básicos;Vicerrectorado Académico;Facultad de Psicología
+Carmen Eulalia Calle Palomeque, PhD;Formación e Innovación Docente (GIFID);Vicerrectorado Académico;Facultad de Filosofía, Letras y Ciencias de la Educación
+Nube Del Rocio Arpi Peñaloza;Sistema Familiar;Vicerrectorado de Investigación e Innovación;Departamento de Educación
+Gabriela Fernanda Balcazar Betancourth;Sistema Familiar;Vicerrectorado de Investigación e Innovación;Departamento de Educación
+Ana Lucia Astudillo Aleman;Calidad del aire y Toxicología medioambiental (CATOx-CEA);Vicerrectorado de Investigación e Innovación;Departamento de Química Aplicada y Sistemas de Producción
+Ana Lucia Astudillo Aleman;Evaluación de Riesgos Ambientales en Sistemas de Producción y Servicios (RISKEN);Vicerrectorado de Investigación e Innovación;Departamento de Química Aplicada y Sistemas de Producción
+Jose Efrain Astudillo Banegas, PhD;Evaluación de Riesgos Ambientales en Sistemas de Producción y Servicios (RISKEN);Vicerrectorado de Investigación e Innovación;Departamento de Química Aplicada y Sistemas de Producción
+Alex Manuel Aviles Añazco, PhD;Evaluación de Riesgos Ambientales en Sistemas de Producción y Servicios (RISKEN);Vicerrectorado de Investigación e Innovación;Departamento de Química Aplicada y Sistemas de Producción
+Ana Lucia Astudillo Aleman;Tecnologías Sostenibles en Calidad y Remediación Ambiental en Agua (TECNOCEA – H2O);Vicerrectorado de Investigación e Innovación;Departamento de Química Aplicada y Sistemas de Producción
+Jose Efrain Astudillo Banegas, PhD;Migración Internacional, Derechos y Políticas;Vicerrectorado Académico;Facultad de Filosofía, Letras y Ciencias de la Educación
+Darwin Fabian Astudillo Salinas, PhD;Electrónica y Control;Vicerrectorado de Investigación e Innovación;Departamento de Ingeniería Eléctrica, Electrónica y Telecomunicaciones
+Darwin Fabian Astudillo Salinas, PhD;Procesamiento Digital de Señales y Comunicaciones;Vicerrectorado de Investigación e Innovación;Departamento de Ingeniería Eléctrica, Electrónica y Telecomunicaciones
+Fabian Manuel Astudillo Riera, PhD;Manejo del Agua y del Suelo (PROMAS);Vicerrectorado de Investigación e Innovación;Departamento de Ingeniería Civil
+Veronica Margarita Carrillo Serrano;Manejo del Agua y del Suelo (PROMAS);Vicerrectorado de Investigación e Innovación;Departamento de Ingeniería Civil
+Marcelo Enrique Cazar Almache;Crecimiento, desarrollo y biología Craneofacial;Vicerrectorado Académico;Facultad de Odontología
+Silvana Vanessa Astudillo Duran, PhD;Gestión Estratégica y de Negocios;Vicerrectorado de Investigación e Innovación;Departamento de Economía, Empresa y Desarrollo Sostenible
+Silvana Vanessa Astudillo Duran, PhD;Infraestructura de Datos Espaciales y Ciudades Inteligentes;Vicerrectorado de Investigación e Innovación;Departamento de Ciencias de la Computación
+Javier Alejandro Avila Larrea;Inteligencia Emocional;Vicerrectorado Académico;Facultad de Psicología
+Maria Marcela Cabrera Velez, PhD;Psicología Clínica y de la Salud;Vicerrectorado Académico;Facultad de Psicología
+Juana Lucia Carrasco Vintimilla;Psicología Clínica y de la Salud;Vicerrectorado Académico;Facultad de Psicología
+Andres Vinicio Auquilla Sangolqui;Gestión del Conocimiento;Vicerrectorado de Investigación e Innovación;Departamento de Ciencias de la Computación
+Elina Maria Avila Ordoñez, PhD;Gestión del Conocimiento;Vicerrectorado de Investigación e Innovación;Departamento de Ciencias de la Computación
+Andres Vinicio Auquilla Sangolqui;Innovación Tecnológica (GIIT);Vicerrectorado de Investigación e Innovación;Departamento de Ciencias de la Computación
+Johanna Lucia Campoverde Vizhñay;Innovación Tecnológica (GIIT);Vicerrectorado de Investigación e Innovación;Departamento de Ciencias de la Computación
+Elina Maria Avila Ordoñez, PhD;Models, Analysis and Simulations Applied to Transport Systems (MAS);Vicerrectorado de Investigación e Innovación;Departamento de Ciencias de la Computación
+Nora Patricia Cazorla Vanegas;Models, Analysis and Simulations Applied to Transport Systems (MAS);Vicerrectorado de Investigación e Innovación;Departamento de Ciencias de la Computación
+Javier Alejandro Avila Larrea;Agroforestería y manejo del paisaje;Vicerrectorado de Investigación e Innovación;Departamento de Recursos Hídricos y Ciencias Ambientales
+Pablo Marcelo Borja Ramon;Agroforestería y manejo del paisaje;Vicerrectorado de Investigación e Innovación;Departamento de Recursos Hídricos y Ciencias Ambientales
+Edgar Antonio Barragan Escandon, PhD;Sistemas de Energía Eléctrica;Vicerrectorado de Investigación e Innovación;Departamento de Ingeniería Eléctrica, Electrónica y Telecomunicaciones
+Pablo Anibal Beltran Romero;Macroeconomía y Desarrollo (GIMADE);Vicerrectorado de Investigación e Innovación;Departamento de Economía, Empresa y Desarrollo Sostenible
+Gina Catalina Bojorque Iñegues, PhD;Educación Matemática;Vicerrectorado de Investigación e Innovación;Departamento de Educación
+Juan Carlos Bernal Reino, PhD;Trayectorias académicas e indicadores educativos;Vicerrectorado de Investigación e Innovación;Departamento de Educación
+Fabian Eugenio Bravo Guerrero;Trayectorias académicas e indicadores educativos;Vicerrectorado de Investigación e Innovación;Departamento de Educación
+Luis Alberto Bernal Sarmiento;Sin grupo asignado;Vicerrectorado Académico;Facultad de Psicología
+Sandra Mercedes Cabrera Arias, PhD;GITEICU – Grupo de Investigación en Tecnología Educativa, Innovación, y Conocimiento en el contexto Universitario.;Vicerrectorado de Investigación e Innovación;Departamento de Educación
+Freddy Patricio Cabrera Ortiz;Políticas Educativas;Vicerrectorado de Investigación e Innovación;Departamento de Educación
+Jaime Asdrubal Bojorque Iñeguez, PhD;Geotecnia vialidad y trasportación (GV&T);Vicerrectorado de Investigación e Innovación;Departamento de Ingeniería Civil
+Juan Eugenio Carrion Monsalve, PhD;Estructuras, sismicidad y materiales (ES&M);Vicerrectorado de Investigación e Innovación;Departamento de Ingeniería Civil
+Veronica Margarita Carrillo Serrano;Ingeniería del Agua y Saneamiento Ambiental (IA&SA);Vicerrectorado de Investigación e Innovación;Departamento de Ingeniería Civil
+Xavier Ricardo Cardenas Haro, PhD;Red Sísmica del Austro;Vicerrectorado de Investigación e Innovación;Departamento de Ingeniería Civil
+Juan Eugenio Carrion Monsalve, PhD;Red Sísmica del Austro;Vicerrectorado de Investigación e Innovación;Departamento de Ingeniería Civil
+Maria Elena Cazar Ramirez, PhD;Biotecnología y Biodiversidad;Vicerrectorado de Investigación e Innovación;Departamento de Química Aplicada y Sistemas de Producción
+Galo Jose Carrillo Rojas, PhD;Energía, Biomasa y Bioenergía;Vicerrectorado de Investigación e Innovación;Departamento de Química Aplicada y Sistemas de Producción
+Natasha Eulalia Cabrera Jara, PhD;Ciudades Sustentables (LlactaLAB);Vicerrectorado de Investigación e Innovación;Departamento Interdisciplinario de Espacio y Población
+Galo Bernardo Carrion Andrade;Ciudades Sustentables (LlactaLAB);Vicerrectorado de Investigación e Innovación;Departamento Interdisciplinario de Espacio y Población
+Galo Jose Carrillo Rojas, PhD;Hidrología y Clima;Vicerrectorado de Investigación e Innovación;Departamento de Recursos Hídricos y Ciencias Ambientales
+Irene Priscila Cedillo Orellana, PhD;Innovación Tecnológica (GIIT);Vicerrectorado de Investigación e Innovación;Departamento de Ciencias de la Computación
+Isabel Cristina Cedillo Quizhpe;Políticas Educativas;Vicerrectorado de Investigación e Innovación;Departamento de Educación
+Rolando Enrique Celleri Alvear, PhD;Hidrología y Clima;Vicerrectorado de Investigación e Innovación;Departamento de Recursos Hídricos y Ciencias Ambientales
+Cinthya Maria Cevallos Ludeña, PhD;Alimentación, Nutrición, Salud y Actividad Física;Vicerrectorado de Investigación e Innovación;Departamento de Biociencias
+Cinthya Maria Cevallos Ludeña, PhD;Cine, Periodismo y Comunicación (CIPEC);Vicerrectorado Académico;Facultad de Filosofía, Letras y Ciencias de la Educación
+Eduardo Jose Chica Martinez, PhD;Biotecnología agropecuaria;Vicerrectorado Académico;Facultad de Ciencias Agropecuarias
+Maria Cristina Chuquiguanga Auquilla;Territorium;Vicerrectorado Académico;Facultad de Arquitectura y Urbanismo
+Ruth Germania Clavijo Castillo, PhD;Políticas Educativas;Vicerrectorado de Investigación e Innovación;Departamento de Educación
+Nelson Albino Cobos Bermeo;Educación Física, Deporte y Salud (EDFIDYS);Vicerrectorado Académico;Facultad de Filosofía, Letras y Ciencias de la Educación
+Nelson Albino Cobos Bermeo;Salud pública, alimentación y actividad física en el ciclo de la vida;Vicerrectorado Académico;Facultad de Ciencias Médicas
+Elsa Gardenia Conforme Zambrano;Sistema Familiar;Vicerrectorado de Investigación e Innovación;Departamento de Educación
+Guillermo Alejandro Cordero Carpio, PhD;Lenguaje, culturas y representaciones;Vicerrectorado Académico;Facultad de Filosofía, Letras y Ciencias de la Educación
+Guillermo Alejandro Cordero Carpio, PhD;Migración Internacional, Derechos y Políticas;Vicerrectorado Académico;Facultad de Filosofía, Letras y Ciencias de la Educación
+Maria Fernanda Cordero Hermida;Psicología Clínica y de la Salud;Vicerrectorado Académico;Facultad de Psicología
+Otilia Vanessa Cordero Ahiman, PhD;Economía Regional;Vicerrectorado de Investigación e Innovación;Departamento de Economía, Empresa y Desarrollo Sostenible
+Otilia Vanessa Cordero Ahiman, PhD;Estudios Sociales de Ciencia y Tecnología;Vicerrectorado de Investigación e Innovación;Departamento de Economía, Empresa y Desarrollo Sostenible
+Claudio Xavier Coronel Rosero;Alimentación, Nutrición, Salud y Actividad Física;Vicerrectorado de Investigación e Innovación;Departamento de Biociencias
+Katherine Tatiana Coronel Pangol, PhD;Empresarial;Vicerrectorado de Investigación e Innovación;Departamento de Economía, Empresa y Desarrollo Sostenible
+Tatiana Gabriela Coronel Sanchez;Sin grupo asignado;Vicerrectorado Académico;Facultad de Ciencias Médicas
+Liena Rosana Corral Maldonado, PhD;Metodologías, Procesos y Prácticas Artísticas;Vicerrectorado Académico;Facultad de Artes
+Diego Estuardo Correa Barahona, PhD;Sin grupo asignado;Vicerrectorado Académico;Facultad de Ingeniería
+Jose Luis Crespo Fajardo, PhD;Sin grupo asignado;Vicerrectorado Académico;Facultad de Artes
+Pablo Andres Crespo Reinoso;Sin grupo asignado;Vicerrectorado Académico;Facultad de Odontología
+Patricio Javier Crespo Sanchez, PhD;Hidrología y Clima;Vicerrectorado de Investigación e Innovación;Departamento de Recursos Hídricos y Ciencias Ambientales
+Jessica Ximena Criollo Bravo;Evaluación de Riesgos Ambientales en Sistemas de Producción y Servicios (RISKEN);Vicerrectorado de Investigación e Innovación;Departamento de Química Aplicada y Sistemas de Producción
+Christian Americo Cruzat Contreras;Nanotecnología Aplicada a Medio Ambiente (N@NO-CEA);Vicerrectorado de Investigación e Innovación;Departamento de Química Aplicada y Sistemas de Producción
+Christian Americo Cruzat Contreras;Tecnologías Sostenibles en Calidad y Remediación Ambiental en Agua (TECNOCEA – H2O);Vicerrectorado de Investigación e Innovación;Departamento de Química Aplicada y Sistemas de Producción
+Wilson Fernando Cueva Vera, PhD;Sin grupo asignado;Vicerrectorado Académico;Facultad de Ciencias Económicas y Administrativas
+Yolanda Patricia Davila Ponton, PhD;Sin grupo asignado;Vicerrectorado Académico;Facultad de Jurisprudencia y Ciencias Políticas y Sociales
+Ana Cristina Delgado Espinoza;Educación Física, Deporte y Salud (EDFIDYS);Vicerrectorado Académico;Facultad de Filosofía, Letras y Ciencias de la Educación
+Jorge Washington Delgado Noboa, PhD;Energía, Biomasa y Bioenergía;Vicerrectorado de Investigación e Innovación;Departamento de Química Aplicada y Sistemas de Producción
+Tania Lorena Delgado Quezada;Sin grupo asignado;Vicerrectorado Académico;Facultad de Psicología
+Silvana Patricia Donoso Moscoso;Alimentación, Nutrición, Salud y Actividad Física;Vicerrectorado de Investigación e Innovación;Departamento de Biociencias
+Maria Elisa Duran Lopez;Biotecnología y Biodiversidad;Vicerrectorado de Investigación e Innovación;Departamento de Química Aplicada y Sistemas de Producción
+Edgar Javier Durán Aguilar;PROYEKTA;Vicerrectorado Académico;Facultad de Arquitectura y Urbanismo
+Jorge Bolivar Dutan Sanango, PhD;Biotecnología de la Reproducción Animal;Vicerrectorado Académico;Facultad de Ciencias Agropecuarias
+Maria Isabel Eljuri Jaramillo;Migración Internacional, Derechos y Políticas;Vicerrectorado Académico;Facultad de Filosofía, Letras y Ciencias de la Educación
+Maria Isabel Eljuri Jaramillo;Turismo, Sostenibilidad y Patrimonio (TUR-Ecuador);Vicerrectorado Académico;Facultad de Ciencias de la Hospitalidad
+Lorena Esperanza Encalada Torres;Salud pública, alimentación y actividad física en el ciclo de la vida;Vicerrectorado Académico;Facultad de Ciencias Médicas
+Lorena Esperanza Encalada Torres;Tecnologías aplicadas en Salud;Vicerrectorado Académico;Facultad de Ingeniería
+Pablo David Encalada Leon, PhD;Sin grupo asignado;Vicerrectorado Académico;Facultad de Artes
+Maria Soledad Escandon Morales;Sin grupo asignado;Vicerrectorado Académico;Facultad de Ciencias Económicas y Administrativas
+Maria Lorena Escudero Duran, PhD;Migración Internacional, Derechos y Políticas;Vicerrectorado Académico;Facultad de Filosofía, Letras y Ciencias de la Educación
+Ximena Elizabeth Espinosa Vasquez;Sin grupo asignado;Vicerrectorado Académico;Facultad de Odontología
+Freddy Edgar Espinoza Figueroa;Desarrollo local a través del turismo (PREIT-TOUR);Vicerrectorado Académico;Facultad de Ciencias de la Hospitalidad
+Jorge Mauricio Espinoza Mejia, PhD;Gestión del Conocimiento;Vicerrectorado de Investigación e Innovación;Departamento de Ciencias de la Computación
+Jorge Mauricio Espinoza Mejia, PhD;Tecnologías aplicadas en Salud;Vicerrectorado Académico;Facultad de Ingeniería
+Juan Leonardo Espinoza Abad, PhD;Sistemas de Energía Eléctrica;Vicerrectorado de Investigación e Innovación;Departamento de Ingeniería Eléctrica, Electrónica y Telecomunicaciones
+Maria Isabel Espinoza Hidrobo;GITEICU – Grupo de Investigación en Tecnología Educativa, Innovación, y Conocimiento en el contexto Universitario.;Vicerrectorado de Investigación e Innovación;Departamento de Educación
+Rene Ernesto Esquivel Gaon;Water Law and Management;Vicerrectorado de Investigación e Innovación;Departamento de Economía, Empresa y Desarrollo Sostenible
+Rene Gustavo Estrella Maldonado, PhD;GSigma – Grupo de Sistemas Inteligentes para la Gestión, Modelado y Aprendizaje;Vicerrectorado de Investigación e Innovación;Departamento de Ciencias de la Computación
+Rene Gustavo Estrella Maldonado, PhD;Gestión del Conocimiento;Vicerrectorado de Investigación e Innovación;Departamento de Ciencias de la Computación
+Tammy Mercedes Fajardo Dack, PhD;EFL Teacher Education;Vicerrectorado de Investigación e Innovación;Departamento de Educación
+Tammy Mercedes Fajardo Dack, PhD;Lenguaje, culturas y representaciones;Vicerrectorado Académico;Facultad de Filosofía, Letras y Ciencias de la Educación
+Maria Monserrath Falconi Abad, PhD;Estudios Interdisciplinarios de Género;Vicerrectorado de Investigación e Innovación;Departamento de Economía, Empresa y Desarrollo Sostenible
+Maria Isabel Farez Plasencia;Economía Regional;Vicerrectorado de Investigación e Innovación;Departamento de Economía, Empresa y Desarrollo Sostenible
+Ximena Angelica Farez Orrego;Salud Intercultural;Vicerrectorado Académico;Facultad de Ciencias Médicas
+Lourdes Karina Farfan Pacheco, PhD;Desarrollo local a través del turismo (PREIT-TOUR);Vicerrectorado Académico;Facultad de Ciencias de la Hospitalidad
+Gonzalo Enrique Flores Juca, PhD;Ciudad, Territorio y Movilidad (CITMOV);Vicerrectorado Académico;Facultad de Arquitectura y Urbanismo
+Gustavo Giovanni Flores Sanchez, PhD;Empresarial;Vicerrectorado de Investigación e Innovación;Departamento de Economía, Empresa y Desarrollo Sostenible
+Pablo Andres Flores Siguenza, PhD;Industrial Management and Innovation Research (IMAGINE);Vicerrectorado de Investigación e Innovación;Departamento de Química Aplicada y Sistemas de Producción
+Paulo Andres Freire Valdiviezo;Etnografía Interdisciplinaria (KALEIDOS);Vicerrectorado de Investigación e Innovación;Departamento Interdisciplinario de Espacio y Población
+Segundo Amador Freire Chaglla;Indicadores Turísticos;Vicerrectorado Académico;Facultad de Ciencias de la Hospitalidad
+Diego Andres Galarza Lucero, PhD;Biotecnología de la Reproducción Animal;Vicerrectorado Académico;Facultad de Ciencias Agropecuarias
+Marcela Alexandra Galarza Torres, PhD;Sin grupo asignado;Vicerrectorado Académico;Facultad de Ciencias de la Hospitalidad
+Maria Teresa Galarza Neira, PhD;Metodologías, Procesos y Prácticas Artísticas;Vicerrectorado Académico;Facultad de Artes
+Fausto Fernando Garcia Avila, PhD;Evaluación de Riesgos Ambientales en Sistemas de Producción y Servicios (RISKEN);Vicerrectorado de Investigación e Innovación;Departamento de Química Aplicada y Sistemas de Producción
+Gabriela Elizabeth Garcia Velez, PhD;Ciudad Patrimonio Mundial;Vicerrectorado Académico;Facultad de Arquitectura y Urbanismo
+Hernan Alfredo Garcia Erazo;Evaluación de Riesgos Ambientales en Sistemas de Producción y Servicios (RISKEN);Vicerrectorado de Investigación e Innovación;Departamento de Química Aplicada y Sistemas de Producción
+Jorge Alejandro Garcia Zumalacarregui, PhD;GeoinfoRmática, Agrociencias y Soluciones Sostenibles (G.R.A.S.S);Vicerrectorado Académico;Facultad de Ciencias Agropecuarias
+Jorge Alejandro Garcia Zumalacarregui, PhD;Saneamiento Ambiental;Vicerrectorado de Investigación e Innovación;Departamento de Recursos Hídricos y Ciencias Ambientales
+Tsai Garcia Perez, PhD;Energía, Biomasa y Bioenergía;Vicerrectorado de Investigación e Innovación;Departamento de Química Aplicada y Sistemas de Producción
+Isabel Gil Gesto, PhD;Feminismo, Derechos humanos y Tecnología;Vicerrectorado Académico;Facultad de Jurisprudencia y Ciencias Políticas y Sociales
+Juan Diego Godoy Chacha;Sin grupo asignado;Vicerrectorado Académico;Facultad de Artes
+Andrea Ximena Gomez Ayora, PhD;Etnografía Interdisciplinaria (KALEIDOS);Vicerrectorado de Investigación e Innovación;Departamento Interdisciplinario de Espacio y Población
+Neli Norma Gonzales Prado;Educación Matemática;Vicerrectorado de Investigación e Innovación;Departamento de Educación
+Pablo Arturo Gonzalez Loyola;Empresarial;Vicerrectorado de Investigación e Innovación;Departamento de Economía, Empresa y Desarrollo Sostenible
+Santiago Renan Gonzalez Martinez, PhD;Monitorización de Salud Estructural;Vicerrectorado Académico;Facultad de Ingeniería
+Santiago Renan Gonzalez Martinez, PhD;Procesamiento Digital de Señales y Comunicaciones;Vicerrectorado de Investigación e Innovación;Departamento de Ingeniería Eléctrica, Electrónica y Telecomunicaciones
+Santiago Renan Gonzalez Martinez, PhD;Red Sísmica del Austro;Vicerrectorado de Investigación e Innovación;Departamento de Ingeniería Civil
+Maria Fernanda Granda Juca, PhD;Ingeniería de Software;Vicerrectorado de Investigación e Innovación;Departamento de Ciencias de la Computación
+Cristian Fernando Guaman Sanchez;VirtualTech;Vicerrectorado Académico;Facultad de Arquitectura y Urbanismo
+Jessica Maritza Guaman Bautista;Sin grupo asignado;Vicerrectorado Académico;Facultad de Ciencias de la Hospitalidad
+Noe Rodrigo Guaman Guachichullca;Industrial Management and Innovation Research (IMAGINE);Vicerrectorado de Investigación e Innovación;Departamento de Química Aplicada y Sistemas de Producción
+Alexandra Elizabeth Guanuchi Quito;Evaluación de Riesgos Ambientales en Sistemas de Producción y Servicios (RISKEN);Vicerrectorado de Investigación e Innovación;Departamento de Química Aplicada y Sistemas de Producción
+Jaime Augusto Guerra Galán;Territorium;Vicerrectorado Académico;Facultad de Arquitectura y Urbanismo
+Jaime Augusto Guerra Galán;PROYEKTA;Vicerrectorado Académico;Facultad de Arquitectura y Urbanismo
+Enmanuel Isidoro Guerrero Quiroz, PhD;Sin grupo asignado;Vicerrectorado Académico;Facultad de Ciencias Médicas
+Guillermo Emilio Guevara Viera;Ecología Forestal, Agroecosistemas y Silvopasturas en Sistemas Ganaderos.;Vicerrectorado Académico;Facultad de Ciencias Agropecuarias
+Raul Victorino Guevara Viera;Ecología Forestal, Agroecosistemas y Silvopasturas en Sistemas Ganaderos.;Vicerrectorado Académico;Facultad de Ciencias Agropecuarias
+Margarita Lucia Guillen Salgado;Estudios Interdisciplinarios de Género;Vicerrectorado de Investigación e Innovación;Departamento de Economía, Empresa y Desarrollo Sostenible
+Margarita Lucia Guillen Salgado;Población y Desarrollo Local Sustentable (PYDLOS);Vicerrectorado de Investigación e Innovación;Departamento Interdisciplinario de Espacio y Población
+Clelia Kathrine Guzman Espinoza;GeoinfoRmática, Agrociencias y Soluciones Sostenibles (G.R.A.S.S);Vicerrectorado Académico;Facultad de Ciencias Agropecuarias
+Sonia Janneth Guzñay Padilla;Formación e Innovación Docente (GIFID);Vicerrectorado Académico;Facultad de Filosofía, Letras y Ciencias de la Educación
+Henrietta Hampel, PhD;Ecología Acuática;Vicerrectorado Académico;Facultad de Ciencias Químicas
+Andres Norberto Haro Haro, PhD;Sin grupo asignado;Vicerrectorado Académico;Facultad de Ciencias Agropecuarias
+Gerardo Esteban Heras Urgiles;English Learning and Acquisition (ELA);Vicerrectorado de Investigación e Innovación;Departamento de Educación
+Maria Augusta Hermida Palacios, PhD;Ciudades Sustentables (LlactaLAB);Vicerrectorado de Investigación e Innovación;Departamento Interdisciplinario de Espacio y Población
+Maria Augusta Hermida Palacios, PhD;PROYEKTA;Vicerrectorado Académico;Facultad de Arquitectura y Urbanismo
+Luis Alberto Herrera Montero, PhD;Ciudad Patrimonio Mundial;Vicerrectorado Académico;Facultad de Arquitectura y Urbanismo
+Cynthia Soledad Hidalgo Camacho;English Learning and Acquisition (ELA);Vicerrectorado de Investigación e Innovación;Departamento de Educación
+Juan Fernando Hidalgo Cordero, PhD;VirtualTech;Vicerrectorado Académico;Facultad de Arquitectura y Urbanismo
+Maria De Lourdes Huiracocha Tutiven, PhD;Neurodesarrollo;Vicerrectorado Académico;Facultad de Ciencias Médicas
+Mirian Sofia Huiracocha Tutiven;Neurodesarrollo;Vicerrectorado Académico;Facultad de Ciencias Médicas
+Mirian Sofia Huiracocha Tutiven;Salud Integral del/la Adolescente;Vicerrectorado Académico;Facultad de Ciencias Médicas
+Israel Sebastian Idrovo Landy, PhD;Etnografía Interdisciplinaria (KALEIDOS);Vicerrectorado de Investigación e Innovación;Departamento Interdisciplinario de Espacio y Población
+Lourdes Eugenia Illescas Peña;Innovación Tecnológica (GIIT);Vicerrectorado de Investigación e Innovación;Departamento de Ciencias de la Computación
+Lourdes Eugenia Illescas Peña;Trayectorias académicas e indicadores educativos;Vicerrectorado de Investigación e Innovación;Departamento de Educación
+Juan Pablo Iñamagua Uyaguari, PhD;Agroforestería y manejo del paisaje;Vicerrectorado de Investigación e Innovación;Departamento de Recursos Hídricos y Ciencias Ambientales
+Gustavo Eduardo Iñiguez Marquez;Sin grupo asignado;Vicerrectorado Académico;Facultad de Ciencias de la Hospitalidad
+Maricruz Fernanda Iñiguez Sanchez;Desarrollo local a través del turismo (PREIT-TOUR);Vicerrectorado Académico;Facultad de Ciencias de la Hospitalidad
+Marco Vinicio Jacome Guzman, PhD;Formación e Innovación Docente (GIFID);Vicerrectorado Académico;Facultad de Filosofía, Letras y Ciencias de la Educación
+Angel Oswaldo Jadan Maza, PhD;Ecología Forestal, Agroecosistemas y Silvopasturas en Sistemas Ganaderos.;Vicerrectorado Académico;Facultad de Ciencias Agropecuarias
+Diana Carolina Jadan Aviles;Industrial Management and Innovation Research (IMAGINE);Vicerrectorado de Investigación e Innovación;Departamento de Química Aplicada y Sistemas de Producción
+Angel Rodrigo Japon Gualan;Estudios Interculturales (GEI);Vicerrectorado Académico;Facultad de Filosofía, Letras y Ciencias de la Educación
+Angel Rodrigo Japon Gualan;Políticas Educativas;Vicerrectorado de Investigación e Innovación;Departamento de Educación
+Lourdes Elizabeth Jara Cobos;Energía, Biomasa y Bioenergía;Vicerrectorado de Investigación e Innovación;Departamento de Química Aplicada y Sistemas de Producción
+Lourdes Elizabeth Jara Cobos;Ingeniería de las Reacciones Químicas, Catálisis y Tecnologías del Medio Ambiente (IRCMA);Vicerrectorado de Investigación e Innovación;Departamento de Biociencias
+Fanny Carola Jerves Vazquez, PhD;Biotecnología y Biodiversidad;Vicerrectorado de Investigación e Innovación;Departamento de Química Aplicada y Sistemas de Producción
+Fanny Carola Jerves Vazquez, PhD;Ingeniería de las Reacciones Químicas, Catálisis y Tecnologías del Medio Ambiente (IRCMA);Vicerrectorado de Investigación e Innovación;Departamento de Biociencias
+Elena Monserrath Jerves Hermida, PhD;Migración Internacional, Derechos y Políticas;Vicerrectorado Académico;Facultad de Filosofía, Letras y Ciencias de la Educación
+Elena Monserrath Jerves Hermida, PhD;Sexualidad, género y educación sexual (HUMSEX);Vicerrectorado de Investigación e Innovación;Departamento de Educación
+Doriz Angelica Jimenez Brito, PhD;Atención Primaria de Salud (GIAPS);Vicerrectorado Académico;Facultad de Ciencias Médicas
+Doriz Angelica Jimenez Brito, PhD;Salud Intercultural;Vicerrectorado Académico;Facultad de Ciencias Médicas
+Juan Carlos Jimenez Pacheco, PhD;Estructuras, sismicidad y materiales (ES&M);Vicerrectorado de Investigación e Innovación;Departamento de Ingeniería Civil
+Juan Carlos Jimenez Pacheco, PhD;Red Sísmica del Austro;Vicerrectorado de Investigación e Innovación;Departamento de Ingeniería Civil
+Pedro Sebastian Jimenez Pacheco, PhD;Ciudad, Territorio y Movilidad (CITMOV);Vicerrectorado Académico;Facultad de Arquitectura y Urbanismo
+Kenia Karen Kun Astudillo;Sin grupo asignado;Vicerrectorado Académico;Facultad de Odontología
+Milton Fabricio Lafebre Carrasco;Sin grupo asignado;Vicerrectorado Académico;Facultad de Odontología
+Jessica Andrea Leon Vizñay;Alimentación, Nutrición, Salud y Actividad Física;Vicerrectorado de Investigación e Innovación;Departamento de Biociencias
+Juan Daniel Leon Ochoa;Sin grupo asignado;Vicerrectorado Académico;Facultad de Artes
+Maria Veronica Leon Velez, PhD;Sin grupo asignado;Vicerrectorado Académico;Facultad de Filosofía, Letras y Ciencias de la Educación
+Pablo Armando León González;PROYEKTA;Vicerrectorado Académico;Facultad de Arquitectura y Urbanismo
+Fabian Leon Tamariz, PhD;Plantas Medicinales y Productos Naturales;Vicerrectorado de Investigación e Innovación;Departamento de Biociencias
+Sandra Eugenia Lima Castro, PhD;Psicología Clínica y de la Salud;Vicerrectorado Académico;Facultad de Psicología
+Gladys Magdalena Lituma Campoverde;Salud Integral del/la Adolescente;Vicerrectorado Académico;Facultad de Ciencias Médicas
+Juan Carlos Llivisaca Villazhañay;Industrial Management and Innovation Research (IMAGINE);Vicerrectorado de Investigación e Innovación;Departamento de Química Aplicada y Sistemas de Producción
+Cindy Tatiana Lopez Orellana;Inteligencia Emocional;Vicerrectorado Académico;Facultad de Psicología
+Cindy Tatiana Lopez Orellana;Sistema Familiar;Vicerrectorado de Investigación e Innovación;Departamento de Educación
+Claudio Hernan Lopez Calle;Políticas Educativas;Vicerrectorado de Investigación e Innovación;Departamento de Educación
+Diana Lopez Molina, PhD;Turismo, Sostenibilidad y Patrimonio (TUR-Ecuador);Vicerrectorado Académico;Facultad de Ciencias de la Hospitalidad
+Mateo Damian Lopez Espinoza;GeoinfoRmática, Agrociencias y Soluciones Sostenibles (G.R.A.S.S);Vicerrectorado Académico;Facultad de Ciencias Agropecuarias
+Silvia Lucia Lopez Alvarado, PhD;Sexualidad, género y educación sexual (HUMSEX);Vicerrectorado de Investigación e Innovación;Departamento de Educación
+Diego Mauricio Loyola Ochoa;Empresarial;Vicerrectorado de Investigación e Innovación;Departamento de Economía, Empresa y Desarrollo Sostenible
+Flor Margarita Lozano Guaman;Sin grupo asignado;Vicerrectorado Académico;Facultad de Artes
+Miriam Alexandra Lucio Bravo, PhD;Crecimiento, desarrollo y biología Craneofacial;Vicerrectorado Académico;Facultad de Odontología
+Miriam Alexandra Lucio Bravo, PhD;Salud Sexual y Reproductiva;Vicerrectorado Académico;Facultad de Ciencias Médicas
+Rosa Lucia Lupercio Novillo, PhD;GeoinfoRmática, Agrociencias y Soluciones Sostenibles (G.R.A.S.S);Vicerrectorado Académico;Facultad de Ciencias Agropecuarias
+Maria Jose Machado Gutierrez;Etnografía Interdisciplinaria (KALEIDOS);Vicerrectorado de Investigación e Innovación;Departamento Interdisciplinario de Espacio y Población
+Segundo Moises Maita Supliguicha, PhD;Suelos y producción;Vicerrectorado Académico;Facultad de Ciencias Agropecuarias
+Jaime Eduardo Maldonado Rivera;Biotecnología agropecuaria;Vicerrectorado Académico;Facultad de Ciencias Agropecuarias
+Jorge Javier Maldonado Mahauad, PhD;Gestión del Conocimiento;Vicerrectorado de Investigación e Innovación;Departamento de Ciencias de la Computación
+Fernando Andrés Martínez Moscoso;Economía Circular Inclusiva y Desarrollo Sostenible;Vicerrectorado de Investigación e Innovación;Departamento Interdisciplinario de Espacio y Población
+Christian Fernando Mejia Guaman, PhD;Manejo del Agua y del Suelo (PROMAS);Vicerrectorado de Investigación e Innovación;Departamento de Ingeniería Civil
+Diana Paulina Mejia Coronel;Sin grupo asignado;Vicerrectorado Académico;Facultad de Artes
+Julio Danilo Mejia Coronel, PhD;Calidad del aire y Toxicología medioambiental (CATOx-CEA);Vicerrectorado de Investigación e Innovación;Departamento de Química Aplicada y Sistemas de Producción
+Julio Danilo Mejia Coronel, PhD;Ecología Acuática;Vicerrectorado Académico;Facultad de Ciencias Químicas
+Piedad Magali Mejia Pesantez;GSigma – Grupo de Sistemas Inteligentes para la Gestión, Modelado y Aprendizaje;Vicerrectorado de Investigación e Innovación;Departamento de Ciencias de la Computación
+Piedad Magali Mejia Pesantez;Innovación Tecnológica (GIIT);Vicerrectorado de Investigación e Innovación;Departamento de Ciencias de la Computación
+Maria Silvana Mendez Alvarez;Biotecnología de la Reproducción Animal;Vicerrectorado Académico;Facultad de Ciencias Agropecuarias
+Nancy Alexandra Mendez Barbecho, PhD;Gestión del Cuidado;Vicerrectorado Académico;Facultad de Ciencias Médicas
+Viviana Catalina Mendez Sacta;Salud Sexual y Reproductiva;Vicerrectorado Académico;Facultad de Ciencias Médicas
+Luis Rodrigo Mendieta Muñoz, PhD;Economía Regional;Vicerrectorado de Investigación e Innovación;Departamento de Economía, Empresa y Desarrollo Sostenible
+Luis Rodrigo Mendieta Muñoz, PhD;Macroeconomía y Desarrollo (GIMADE);Vicerrectorado de Investigación e Innovación;Departamento de Economía, Empresa y Desarrollo Sostenible
+Daniel Emilio Mendoza Siguenza;Hidrología y Clima;Vicerrectorado de Investigación e Innovación;Departamento de Recursos Hídricos y Ciencias Ambientales
+Daniel Emilio Mendoza Siguenza;Ingeniería del Agua y Saneamiento Ambiental (IA&SA);Vicerrectorado de Investigación e Innovación;Departamento de Ingeniería Civil
+Juanita Catalina Mendoza Eskola, PhD;Estudios Interdisciplinarios de Género;Vicerrectorado de Investigación e Innovación;Departamento de Economía, Empresa y Desarrollo Sostenible
+Luis Ismael Minchala Avila, PhD;Electrónica y Control;Vicerrectorado de Investigación e Innovación;Departamento de Ingeniería Eléctrica, Electrónica y Telecomunicaciones
+Daniel Estuardo Mogrovejo Carrasco, PhD;Geotecnia vialidad y trasportación (GV&T);Vicerrectorado de Investigación e Innovación;Departamento de Ingeniería Civil
+Daniel Estuardo Mogrovejo Carrasco, PhD;Red Sísmica del Austro;Vicerrectorado de Investigación e Innovación;Departamento de Ingeniería Civil
+Arleti Maria Molerio Rosa, PhD;Sin grupo asignado;Vicerrectorado Académico;Facultad de Artes
+Gabriela Estefania Molina Ochoa;Etnografía Interdisciplinaria (KALEIDOS);Vicerrectorado de Investigación e Innovación;Departamento Interdisciplinario de Espacio y Población
+Maria Augusta Molina Diaz;Sin grupo asignado;Vicerrectorado Académico;Facultad de Ciencias de la Hospitalidad
+Ivan Andres Montero Izquierdo, PhD;Energía, Biomasa y Bioenergía;Vicerrectorado de Investigación e Innovación;Departamento de Química Aplicada y Sistemas de Producción
+Ivan Andres Montero Izquierdo, PhD;Ingeniería de las Reacciones Químicas, Catálisis y Tecnologías del Medio Ambiente (IRCMA);Vicerrectorado de Investigación e Innovación;Departamento de Biociencias
+Diego Esteban Mora Serrano, PhD;Ingeniería del Agua y Saneamiento Ambiental (IA&SA);Vicerrectorado de Investigación e Innovación;Departamento de Ingeniería Civil
+Diego Esteban Mora Serrano, PhD;Manejo del Agua y del Suelo (PROMAS);Vicerrectorado de Investigación e Innovación;Departamento de Ingeniería Civil
+Lorena Viviana Mora Bravo;Plantas Medicinales y Productos Naturales;Vicerrectorado de Investigación e Innovación;Departamento de Biociencias
+Lorena Viviana Mora Bravo;Salud Sexual y Reproductiva;Vicerrectorado Académico;Facultad de Ciencias Médicas
+Pedro Fabian Mora Pacheco, PhD;Acompañamiento Organizaciónal al Desarrollo (ACORDES);Vicerrectorado de Investigación e Innovación;Departamento de Economía, Empresa y Desarrollo Sostenible
+Diana Elizabeth Morales Avilez;Etnografía Interdisciplinaria (KALEIDOS);Vicerrectorado de Investigación e Innovación;Departamento Interdisciplinario de Espacio y Población
+Juana Agustina Morales Quizhpi;Sistema Familiar;Vicerrectorado de Investigación e Innovación;Departamento de Educación
+Carlos Villie Morocho Zurita, PhD;GSigma – Grupo de Sistemas Inteligentes para la Gestión, Modelado y Aprendizaje;Vicerrectorado de Investigación e Innovación;Departamento de Ciencias de la Computación
+Carlos Villie Morocho Zurita, PhD;Infraestructura de Datos Espaciales y Ciudades Inteligentes;Vicerrectorado de Investigación e Innovación;Departamento de Ciencias de la Computación
+Nubia Silvana Moscoso Calle;Gestión Estratégica y de Negocios;Vicerrectorado de Investigación e Innovación;Departamento de Economía, Empresa y Desarrollo Sostenible
+Misael Moya Mendez, PhD;Metodologías, Procesos y Prácticas Artísticas;Vicerrectorado Académico;Facultad de Artes
+Misael Moya Mendez, PhD;Pedagogía de las Artes;Vicerrectorado Académico;Facultad de Artes
+Henrry Fernando Moyano Bojorque, PhD;Sistemas de Energía Eléctrica;Vicerrectorado de Investigación e Innovación;Departamento de Ingeniería Eléctrica, Electrónica y Telecomunicaciones
+Patricia Piedad Naulaguari Medina;Gestión del Cuidado;Vicerrectorado Académico;Facultad de Ciencias Médicas
+Vivian Alejandra Neira Molina, PhD;Alimentación, Nutrición, Salud y Actividad Física;Vicerrectorado de Investigación e Innovación;Departamento de Biociencias
+Vivian Alejandra Neira Molina, PhD;Salud Sexual y Reproductiva;Vicerrectorado Académico;Facultad de Ciencias Médicas
+Miguel Angel Novillo Verdugo;Lenguaje, culturas y representaciones;Vicerrectorado Académico;Facultad de Filosofía, Letras y Ciencias de la Educación
+Walter Vinicio Novillo Alulema;Sin grupo asignado;Vicerrectorado Académico;Facultad de Artes
+Ana Gabriela Nuñez Avila, PhD;GSigma – Grupo de Sistemas Inteligentes para la Gestión, Modelado y Aprendizaje;Vicerrectorado de Investigación e Innovación;Departamento de Ciencias de la Computación
+Ana Gabriela Nuñez Avila, PhD;Innovación Tecnológica (GIIT);Vicerrectorado de Investigación e Innovación;Departamento de Ciencias de la Computación
+Angelica Maria Ochoa Aviles, PhD;Alimentación, Nutrición, Salud y Actividad Física;Vicerrectorado de Investigación e Innovación;Departamento de Biociencias
+Danny Vinicio Ochoa Correa, PhD;Sistemas de Energía Eléctrica;Vicerrectorado de Investigación e Innovación;Departamento de Ingeniería Eléctrica, Electrónica y Telecomunicaciones
+Felipe Andres Ochoa Guerrero;Sin grupo asignado;Vicerrectorado Académico;Facultad de Artes
+Maritza Raphaela Ochoa Castro;Biotecnología y Biodiversidad;Vicerrectorado de Investigación e Innovación;Departamento de Química Aplicada y Sistemas de Producción
+Paola Marcela Ochoa Fernandez;Sin grupo asignado;Vicerrectorado Académico;Facultad de Artes
+Remigio Efrain Ojeda Orellana, PhD;Contabilidad, Finanzas y Tributación (GiCOFT);Vicerrectorado de Investigación e Innovación;Departamento de Economía, Empresa y Desarrollo Sostenible
+Miriam Carlota Ordoñez, PhD;Sistema Familiar;Vicerrectorado de Investigación e Innovación;Departamento de Educación
+Adriana Monserrath Orellana Paucar, PhD;Pharmacology and Nutritional Sciences (PharmaNut);Vicerrectorado Académico;Facultad de Ciencias Médicas
+Boris Adrian Orellana Alvear;Laboratorio de Dinámicas Urbano-Territoriales Contemporáneas (LDUT);Vicerrectorado Académico;Facultad de Arquitectura y Urbanismo
+Boris Adrian Orellana Alvear;VirtualTech;Vicerrectorado Académico;Facultad de Arquitectura y Urbanismo
+Daniel Augusto Orellana Vintimilla, PhD;Ciudades Sustentables (LlactaLAB);Vicerrectorado de Investigación e Innovación;Departamento Interdisciplinario de Espacio y Población
+Diana Catalina Orellana Ordoñez;Sin grupo asignado;Vicerrectorado Académico;Facultad de Artes
+Johanna Marlene Orellana Alvear, PhD;Sin grupo asignado;Vicerrectorado Académico;Facultad de Ciencias Médicas
+Mercy Raquel Orellana Bravo, PhD;Ciudad, Territorio y Movilidad (CITMOV);Vicerrectorado Académico;Facultad de Arquitectura y Urbanismo
+Mercy Raquel Orellana Bravo, PhD;Economía Regional;Vicerrectorado de Investigación e Innovación;Departamento de Economía, Empresa y Desarrollo Sostenible
+Susana Ximena Orellana Mora;Desarrollo local a través del turismo (PREIT-TOUR);Vicerrectorado Académico;Facultad de Ciencias de la Hospitalidad
+Susana Ximena Orellana Mora;English Learning and Acquisition (ELA);Vicerrectorado de Investigación e Innovación;Departamento de Educación
+Martin Eduardo Ortega Ortega;Procesamiento Digital de Señales y Comunicaciones;Vicerrectorado de Investigación e Innovación;Departamento de Ingeniería Eléctrica, Electrónica y Telecomunicaciones
+Martin Eduardo Ortega Ortega;Sistemas de Energía Eléctrica;Vicerrectorado de Investigación e Innovación;Departamento de Ingeniería Eléctrica, Electrónica y Telecomunicaciones
+Fernando Herminio Ortiz Vizuete;Cine, Periodismo y Comunicación (CIPEC);Vicerrectorado Académico;Facultad de Filosofía, Letras y Ciencias de la Educación
+Fernando Herminio Ortiz Vizuete;Migración Internacional, Derechos y Políticas;Vicerrectorado Académico;Facultad de Filosofía, Letras y Ciencias de la Educación
+Fidel Ernesto Ortiz Mosquera;Pedagogía de las Artes;Vicerrectorado Académico;Facultad de Artes
+William Alfredo Ortiz Ochoa, PhD;Inteligencia Emocional;Vicerrectorado Académico;Facultad de Psicología
+William Alfredo Ortiz Ochoa, PhD;Procesos Psicológicos Básicos;Vicerrectorado Académico;Facultad de Psicología
+Silvia Johana Ortiz Ulloa, PhD;Alimentación, Nutrición, Salud y Actividad Física;Vicerrectorado de Investigación e Innovación;Departamento de Biociencias
+Fernanda Lucia Pacheco Lupercio;Estudios Interdisciplinarios de Género;Vicerrectorado de Investigación e Innovación;Departamento de Economía, Empresa y Desarrollo Sostenible
+Maria De Lourdes Pacheco Salazar;Sin grupo asignado;Vicerrectorado Académico;Facultad de Psicología
+Vicente Guillermo Pacheco Salazar, PhD;GITEICU – Grupo de Investigación en Tecnología Educativa, Innovación, y Conocimiento en el contexto Universitario.;Vicerrectorado de Investigación e Innovación;Departamento de Educación
+Natalia Elizabeth Pacurucu Caceres;Laboratorio de Dinámicas Urbano-Territoriales Contemporáneas (LDUT);Vicerrectorado Académico;Facultad de Arquitectura y Urbanismo
+Natalia Elizabeth Pacurucu Caceres;Infraestructura de Datos Espaciales y Ciudades Inteligentes;Vicerrectorado de Investigación e Innovación;Departamento de Ciencias de la Computación
+Estefania Priscila Palacios Tamayo, PhD;Historia de Cuenca y su Región;Vicerrectorado Académico;Facultad de Filosofía, Letras y Ciencias de la Educación
+Estefania Priscila Palacios Tamayo, PhD;Lenguaje, culturas y representaciones;Vicerrectorado Académico;Facultad de Filosofía, Letras y Ciencias de la Educación
+Gicela Monserrate Palacios Santana;Inmuno-reumatología;Vicerrectorado Académico;Facultad de Ciencias Médicas
+Gicela Monserrate Palacios Santana;Salud pública, alimentación y actividad física en el ciclo de la vida;Vicerrectorado Académico;Facultad de Ciencias Médicas
+Ivan Andres Palacios Astudillo;Rehabilitación Oral (GIRO);Vicerrectorado Académico;Facultad de Odontología
+Maria Dolores Palacios Madero, PhD;Sistema Familiar;Vicerrectorado de Investigación e Innovación;Departamento de Educación
+Ruth Fabiola Palacios Coello;Sin grupo asignado;Vicerrectorado Académico;Facultad de Ciencias Médicas
+Fanny Ximena Palomeque Pesantez, PhD;Agroforestería y manejo del paisaje;Vicerrectorado de Investigación e Innovación;Departamento de Recursos Hídricos y Ciencias Ambientales
+Pablo Jose Paño Yañez;Ciudad Patrimonio Mundial;Vicerrectorado Académico;Facultad de Arquitectura y Urbanismo
+Pablo Jose Paño Yañez;Economía Circular Inclusiva y Desarrollo Sostenible;Vicerrectorado de Investigación e Innovación;Departamento Interdisciplinario de Espacio y Población
+Pablo Jose Paño Yañez;Población y Desarrollo Local Sustentable (PYDLOS);Vicerrectorado de Investigación e Innovación;Departamento Interdisciplinario de Espacio y Población
+Luis Otto Parra Gonzalez, PhD;Ingeniería de Software;Vicerrectorado de Investigación e Innovación;Departamento de Ciencias de la Computación
+Manuel Raul Pelaez Samaniego, PhD;Energía, Biomasa y Bioenergía;Vicerrectorado de Investigación e Innovación;Departamento de Química Aplicada y Sistemas de Producción
+Denisse Fabiola Peña Tapia;Biotecnología agropecuaria;Vicerrectorado Académico;Facultad de Ciencias Agropecuarias
+Denisse Fabiola Peña Tapia;Nanotecnología Aplicada a Medio Ambiente (N@NO-CEA);Vicerrectorado de Investigación e Innovación;Departamento de Química Aplicada y Sistemas de Producción
+Eva Karina Peña Contreras, PhD;Estudios Interdisciplinarios de Género;Vicerrectorado de Investigación e Innovación;Departamento de Economía, Empresa y Desarrollo Sostenible
+Juan Antonio Peña Aguirre, PhD;Feminismo, Derechos humanos y Tecnología;Vicerrectorado Académico;Facultad de Jurisprudencia y Ciencias Políticas y Sociales
+Silvia Alexandra Peña Gonzalez, PhD;Ingeniería Industrial e Innovación (GI3);Vicerrectorado de Investigación e Innovación;Departamento de Química Aplicada y Sistemas de Producción
+Maria Eulalia Peñafiel Tenorio, PhD;Ingeniería de las Reacciones Químicas, Catálisis y Tecnologías del Medio Ambiente (IRCMA);Vicerrectorado de Investigación e Innovación;Departamento de Biociencias
+Eugenia Peñaherrera Wilches;Plantas Medicinales y Productos Naturales;Vicerrectorado de Investigación e Innovación;Departamento de Biociencias
+Ximena Katherine Peralta Vallejo, PhD;Acompañamiento Organizaciónal al Desarrollo (ACORDES);Vicerrectorado de Investigación e Innovación;Departamento de Economía, Empresa y Desarrollo Sostenible
+Ximena Katherine Peralta Vallejo, PhD;Contabilidad, Finanzas y Tributación (GiCOFT);Vicerrectorado de Investigación e Innovación;Departamento de Economía, Empresa y Desarrollo Sostenible
+Paul Gustavo Peralta Fajardo;Sin grupo asignado;Vicerrectorado Académico;Facultad de Artes
+Fernando Pedro Perea Ganchou;Biotecnología de la Reproducción Animal;Vicerrectorado Académico;Facultad de Ciencias Agropecuarias
+Jose Luis Pesantez Pacheco, PhD;Biotecnología de la Reproducción Animal;Vicerrectorado Académico;Facultad de Ciencias Agropecuarias
+Juan Martin Pesantez Alvarado;Sin grupo asignado;Vicerrectorado Académico;Facultad de Odontología
+Juan Patricio Pesantez Vallejo;Sin grupo asignado;Vicerrectorado Académico;Facultad de Ciencias Agropecuarias
+David Manuel Pineda Alvarez;Crecimiento, desarrollo y biología Craneofacial;Vicerrectorado Académico;Facultad de Odontología
+Veronica Patricia Pinos Velez, PhD;Energía, Biomasa y Bioenergía;Vicerrectorado de Investigación e Innovación;Departamento de Química Aplicada y Sistemas de Producción
+Veronica Patricia Pinos Velez, PhD;Ingeniería de las Reacciones Químicas, Catálisis y Tecnologías del Medio Ambiente (IRCMA);Vicerrectorado de Investigación e Innovación;Departamento de Biociencias
+Veronica Patricia Pinos Velez, PhD;Saneamiento Ambiental;Vicerrectorado de Investigación e Innovación;Departamento de Recursos Hídricos y Ciencias Ambientales
+Diego Arturo Ponce Vasquez, PhD;Gestión del Conocimiento;Vicerrectorado de Investigación e Innovación;Departamento de Ciencias de la Computación
+Juan Carlos Pozo Palacios;Neurodesarrollo;Vicerrectorado Académico;Facultad de Ciencias Médicas
+Juan Carlos Pozo Palacios;Salud Sexual y Reproductiva;Vicerrectorado Académico;Facultad de Ciencias Médicas
+Santiago Estuardo Pozo Rodriguez;Economía Regional;Vicerrectorado de Investigación e Innovación;Departamento de Economía, Empresa y Desarrollo Sostenible
+Santiago Estuardo Pozo Rodriguez;Macroeconomía y Desarrollo (GIMADE);Vicerrectorado de Investigación e Innovación;Departamento de Economía, Empresa y Desarrollo Sostenible
+Juan Felipe Quesada Molina, PhD;Entorno Construido Sostenible (ECOS);Vicerrectorado Académico;Facultad de Arquitectura y Urbanismo
+Tatiana Gabriela Quezada Matute;Trayectorias académicas e indicadores educativos;Vicerrectorado de Investigación e Innovación;Departamento de Educación
+Pablo Geovanny Quichimbo Miguitama, PhD;Agroforestería y manejo del paisaje;Vicerrectorado de Investigación e Innovación;Departamento de Recursos Hídricos y Ciencias Ambientales
+Pablo Geovanny Quichimbo Miguitama, PhD;Suelos y producción;Vicerrectorado Académico;Facultad de Ciencias Agropecuarias
+Ermes Ramiro Rodas Carpio;Producción Animal;Vicerrectorado Académico;Facultad de Ciencias Agropecuarias
+Fabiola Virginia Rodas Lopez;Nueva ensayística sobre las artes y el diseño en el tercer milenio;Vicerrectorado Académico;Facultad de Artes
+Dolores Amparito Rodriguez Sanchez;Salud Mental;Vicerrectorado Académico;Facultad de Ciencias Médicas
+Maria De Lourdes Rodriguez Coyago, PhD;Periodoncia e implantología oral (GIPIO);Vicerrectorado Académico;Facultad de Odontología
+Maria De Lourdes Rodriguez Coyago, PhD;Rehabilitación Oral (GIRO);Vicerrectorado Académico;Facultad de Odontología
+Tannia Edith Rodriguez Rodriguez;Nueva ensayística sobre las artes y el diseño en el tercer milenio;Vicerrectorado Académico;Facultad de Artes
+Rosa Vanesa Rojas Luna;Empresarial;Vicerrectorado de Investigación e Innovación;Departamento de Economía, Empresa y Desarrollo Sostenible
+Diego Fernando Roldan Monsalve, PhD;Economía Regional;Vicerrectorado de Investigación e Innovación;Departamento de Economía, Empresa y Desarrollo Sostenible
+Diego Fernando Roldan Monsalve, PhD;Water Law and Management;Vicerrectorado de Investigación e Innovación;Departamento de Economía, Empresa y Desarrollo Sostenible
+Diego Francisco Roldan Arauz, PhD;Sin grupo asignado;Vicerrectorado Académico;Facultad de Ciencias Económicas y Administrativas
+Katherine Andrea Romero Espinoza;Crecimiento, desarrollo y biología Craneofacial;Vicerrectorado Académico;Facultad de Odontología
+Cornelio Alejandro Rosales Jaramillo, PhD;Producción Animal;Vicerrectorado Académico;Facultad de Ciencias Agropecuarias
+Guido Leonel Rosales Jaramillo;Sin grupo asignado;Vicerrectorado Académico;Facultad de Psicología
+Juan José Sáenz Peñafiel;Sin grupo asignado;Vicerrectorado Académico;Facultad de Arquitectura y Urbanismo
+Edgar Geovanny Sagbay Jaramillo;Sin grupo asignado;Vicerrectorado Académico;Facultad de Artes
+Hector Javier Saltos Carvallo;PROYEKTA;Vicerrectorado Académico;Facultad de Arquitectura y Urbanismo
+Angelita Mercedes Sanchez Plasencia, PhD;Literaturas Regionales;Vicerrectorado Académico;Facultad de Filosofía, Letras y Ciencias de la Educación
+Carlos Mauricio Sanchez Alvarracin;Evaluación de Riesgos Ambientales en Sistemas de Producción y Servicios (RISKEN);Vicerrectorado de Investigación e Innovación;Departamento de Química Aplicada y Sistemas de Producción
+Esteban Remigio Sanchez Cordero, PhD;Ingeniería del Agua y Saneamiento Ambiental (IA&SA);Vicerrectorado de Investigación e Innovación;Departamento de Ingeniería Civil
+Jose Hernán Sánchez Castillo;PROYEKTA;Vicerrectorado Académico;Facultad de Arquitectura y Urbanismo
+Juan Jose Santillan Iñiguez;Desarrollo local a través del turismo (PREIT-TOUR);Vicerrectorado Académico;Facultad de Ciencias de la Hospitalidad
+Juan Jose Santillan Iñiguez;English Learning and Acquisition (ELA);Vicerrectorado de Investigación e Innovación;Departamento de Educación
+Jose Luis Santos Morocho, PhD;Sin grupo asignado;Vicerrectorado Académico;Facultad de Psicología
+Victor Hugo Saquicela Galarza, PhD;Estudios Sociales de Ciencia y Tecnología;Vicerrectorado de Investigación e Innovación;Departamento de Economía, Empresa y Desarrollo Sostenible
+Victor Hugo Saquicela Galarza, PhD;Gestión del Conocimiento;Vicerrectorado de Investigación e Innovación;Departamento de Ciencias de la Computación
+Juan Pablo Sarmiento Jara, PhD;Economía Regional;Vicerrectorado de Investigación e Innovación;Departamento de Economía, Empresa y Desarrollo Sostenible
+Juan Pablo Sarmiento Jara, PhD;Water Law and Management;Vicerrectorado de Investigación e Innovación;Departamento de Economía, Empresa y Desarrollo Sostenible
+Luis Santiago Sarmiento Moscoso, PhD;Economía Regional;Vicerrectorado de Investigación e Innovación;Departamento de Economía, Empresa y Desarrollo Sostenible
+Luis Santiago Sarmiento Moscoso, PhD;Macroeconomía y Desarrollo (GIMADE);Vicerrectorado de Investigación e Innovación;Departamento de Economía, Empresa y Desarrollo Sostenible
+Joselin Katerine Segovia Sarmiento;Economía Regional;Vicerrectorado de Investigación e Innovación;Departamento de Economía, Empresa y Desarrollo Sostenible
+Ana Lucia Serrano Lopez, PhD;Indicadores Turísticos;Vicerrectorado Académico;Facultad de Ciencias de la Hospitalidad
+Maria Eugenia Siguencia Avila, PhD;Ciudad Patrimonio Mundial;Vicerrectorado Académico;Facultad de Arquitectura y Urbanismo
+Lorena Catalina Siguenza Guzman, PhD;Industrial Management and Innovation Research (IMAGINE);Vicerrectorado de Investigación e Innovación;Departamento de Química Aplicada y Sistemas de Producción
+Lorena Catalina Siguenza Guzman, PhD;Infraestructura de Datos Espaciales y Ciudades Inteligentes;Vicerrectorado de Investigación e Innovación;Departamento de Ciencias de la Computación
+Ivan Paul Sinchi Toral;PROYEKTA;Vicerrectorado Académico;Facultad de Arquitectura y Urbanismo
+Manuel Elias Soria Parra;Biotecnología de la Reproducción Animal;Vicerrectorado Académico;Facultad de Ciencias Agropecuarias
+Dolores Catalina Sucozhañay Calle;Economía Circular Inclusiva y Desarrollo Sostenible;Vicerrectorado de Investigación e Innovación;Departamento Interdisciplinario de Espacio y Población
+Dolores Catalina Sucozhañay Calle;Población y Desarrollo Local Sustentable (PYDLOS);Vicerrectorado de Investigación e Innovación;Departamento Interdisciplinario de Espacio y Población
+Rene David Tacuri Reino;Procesos Psicológicos Básicos;Vicerrectorado Académico;Facultad de Psicología
+Victor Eduardo Tacuri Espinoza;GeoinfoRmática, Agrociencias y Soluciones Sostenibles (G.R.A.S.S);Vicerrectorado Académico;Facultad de Ciencias Agropecuarias
+Victor Eduardo Tacuri Espinoza;Manejo del Agua y del Suelo (PROMAS);Vicerrectorado de Investigación e Innovación;Departamento de Ingeniería Civil
+Pablo Esteban Tamariz Ordoñez;Rehabilitación Oral (GIRO);Vicerrectorado Académico;Facultad de Odontología
+Jeanneth Patricia Tapia Cardenas;Salud Integral del/la Adolescente;Vicerrectorado Académico;Facultad de Ciencias Médicas
+Carlos Oswaldo Tello Tello;PROYEKTA;Vicerrectorado Académico;Facultad de Arquitectura y Urbanismo
+Jorge Agustin Tenesaca Chimbo;PROYEKTA;Vicerrectorado Académico;Facultad de Arquitectura y Urbanismo
+Edison Patricio Timbe Castro, PhD;Hidrología y Clima;Vicerrectorado de Investigación e Innovación;Departamento de Recursos Hídricos y Ciencias Ambientales
+Edison Patricio Timbe Castro, PhD;Suelos y producción;Vicerrectorado Académico;Facultad de Ciencias Agropecuarias
+Luis Manuel Timbe Castro, PhD;Hidrología y Clima;Vicerrectorado de Investigación e Innovación;Departamento de Recursos Hídricos y Ciencias Ambientales
+Elisabeth Marta Tommerbakk, PhD;Estudios Sociales de Ciencia y Tecnología;Vicerrectorado de Investigación e Innovación;Departamento de Economía, Empresa y Desarrollo Sostenible
+Carlos Santiago Torres Inga;Ecología Forestal, Agroecosistemas y Silvopasturas en Sistemas Ganaderos.;Vicerrectorado Académico;Facultad de Ciencias Agropecuarias
+Maria Fernanda Torres Calle;Crecimiento, desarrollo y biología Craneofacial;Vicerrectorado Académico;Facultad de Odontología
+Santiago Patricio Torres Contreras, PhD;Sistemas de Energía Eléctrica;Vicerrectorado de Investigación e Innovación;Departamento de Ingeniería Eléctrica, Electrónica y Telecomunicaciones
+Fanny Monserrate Tubay Zambrano, PhD;Estudios Interculturales (GEI);Vicerrectorado Académico;Facultad de Filosofía, Letras y Ciencias de la Educación
+Fanny Monserrate Tubay Zambrano, PhD;Sexualidad, género y educación sexual (HUMSEX);Vicerrectorado de Investigación e Innovación;Departamento de Educación
+Maria Fernanda Uguña Rosas;Calidad del aire y Toxicología medioambiental (CATOx-CEA);Vicerrectorado de Investigación e Innovación;Departamento de Química Aplicada y Sistemas de Producción
+Antonio Javier Vallecillo Maza;Biotecnología agropecuaria;Vicerrectorado Académico;Facultad de Ciencias Agropecuarias
+Antonio Javier Vallecillo Maza;Sanidad animal y salud pública;Vicerrectorado Académico;Facultad de Ciencias Agropecuarias
+David Enrique Vanegas Jacome;Plantas Medicinales y Productos Naturales;Vicerrectorado de Investigación e Innovación;Departamento de Biociencias
+Diana Patricia Vanegas Coveña, PhD;Neurodesarrollo;Vicerrectorado Académico;Facultad de Ciencias Médicas
+Diana Patricia Vanegas Coveña, PhD;Salud Integral del/la Adolescente;Vicerrectorado Académico;Facultad de Ciencias Médicas
+Maria Eulalia Vanegas Peña, PhD;Nanotecnología Aplicada a Medio Ambiente (N@NO-CEA);Vicerrectorado de Investigación e Innovación;Departamento de Química Aplicada y Sistemas de Producción
+Maria Eulalia Vanegas Peña, PhD;Tecnologías Sostenibles en Calidad y Remediación Ambiental en Agua (TECNOCEA – H2O);Vicerrectorado de Investigación e Innovación;Departamento de Química Aplicada y Sistemas de Producción
+Paul Fernando Vanegas Peña;Economía Circular Inclusiva y Desarrollo Sostenible;Vicerrectorado de Investigación e Innovación;Departamento Interdisciplinario de Espacio y Población
+Denisse Helena Vasquez Guevara, PhD;Alimentación, Nutrición, Salud y Actividad Física;Vicerrectorado de Investigación e Innovación;Departamento de Biociencias
+Denisse Helena Vasquez Guevara, PhD;Cine, Periodismo y Comunicación (CIPEC);Vicerrectorado Académico;Facultad de Filosofía, Letras y Ciencias de la Educación
+Andres Marcelo Vazquez Rodas, PhD;Electrónica y Control;Vicerrectorado de Investigación e Innovación;Departamento de Ingeniería Eléctrica, Electrónica y Telecomunicaciones
+Andres Marcelo Vazquez Rodas, PhD;Procesamiento Digital de Señales y Comunicaciones;Vicerrectorado de Investigación e Innovación;Departamento de Ingeniería Eléctrica, Electrónica y Telecomunicaciones
+Angel Oswaldo Vazquez Patiño;Ingeniería del Agua y Saneamiento Ambiental (IA&SA);Vicerrectorado de Investigación e Innovación;Departamento de Ingeniería Civil
+Juan Mesias Vazquez Mosquera;Sin grupo asignado;Vicerrectorado Académico;Facultad de Ciencias Agropecuarias
+Raul Fernando Vazquez Zambrano, PhD;Ecología Acuática;Vicerrectorado Académico;Facultad de Ciencias Químicas
+Raul Fernando Vazquez Zambrano, PhD;Ingeniería del Agua y Saneamiento Ambiental (IA&SA);Vicerrectorado de Investigación e Innovación;Departamento de Ingeniería Civil
+Bernardo Jose Vega Crespo, PhD;Salud Sexual y Reproductiva;Vicerrectorado Académico;Facultad de Ciencias Médicas
+Jaime Eduardo Veintimilla Reyes, PhD;GSigma – Grupo de Sistemas Inteligentes para la Gestión, Modelado y Aprendizaje;Vicerrectorado de Investigación e Innovación;Departamento de Ciencias de la Computación
+Jaime Eduardo Veintimilla Reyes, PhD;Gestión del Conocimiento;Vicerrectorado de Investigación e Innovación;Departamento de Ciencias de la Computación
+Angelica Maria Vele Salto;Ingeniería de las Reacciones Químicas, Catálisis y Tecnologías del Medio Ambiente (IRCMA);Vicerrectorado de Investigación e Innovación;Departamento de Biociencias
+Gladys Jaqueline Verdugo Cardenas, PhD;Sin grupo asignado;Vicerrectorado Académico;Facultad de Filosofía, Letras y Ciencias de la Educación
+Maria Eugenia Verdugo Guaman;Formación e Innovación Docente (GIFID);Vicerrectorado Académico;Facultad de Filosofía, Letras y Ciencias de la Educación
+Maria Eugenia Verdugo Guaman;Inteligencia Emocional;Vicerrectorado Académico;Facultad de Psicología
+Edisson Andres Villa Avila;Sistemas de Energía Eléctrica;Vicerrectorado de Investigación e Innovación;Departamento de Ingeniería Eléctrica, Electrónica y Telecomunicaciones
+Manuel Gonzalo Villavicencio Quinde, PhD;Lenguaje, culturas y representaciones;Vicerrectorado Académico;Facultad de Filosofía, Letras y Ciencias de la Educación
+Paulina Germania Villena Ochoa;Biotecnología agropecuaria;Vicerrectorado Académico;Facultad de Ciencias Agropecuarias
+Maria Cecilia Vintimilla Alvarez;Alimentación, Nutrición, Salud y Actividad Física;Vicerrectorado de Investigación e Innovación;Departamento de Biociencias
+Maria Cecilia Vintimilla Alvarez;Pharmacology and Nutritional Sciences (PharmaNut);Vicerrectorado Académico;Facultad de Ciencias Médicas
+Paola Fernanda Vintimilla Alvarez;Economía Circular Inclusiva y Desarrollo Sostenible;Vicerrectorado de Investigación e Innovación;Departamento Interdisciplinario de Espacio y Población
+Paola Fernanda Vintimilla Alvarez;Ingeniería Industrial e Innovación (GI3);Vicerrectorado de Investigación e Innovación;Departamento de Química Aplicada y Sistemas de Producción
+Lorena Regina Vivanco Cruz, PhD;Ciudades Sustentables (LlactaLAB);Vicerrectorado de Investigación e Innovación;Departamento Interdisciplinario de Espacio y Población
+Lorena Regina Vivanco Cruz, PhD;Infraestructura de Datos Espaciales y Ciudades Inteligentes;Vicerrectorado de Investigación e Innovación;Departamento de Ciencias de la Computación
+Esteban Felipe Zalamea Leon, PhD;VirtualTech;Vicerrectorado Académico;Facultad de Arquitectura y Urbanismo
+Zulma Beatriz Zamora Burbano;Sin grupo asignado;Vicerrectorado Académico;Facultad de Ciencias Químicas
+Fausto Leonardo Zaruma Torres, PhD;Pharmacology and Nutritional Sciences (PharmaNut);Vicerrectorado Académico;Facultad de Ciencias Médicas
+Pedro Rene Zea Davila;Ecología Forestal, Agroecosistemas y Silvopasturas en Sistemas Ganaderos.;Vicerrectorado Académico;Facultad de Ciencias Agropecuarias
+Pedro Rene Zea Davila;Industrial Management and Innovation Research (IMAGINE);Vicerrectorado de Investigación e Innovación;Departamento de Química Aplicada y Sistemas de Producción
+Ana Lucia Zeas Puga;Salud Sexual y Reproductiva;Vicerrectorado Académico;Facultad de Ciencias Médicas
+Cristian Fabian Zhimnay Valverde;Población y Desarrollo Local Sustentable (PYDLOS);Vicerrectorado de Investigación e Innovación;Departamento Interdisciplinario de Espacio y Población
+Jonnathan Andres Zhindon Duarte;Pedagogía de las Artes;Vicerrectorado Académico;Facultad de Artes
+Miguel Angel Zuñiga Prieto, PhD;GSigma – Grupo de Sistemas Inteligentes para la Gestión, Modelado y Aprendizaje;Vicerrectorado de Investigación e Innovación;Departamento de Ciencias de la Computación
+Miguel Angel Zuñiga Prieto, PhD;Ingeniería de Software;Vicerrectorado de Investigación e Innovación;Departamento de Ciencias de la Computación
+    </script>
+    <script>
+        function loadData() {
+            const csvElement = document.getElementById('csv-data');
+            if (csvElement && csvElement.textContent.trim()) {
+                return buildHierarchyFromCSV(csvElement.textContent.trim());
+            }
+            return null;
+        }
+        function buildHierarchyFromCSV(csvText) {
+            const lines = csvText.trim().split('\n');
+            if (lines.length < 2) return null;
+            const header = lines[0].split(';');
+            const idxInv = header.findIndex(h => h.trim().toLowerCase().includes('investigador'));
+            const idxGrupo = header.findIndex(h => h.trim().toLowerCase().includes('grupo'));
+            const idxVic = header.findIndex(h => h.trim().toLowerCase().includes('vicerrectorado'));
+            const idxUni = header.findIndex(h => h.trim().toLowerCase().includes('unidad'));
+            const root = { name: "Universidad de Cuenca", children: [] };
+            const vMap = {};
+            for (let i = 1; i < lines.length; i++) {
+                const line = lines[i].trim();
+                if (!line) continue;
+                const cols = line.split(';');
+                if (cols.length < 4) continue;
+                const investigador = cols[idxInv]?.trim() || '';
+                const grupo = cols[idxGrupo]?.trim() || 'Sin grupo asignado';
+                const vicerrectorado = cols[idxVic]?.trim() || '';
+                const unidad = cols[idxUni]?.trim() || '';
+                if (!vicerrectorado || !unidad) continue;
+                if (!vMap[vicerrectorado]) vMap[vicerrectorado] = { name: vicerrectorado, color: vicerrectorado.includes('Académico') ? '#003156' : '#A51008', children: {} };
+                if (!vMap[vicerrectorado].children[unidad]) vMap[vicerrectorado].children[unidad] = { name: unidad, children: {} };
+                if (!vMap[vicerrectorado].children[unidad].children[grupo]) vMap[vicerrectorado].children[unidad].children[grupo] = { name: grupo, investigadores: new Set() };
+                if (investigador) vMap[vicerrectorado].children[unidad].children[grupo].investigadores.add(investigador);
+            }
+            root.children = Object.values(vMap).map(v => ({ name: v.name, color: v.color, children: Object.values(v.children).map(u => ({ name: u.name, children: Object.values(u.children).map(g => ({ name: g.name, value: g.investigadores.size || 1, investigadores: Array.from(g.investigadores) })) })) }));
+            return root.children.length > 0 ? root : null;
+        }
+        
+        function init() {
+            const data = loadData();
+            if (!data) { document.getElementById('instruction').textContent = 'No se encontraron datos.'; return; }
+            
+            const width = 1000, height = 600;
+            const svg = d3.select("#canvas").attr("viewBox", `0 0 ${width} ${height}`).on("click", (event) => { if (event.target === svg.node()) zoom(root); });
+            const defs = svg.append("defs");
+            const filterShadow = defs.append("filter").attr("id", "shadow").attr("height", "140%");
+            filterShadow.append("feDropShadow").attr("dx", 0).attr("dy", 4).attr("stdDeviation", 10).attr("flood-opacity", 0.08);
+            const gradBlue = defs.append("linearGradient").attr("id", "gradBlue").attr("x1","0%").attr("y1","0%").attr("x2","100%").attr("y2","100%");
+            gradBlue.append("stop").attr("offset","0%").attr("stop-color","#004B82"); gradBlue.append("stop").attr("offset","100%").attr("stop-color","#003156");
+            const gradRed = defs.append("linearGradient").attr("id","gradRed").attr("x1","0%").attr("y1","0%").attr("x2","100%").attr("y2","100%");
+            gradRed.append("stop").attr("offset","0%").attr("stop-color","#C41E14"); gradRed.append("stop").attr("offset","100%").attr("stop-color","#A51008");
+            
+            const root = d3.hierarchy(data);
+            root.leaves().forEach(d => { d.realValue = d.data.investigadores ? d.data.investigadores.length : (d.data.value || 1); });
+            const vAcad = root.children.find(c => c.data.name.includes("Académico"));
+            const vInv = root.children.find(c => c.data.name.includes("Investigación"));
+            if (vAcad) vAcad.leaves().forEach(d => d.value = d.realValue * (100 / (d3.sum(vAcad.leaves(), l => l.realValue) || 1)));
+            if (vInv) vInv.leaves().forEach(d => d.value = d.realValue * (100 / (d3.sum(vInv.leaves(), l => l.realValue) || 1)));
+            root.eachAfter(d => { if (d.children) d.value = d3.sum(d.children, c => c.value); });
+            root.sort((a, b) => b.value - a.value);
+            
+            const pack = d3.pack()
+                .size([width, height])
+                .padding(d => {
+                    if (d.depth === 0) return 0;
+                    if (d.depth === 1) return 8;
+                    if (d.depth === 2) return 4;
+                    return 2;
+                });
+                
+            const nodes = pack(root).descendants();
+            let focus = root, view;
+            const nodeGroup = svg.append("g");
+            const circle = nodeGroup.selectAll("circle").data(nodes.slice(1)).join("circle")
+                .attr("fill", d => d.depth === 1 ? (d.data.color === "#003156" ? "url(#gradBlue)" : "url(#gradRed)") : "white")
+                .attr("stroke", d => d.depth > 1 ? (d.parent?.data?.color || "#DADADA") : "none")
+                .attr("stroke-width", d => d.depth > 1 ? 1.5 : 0)
+                .style("filter", d => d.depth === 1 ? "url(#shadow)" : "none")
+                .style("opacity", d => d.depth === 1 ? 1 : 0)
+                .style("pointer-events", d => d.depth === 1 ? "all" : "none")
+                .style("cursor", "pointer")
+                .on("click", (event, d) => { event.stopPropagation(); if (d.children && d.depth <= 2) zoom(d); else { circle.attr("stroke-width", c => c.depth > 1 ? 1.5 : 0); d3.select(event.currentTarget).attr("stroke","#111111").attr("stroke-width",2.5); openSidebar(d.data); } })
+                .on("mouseover", (event, d) => { const visible = (focus === root && d.depth === 1) || d.parent === focus; if (visible) { d3.select("#tooltip").style("opacity",1).html(`<div class="tt-name">${d.data.name}</div><div class="tt-count">${d3.sum(d.leaves(), l => l.realValue)} Investigadores</div>`).style("left",(event.pageX+15)+"px").style("top",(event.pageY-15)+"px"); } })
+                .on("mouseout", () => d3.select("#tooltip").style("opacity",0));
+            
+            const label = nodeGroup.selectAll("g.label-group")
+                .data(nodes.slice(1))
+                .join("g")
+                .attr("class", "label-group")
+                .style("opacity", d => d.depth === 1 ? 1 : 0)
+                .style("pointer-events","none");
+
+            label.each(function(d) {
+                const el = d3.select(this);
+                el.selectAll("*").remove();
+                let name = d.data.name;
+                const isDepth1 = d.depth === 1;
+                const isDepth2 = d.depth === 2;
+                if (isDepth2) {
+                    name = name.replace(/^(Facultad de\s+|Departamento de\s+|Depto\.\s+de\s+|Departamento Interdisciplinario de\s+)/i, "");
+                }
+                let maxLineLength = Math.max(14, Math.floor(d.r * 0.32));
+                if (isDepth1) maxLineLength = 28; 
+                const words = name.split(/\s+/);
+                let lines = [];
+                let currentLine = "";
+                words.forEach(word => {
+                    if ((currentLine + " " + word).trim().length <= maxLineLength) {
+                        currentLine = (currentLine + " " + word).trim();
+                    } else {
+                        if (currentLine) lines.push(currentLine);
+                        currentLine = word;
+                    }
+                });
+                if (currentLine) lines.push(currentLine);
+                if (lines.length > 3) {
+                    lines = [lines[0], lines[1], lines[2] + "..."];
+                }
+                let fontSizeNum = Math.min(isDepth1 ? 18 : (isDepth2 ? 13 : 11), d.r * 0.25);
+                fontSizeNum = Math.max(isDepth1 ? 14 : (isDepth2 ? 9.5 : 8), fontSizeNum);
+                const fontSize = fontSizeNum + "px";
+                const lineHeight = fontSizeNum * 1.15;
+                const totalHeight = lines.length * lineHeight;
+                const startY = isDepth2 ? (-(totalHeight / 2) + lineHeight / 2) : (-(totalHeight / 2) + lineHeight / 2 - 2);
+                const textNode = el.append("text")
+                    .attr("text-anchor", "middle")
+                    .attr("fill", isDepth1 ? "white" : "#111111")
+                    .style("font-size", fontSize)
+                    .style("font-weight", "700")
+                    .style("font-family", "inherit");
+                lines.forEach((line, i) => {
+                    textNode.append("tspan")
+                        .attr("x", 0)
+                        .attr("y", startY + (i * lineHeight))
+                        .text(line);
+                });
+                if (!isDepth2) {
+                    const realCount = d3.sum(d.leaves(), l => l.realValue);
+                    el.append("text")
+                        .attr("text-anchor", "middle")
+                        .attr("y", (totalHeight / 2) + (isDepth1 ? 15 : 10))
+                        .attr("fill", isDepth1 ? "rgba(255,255,255,0.85)" : "#6F6F6F")
+                        .style("font-size", (fontSizeNum * 0.8) + "px")
+                        .style("font-weight", "600")
+                        .text(`${realCount} inv.`);
+                }
+            });
+
+            function zoom(d) { 
+                focus = d; 
+                const zp = focus.depth === 0 ? focus.r * 2.05 : focus.depth === 1 ? focus.r * 2.15 : focus.r * 2.2; 
+                const t = svg.transition().duration(900); 
+                t.tween("zoom", () => { 
+                    const i = d3.interpolateZoom(view, [focus.x, focus.y, zp]); 
+                    return t2 => zoomTo(i(t2)); 
+                }); 
+                circle.style("pointer-events", d => focus === root ? (d.depth === 1 ? "all" : "none") : (d.parent === focus ? "all" : "none")); 
+                circle.transition(t).style("opacity", d => focus === root ? (d.depth === 1 ? 1 : 0) : (d === focus || d.parent === focus ? 1 : 0)); 
+                label.transition(t).style("opacity", d => focus === root ? (d.depth === 1 ? 1 : 0) : (d.parent === focus ? 1 : 0)); 
+                updateUI(focus); 
+            }
+            
+            function zoomTo(v) { view = v; const k = height/v[2]; const tx = d => (d.x-v[0])*k+width/2; const ty = d => (d.y-v[1])*k+height/2; circle.attr("transform", d => `translate(${tx(d)},${ty(d)})`).attr("r", d => d.r*k); label.attr("transform", d => `translate(${tx(d)},${ty(d)})`); }
+            function updateUI(node) {
+                const isRoot = node === root;
+                // Mostrar/ocultar DPE solo en vista raíz
+                const dpe = document.getElementById("dpe-flotante");
+                if (dpe) dpe.classList.toggle("oculto", !isRoot);
+                document.getElementById("instruction").style.opacity = isRoot ? "1" : "0";
+                const stats = document.getElementById("stats-panel");
+                stats.classList.toggle("visible", !isRoot);
+                if (!isRoot) {
+                    document.getElementById("stat-unidades").textContent = node.children ? node.children.length : 1;
+                    document.getElementById("stat-grupos").textContent = node.leaves().length;
+                    document.getElementById("stat-investigadores").textContent = d3.sum(node.leaves(), d => d.realValue);
+                    document.getElementById("stat-label-unidades").textContent = node.depth === 1 ? (node.data.name.includes("Académico") ? "Facultades" : "Deptos.") : "Grupos";
+                }
+                const bc = document.getElementById("breadcrumb");
+                bc.innerHTML = "";
+                const path = node.ancestors().reverse();
+                path.forEach((n,i) => {
+                    if(i>0){const s=document.createElement("span");s.className="sep";s.textContent="›";bc.appendChild(s);}
+                    const b=document.createElement("button");
+                    b.textContent=n.depth===0?"Universidad":n.data.name.length>25?n.data.name.slice(0,23)+"…":n.data.name;
+                    if(i===path.length-1)b.classList.add("current");
+                    b.onclick=(e)=>{e.stopPropagation();zoom(n);closeSidebar();};
+                    bc.appendChild(b);
+                });
+            }
+            function openSidebar(data) { document.getElementById("sidebar-title").textContent = data.name; const list = document.getElementById("sidebar-list"); list.innerHTML = ""; if (data.investigadores && data.investigadores.length > 0) { data.investigadores.sort().forEach(name => { const li = document.createElement("li"); li.innerHTML = `<span style="color:#003156;font-weight:700;">▸</span> ${name}`; list.appendChild(li); }); } else { const li = document.createElement("li"); li.textContent = "Sin investigadores asignados"; li.style.fontStyle = "italic"; li.style.color = "#6F6F6F"; list.appendChild(li); } document.getElementById("sidebar").classList.add("open"); }
+            function closeSidebar() { document.getElementById("sidebar").classList.remove("open"); circle.attr("stroke-width", c => c.depth > 1 ? 1.5 : 0).attr("stroke", c => c.depth > 1 ? (c.parent?.data?.color || "#DADADA") : "none"); }
+            document.getElementById("close-sidebar").onclick = closeSidebar;
+            zoomTo([root.x, root.y, root.r * 2]);
+            updateUI(root);
+        }
+        init();
+    </script>
+</body>
+</html>
