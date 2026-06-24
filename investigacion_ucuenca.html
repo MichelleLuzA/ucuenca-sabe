@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard Ejecutivo de Investigación UCuenca 2026</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        /* Importación de tipografías del ecosistema Meta para emular el Kit de Marca UCuenca */
+        @import url('https://fonts.googleapis.com/css2?family=Fira+Sans:ital,wght@0,300;0,400;0,700;1,400&family=Lora:ital,wght@0,400;0,500;1,400&display=swap');
+
+        :root {
+            --ucblue: #003156;     /* Azul Institucional Principal (80% peso visual) */
+            --ucred: #A51008;      /* Rojo de Acento (10%) */
+            --ucgray: #6F6F6F;     /* Gris Secundario (10%) */
+            --uclightgray: #DADADA;/* Gris Claro de Fondo y Bordes */
+            --ucwhite: #FFFFFF;
+        }
+
+        body {
+            font-family: 'Fira Sans', sans-serif; /* Emulación de FF Meta Pro */
+            background-color: #F8F9FA;
+            margin: 0;
+            padding: 20px;
+            color: var(--ucblue);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Contenedor Ejecutivo del Dashboard */
+        #dashboard-container {
+            width: 100%;
+            max-width: 1100px;
+            background-color: var(--ucwhite);
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0, 49, 86, 0.08);
+            padding: 30px;
+            box-sizing: border-box;
+            border-top: 6px solid var(--ucblue);
+        }
+
+        /* Encabezado Institucional conforme al Manual */
+        .brand-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid var(--uclightgray);
+            padding-bottom: 20px;
+            margin-bottom: 25px;
+        }
+
+        .brand-title h1 {
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            margin: 0;
+            color: var(--ucblue);
+        }
+
+        .brand-title p {
+            font-family: 'Lora', serif; /* Emulación de Meta Serif Pro */
+            font-size: 15px;
+            margin: 5px 0 0 0;
+            color: var(--ucgray);
+            font-style: italic;
+        }
+
+        .kpi-badge {
+            background-color: var(--ucblue);
+            color: var(--ucwhite);
+            padding: 10px 20px;
+            border-radius: 4px;
+            text-align: right;
+        }
+
+        .kpi-badge .value {
+            font-size: 24px;
+            font-weight: 700;
+            display: block;
+            line-height: 1;
+        }
+
+        .kpi-badge .label {
+            font-size: 11px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            opacity: 0.8;
+        }
+
+        /* Instrucciones de navegación interactiva */
+        .nav-instruction {
+            background-color: rgba(0, 49, 86, 0.03);
+            border-left: 4px solid var(--ucred);
+            padding: 12px 15px;
+            font-size: 13px;
+            margin-bottom: 20px;
+            color: var(--ucblue);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* Estilos del gráfico interactivo D3.js */
+        #visualization {
+            display: flex;
+            justify-content: center;
+            position: relative;
+            background-color: #FCFCFC;
+            border: 1px solid var(--uclightgray);
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        circle {
+            transition: stroke-width 0.2s ease, fill-opacity 0.2s ease;
+            cursor: pointer;
+        }
+
+        .node--leaf circle {
+            stroke: var(--uclightgray);
+            stroke-width: 1px;
+        }
+
+        .node--leaf:hover circle {
+            stroke: var(--ucred) !important;
+            stroke-width: 2px !important;
+        }
+
+        .label-text {
+            font-family: 'Fira Sans', sans-serif;
+            fill: var(--ucblue);
+            font-weight: 700;
+            text-anchor: middle;
+            pointer-events: none;
+        }
+
+        .label-leaf {
+            font-family: 'Lora', serif;
+            fill: #111111;
+            font-size: 10px;
+            text-anchor: middle;
+            pointer-events: none;
+        }
+
+        /* Tooltip Corporativo Avanzado */
+        .uc-tooltip {
+            position: absolute;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.96);
+            border-left: 4px solid var(--ucblue);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+            border-radius: 0 4px 4px 0;
+            pointer-events: none;
+            font-size: 13px;
+            line-height: 1.4;
+            color: #333;
+            font-family: 'Fira Sans', sans-serif;
+            z-index: 1000;
+            display: none;
+        }
+
+        .uc-tooltip .title {
+            font-weight: 700;
+            color: var(--ucblue);
+            margin-bottom: 4px;
+        }
+
+        .uc-tooltip .stat {
+            font-size: 15px;
+            font-weight: 700;
+            color: var(--ucred);
+        }
+
+        .breadcrumbs {
+            font-size: 13px;
+            font-weight: 400;
+            color: var(--ucgray);
+        }
+    </style>
+</head>
+<body>
+
+<div id="dashboard-container">
+    <div class="brand-header">
+        <div class="brand-title">
+            <h1>UCUENCA</h1>
+            <p>Vicerrectorado de Investigación e Innovación — Modelo de Distribución del Capital Humano</p>
+        </div>
+        <div class="kpi-badge">
+            <span class="value" id="kpi-total">429</span>
+            <span class="label">Investigadores Activos</span>
+        </div>
+    </div>
+
+    <div class="nav-instruction">
+        <div>
+            <strong>Interacción Estratégica:</strong> Haz clic en los círculos concéntricos (Departamentos o Facultades) para realizar un <em>drill-down</em> y explorar las líneas de investigación específicas. Haz clic en el fondo para regresar al nivel macro.
+        </div>
+        <div class="breadcrumbs" id="breadcrumb">Raíz: UCuenca</div>
+    </div>
+
+    <div id="visualization"></div>
+</div>
+
+<div class="uc-tooltip" id="tooltip"></div>
+
+<script>
+    // 1. Estructura de Datos Unificada y Curada (Integrando Listados 1 y 2 sin duplicidades de totales)
+    const dataset = {
+        name: "UCUENCA",
+        children: [
+            {
+                name: "Departamentos (Áreas Académicas)",
+                children: [
+                    {
+                        name: "Dpto. Biociencias",
+                        children: [
+                            { name: "Alimentación, Nutrición, Salud y Actividad Física", value: 10 },
+                            { name: "Ingeniería de las Reacciones Químicas, Catálisis y Tecnologías del Medio Ambiente (IRCMA)", value: 6 },
+                            { name: "Plantas Medicinales y Productos Naturales", value: 4 }
+                        ]
+                    },
+                    {
+                        name: "Dpto. Ciencias de la Computación",
+                        children: [
+                            { name: "Gestión del Conocimiento", value: 8 },
+                            { name: "GSigma – Grupo de Sistemas Inteligentes para la Gestión, Modelado y Aprendizaje", value: 7 },
+                            { name: "Infraestructura de Datos Espaciales y Ciudades Inteligentes", value: 5 },
+                            { name: "Ingeniería de Software", value: 3 },
+                            { name: "Innovación Tecnológica (GIIT)", value: 6 },
+                            { name: "Models, Analysis and Simulations Applied to Transport Systems (MAS)", value: 2 }
+                        ]
+                    },
+                    {
+                        name: "Dpto. Economía, Empresa y Desarrollo Sostenible",
+                        children: [
+                            { name: "Acompañamiento Organizacional al Desarrollo (ACORDES)", value: 5 },
+                            { name: "Contabilidad, Finanzas y Tributación (GiCOFT)", value: 3 },
+                            { name: "Economía Regional", value: 12 },
+                            { name: "Empresarial", value: 8 },
+                            { name: "Estudios Interdisciplinarios de Género", value: 5 },
+                            { name: "Estudios Sociales de Ciencia y Tecnología", value: 3 },
+                            { name: "Gestión Estratégica y de Negocios", value: 2 },
+                            { name: "Macroeconomía y Desarrollo (GIMADE)", value: 4 },
+                            { name: "Water Law and Management", value: 4 }
+                        ]
+                    },
+                    {
+                        name: "Dpto. Educación",
+                        children: [
+                            { name: "Educación Matemática", value: 2 },
+                            { name: "EFL Teacher Education", value: 3 },
+                            { name: "English Learning and Acquisition (ELA)", value: 4 },
+                            { name: "GITEICU – Grupo de Investigación en Tecnología Educativa, Innovación, y Conocimiento Universitario", value: 3 },
+                            { name: "Políticas Educativas", value: 5 },
+                            { name: "Sexualidad, género y educación sexual (HUMSEX)", value: 5 },
+                            { name: "Sistema Familiar", value: 7 },
+                            { name: "Trayectorias académicas e indicadores educativos", value: 4 }
+                        ]
+                    },
+                    {
+                        name: "Dpto. Ingeniería Civil",
+                        children: [
+                            { name: "Estructuras, sismicidad y materiales (ES&M)", value: 2 },
+                            { name: "Geotecnia vialidad y transportación (GV&T)", value: 2 },
+                            { name: "Ingeniería del Agua y Saneamiento Ambiental (IA&SA)", value: 6 },
+                            { name: "Manejo del Agua y del Suelo (PROMAS)", value: 5 },
+                            { name: "Red Sísmica del Austro", value: 5 }
+                        ]
+                    },
+                    {
+                        name: "Dpto. Ingeniería Eléctrica, Electrónica y Telecomunicaciones",
+                        children: [
+                            { name: "Electrónica y Control", value: 3 },
+                            { name: "Procesamiento Digital de Señales y Comunicaciones", value: 4 },
+                            { name: "Sistemas de Energía Eléctrica", value: 7 }
+                        ]
+                    },
+                    {
+                        name: "Dpto. Química Aplicada y Sistemas de Producción",
+                        children: [
+                            { name: "Biotecnología y Biodiversidad", value: 4 },
+                            { name: "Calidad del aire y Toxicología medioambiental (CATOx-CEA)", value: 3 },
+                            { name: "Energía, Biomasa y Bioenergía", value: 7 },
+                            { name: "Evaluación de Riesgos Ambientales en Sistemas de Producción y Servicios (RISKEN)", value: 8 },
+                            { name: "Industrial Management and Innovation Research (IMAGINE)", value: 7 },
+                            { name: "Ingeniería Industrial e Innovación (GI3)", value: 4 },
+                            { name: "Nanotecnología Aplicada a Medio Ambiente (N@NO-CEA)", value: 3 },
+                            { name: "Tecnologías Sostenibles en Calidad y Remediación Ambiental en Agua (TECNOCEA – H2O)", value: 3 }
+                        ]
+                    },
+                    {
+                        name: "Dpto. Recursos Hídricos y Ciencias Ambientales",
+                        children: [
+                            { name: "Agroforestería y manejo del paisaje", value: 5 },
+                            { name: "Hidrología y Clima", value: 6 },
+                            { name: "Saneamiento Ambiental", value: 2 }
+                        ]
+                    },
+                    {
+                        name: "Dpto. Interdisciplinario de Espacio y Población",
+                        children: [
+                            { name: "Ciudades Sustentables (LlactaLAB)", value: 5 },
+                            { name: "Economía Circular Inclusiva y Desarrollo Sostenible", value: 5 },
+                            { name: "Etnografía Interdisciplinaria (KALEIDOS)", value: 7 },
+                            { name: "Población y Desarrollo Local Sustentable (PYDLOS)", value: 5 }
+                        ]
+                    }
+                ]
+            },
+            {
+                name: "Facultades",
+                children: [
+                    {
+                        name: "Facultad de Arquitectura y Urbanismo",
+                        children: [
+                            { name: "Ciudad Patrimonio Mundial", value: 6 },
+                            { name: "Ciudad, Territorio y Movilidad (CITMOV)", value: 3 },
+                            { name: "Entorno Construido Sostenible (ECOS)", value: 2 },
+                            { name: "Laboratorio de Dinámicas Urbano-Territoriales Contemporáneas (LDUT)", value: 2 },
+                            { name: "PROYEKTA", value: 10 },
+                            { name: "Territorium", value: 3 },
+                            { name: "VirtualTech", value: 5 }
+                        ]
+                    },
+                    {
+                        name: "Facultad de Artes",
+                        children: [
+                            { name: "MediaLab: Arte, Diseño y Tecnología", value: 1 },
+                            { name: "Metodologías, Procesos y Prácticas Artísticas", value: 3 },
+                            { name: "Nueva ensayística sobre las artes y el diseño en el tercer milenio", value: 2 },
+                            { name: "Pedagogía de las Artes", value: 3 }
+                        ]
+                    },
+                    {
+                        name: "Facultad de Ciencias Agropecuarias",
+                        children: [
+                            { name: "Biotecnología agropecuaria", value: 6 },
+                            { name: "Biotecnología de la Reproducción Animal", value: 7 },
+                            { name: "Ecología Forestal, Agroecosistemas y Silvopasturas en Sistemas Ganaderos", value: 6 },
+                            { name: "GeoinfoRmática, Agrociencias y Soluciones Sostenibles (G.R.A.S.S)", value: 5 },
+                            { name: "Producción Animal", value: 2 },
+                            { name: "Sanidad animal y salud pública", value: 2 },
+                            { name: "Suelos y producción", value: 4 }
+                        ]
+                    },
+                    {
+                        name: "Facultad de Ciencias de la Hospitalidad",
+                        children: [
+                            { name: "Desarrollo local a través del turismo (PREIT-TOUR)", value: 6 },
+                            { name: "Indicadores Turísticos", value: 2 },
+                            { name: "Turismo, Sostenibilidad y Patrimonio (TUR-Ecuador)", value: 3 }
+                        ]
+                    },
+                    {
+                        name: "Facultad de Ciencias Médicas",
+                        children: [
+                            { name: "Atención Primaria de Salud (GIAPS)", value: 1 },
+                            { name: "Gestión del Cuidado", value: 2 },
+                            { name: "Inmuno-reumatología", value: 2 },
+                            { name: "Neurodesarrollo", value: 5 },
+                            { name: "Pharmacology and Nutritional Sciences (PharmaNut)", value: 3 },
+                            { name: "Salud Integral del/la Adolescente", value: 4 },
+                            { name: "Salud Intercultural", value: 3 },
+                            { name: "Salud Mental", value: 2 },
+                            { name: "Salud pública, alimentación y actividad física en el ciclo de la vida", value: 5 },
+                            { name: "Salud Sexual y Reproductiva", value: 9 }
+                        ]
+                    },
+                    {
+                        name: "Facultad de Ciencias Químicas",
+                        children: [
+                            { name: "Ecología Acuática", value: 3 }
+                        ]
+                    },
+                    {
+                        name: "Facultad de Filosofía, Letras y Ciencias de la Educación",
+                        children: [
+                            { name: "Cine, Periodismo y Comunicación (CIPEC)", value: 3 },
+                            { name: "Educación Física, Deporte y Salud (EDFIDYS)", value: 4 },
+                            { name: "Estudios Interculturales (GEI)", value: 5 },
+                            { name: "Formación e Innovación Docente (GIFID)", value: 4 },
+                            { name: "Historia de Cuenca y su Región", value: 1 },
+                            { name: "Lenguaje, culturas y representaciones", value: 9 },
+                            { name: "Literaturas Regionales", value: 1 },
+                            { name: "Migración Internacional, Derechos y Políticas", value: 6 }
+                        ]
+                    },
+                    {
+                        name: "Facultad de Ingeniería",
+                        children: [
+                            { name: "Monitorización de Salud Estructural", value: 1 },
+                            { name: "Tecnologías aplicadas en Salud", value: 3 }
+                        ]
+                    },
+                    {
+                        name: "Facultad de Jurisprudencia y Ciencias Políticas y Sociales",
+                        children: [
+                            { name: "Feminismo, Derechos humanos y Tecnología", value: 4 }
+                        ]
+                    },
+                    {
+                        name: "Facultad de Odontología",
+                        children: [
+                            { name: "Biomateriales y Tecnologías Dentales Aplicadas", value: 1 },
+                            { name: "Crecimiento, desarrollo y biología Craneofacial", value: 5 },
+                            { name: "Odontología Digital y Materiales CAD/CAM", value: 2 },
+                            { name: "Periodoncia e implantología oral (GIPIO)", value: 3 },
+                            { name: "Rehabilitación Oral (GIRO)", value: 5 }
+                        ]
+                    },
+                    {
+                        name: "Facultad de Psicología",
+                        children: [
+                            { name: "Inteligencia Emocional", value: 4 },
+                            { name: "Procesamiento Criminalístico o Procesos Psicológicos Básicos", value: 4 },
+                            { name: "Psicología Clínica y de la Salud", value: 4 }
+                        ]
+                    }
+                ]
+            }
+        ]
+    };
+
+    // 2. Dimensionamiento óptimo resguardando áreas de seguridad
+    const width = 800;
+    const height = width;
+
+    // Escala de Colores Oficiales UCuenca en Degradación Armónica para niveles jerárquicos
+    const colorScale = d3.scaleLinear()
+        .domain([0, 5])
+        .range(["#003156", "#DADADA"]) // De UCBLUE profundo a Gris Claro de fondo
+        .interpolate(d3.interpolateHcl);
+
+    // Configuración del empaquetado de círculos de D3
+    const pack = data => d3.pack()
+        .size([width, height])
+        .padding(5)
+        (d3.hierarchy(data)
+            .sum(d => d.value)
+            .sort((a, b) => b.value - a.value));
+
+    const root = pack(dataset);
+    let focus = root;
+    let view;
+
+    // Creación del lienzo SVG interactivo
+    const svg = d3.select("#visualization").append("svg")
+        .attr("width", width)
+        .attr("height", height)
+        .attr("viewBox", `0 0 ${width} ${height}`)
+        .style("display", "block")
+        .style("background", "transparent")
+        .on("click", (event) => zoom(event, root));
+
+    // Elementos del Tooltip
+    const tooltip = d3.select("#tooltip");
+    const breadcrumb = d3.select("#breadcrumb");
+
+    // Renderizado de nodos del árbol jerárquico
+    const node = svg.append("g")
+        .selectAll("g")
+        .data(root.descendants().slice(1))
+        .join("g")
+        .attr("class", d => d.children ? "node" : "node node--leaf")
+        .style("fill", d => d.children ? colorScale(d.depth) : "#FFFFFF")
+        .style("fill-opacity", d => d.children ? 0.25 : 1)
+        .on("mouseover", function(event, d) {
+            if (!d.children) {
+                d3.select(this).select("circle").style("fill", "#003156").style("fill-opacity", 0.1);
+            }
+            
+            // Construcción del Tooltip Institucional
+            let tooltipContent = `<div class="title">${d.data.name}</div>`;
+            if (d.value) {
+                tooltipContent += `<div><strong>Investigadores:</strong> <span class="stat">${d.value}</span></div>`;
+            }
+            if (d.parent) {
+                tooltipContent += `<div style="font-size:11px; color:#6F6F6F; margin-top:4px;">Pertenece a: ${d.parent.data.name}</div>`;
+            }
+            
+            tooltip.html(tooltipContent)
+                .style("display", "block")
+                .style("left", (event.pageX + 15) + "px")
+                .style("top", (event.pageY - 15) + "px");
+        })
+        .on("mousemove", function(event) {
+            tooltip.style("left", (event.pageX + 15) + "px")
+                   .style("top", (event.pageY - 15) + "px");
+        })
+        .on("mouseout", function(event, d) {
+            if (!d.children) {
+                d3.select(this).select("circle").style("fill", "#FFFFFF").style("fill-opacity", 1);
+            }
+            tooltip.style("display", "none");
+        })
+        .on("click", (event, d) => focus !== d && (zoom(event, d), event.stopPropagation()));
+
+    // Dibujo de los círculos concéntricos
+    node.append("circle")
+        .attr("stroke", d => d.children ? "#003156" : "#6F6F6F")
+        .attr("stroke-width", d => d.children ? "1px" : "0.5px")
+        .style("stroke-opacity", d => d.children ? 0.3 : 0.6);
+
+    // Inyección de etiquetas adaptativas para directivos
+    const label = svg.append("g")
+        .selectAll("text")
+        .data(root.descendants())
+        .join("text")
+        .attr("class", d => d.children ? "label-text" : "label-leaf")
+        .style("fill-opacity", d => d === root.children[0] || d === root.children[1] ? 1 : 0)
+        .style("display", d => d === root || !d.children ? "none" : "inline")
+        .style("font-size", d => d.children ? "14px" : "10px")
+        .text(d => d.data.name);
+
+    // Inicialización del zoom nativo sobre el nodo raíz
+    zoomTo([root.x, root.y, root.r * 2]);
+
+    // Función de cálculo para el encuadre matemático de la vista
+    function zoomTo(v) {
+        const k = width / v[2];
+        view = v;
+        node.attr("transform", d => `translate(${(d.x - v[0]) * k},${(d.y - v[1]) * k})`);
+        node.selectAll("circle").attr("r", d => d.r * k);
+    }
+
+    // Lógica avanzada de Zoom e interpolación fluida (Drill-Down / Roll-Up)
+    function zoom(event, d) {
+        focus = d;
+
+        // Actualización dinámica de la barra de navegación institucional (Breadcrumbs)
+        let path = [];
+        let current = d;
+        while(current) {
+            path.unshift(current.data.name);
+            current = current.parent;
+        }
+        breadcrumb.text("Ubicación: " + path.join(" > "));
+
+        const transition = svg.transition()
+            .duration(750)
+            .tween("zoom", d => {
+                const i = d3.interpolateZoom(view, [focus.x, focus.y, focus.r * 2]);
+                return t => zoomTo(i(t));
+            });
+
+        // Visibilidad inteligente de etiquetas según la profundidad del nivel consultado
+        label.transition(transition)
+            .style("fill-opacity", d => d.parent === focus ? 1 : 0)
+            .on("start", function(d) { 
+                if (d.parent === focus && d.children) this.style.display = "inline"; 
+                if (d.parent === focus && !d.children && focus.r < 150) this.style.display = "inline";
+            })
+            .on("end", function(d) { if (d.parent !== focus) this.style.display = "none"; });
+    }
+</script>
+
+</body>
+</html>
