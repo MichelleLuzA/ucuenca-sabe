@@ -1,0 +1,74 @@
+{
+  "version": "1.1.0",
+  "diagrams": [
+    {
+      "ordinal": 0,
+      "scrollPosition": {
+        "x": 0,
+        "y": 0
+      },
+      "nodes": [
+        {
+          "location": {
+            "x": 343.18475118062986,
+            "y": 136
+          },
+          "nodeIndex": "raw_investigadores",
+          "nodeLineageTag": "24c5030e-d6c8-423d-8821-9ef0aae5be8c",
+          "size": {
+            "height": 248,
+            "width": 234
+          },
+          "zIndex": 1
+        },
+        {
+          "location": {
+            "x": 50,
+            "y": -50
+          },
+          "nodeIndex": "silver_catastropure",
+          "nodeLineageTag": "f4a8ca57-0461-4fa9-9503-2c64037042e0",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 4
+        },
+        {
+          "location": {
+            "x": 706.36163941535983,
+            "y": 29
+          },
+          "nodeIndex": "silver_investigadores",
+          "nodeLineageTag": "9f848272-b5e7-4a32-ae88-d160eb06ee1d",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 2
+        },
+        {
+          "location": {
+            "x": 1007.3616394153601,
+            "y": 9.12994172754648
+          },
+          "nodeIndex": "silver_jerarquía",
+          "nodeLineageTag": "060ebf7a-1e0b-4d28-bc3f-a3683ea1dc5c",
+          "size": {
+            "height": 176,
+            "width": 234
+          },
+          "zIndex": 3
+        }
+      ],
+      "name": "Todas las tablas",
+      "zoomValue": 100,
+      "pinKeyFieldsToTop": false,
+      "showExtraHeaderInfo": false,
+      "hideKeyFieldsWhenCollapsed": false,
+      "tablesLocked": false
+    }
+  ],
+  "selectedDiagram": "Todas las tablas",
+  "defaultDiagram": "Todas las tablas"
+}

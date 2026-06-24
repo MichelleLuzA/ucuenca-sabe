@@ -1,0 +1,23 @@
+relationship f82b1d61-1e88-4272-980f-dac5f0f37071
+	joinOnDateBehavior: datePartOnly
+	fromColumn: raw_investigadores.fecha_extraccion
+	toColumn: LocalDateTable_d7639b60-2e1d-4a14-9112-85ac817f2070.Date
+
+relationship ca98a42a-38cf-40f1-928f-1824cc90d272
+	joinOnDateBehavior: datePartOnly
+	fromColumn: silver_investigadores.fecha_extraccion
+	toColumn: LocalDateTable_9a2da4ad-c70d-4fef-a2f7-430326d22bd6.Date
+
+relationship 5dcb00ba-26dc-4b55-86cb-af75ed7c2c7b
+	joinOnDateBehavior: datePartOnly
+	fromColumn: silver_catastropure.fecha_extraccion
+	toColumn: LocalDateTable_cb049f35-0d3a-448b-90bf-ea4f0695f414.Date
+
+relationship AutoDetected_156ffdc8-d440-4e4f-b228-4b3edc6a67d1
+	fromColumn: silver_investigadores.investigador
+	toColumn: raw_investigadores.investigador
+
+relationship AutoDetected_fc452dbb-78f0-41bd-852f-2361386525eb
+	fromColumn: silver_catastropure.investigador
+	toColumn: raw_investigadores.investigador
+

@@ -1,0 +1,162 @@
+table silver_catastropure
+	excludeFromModelRefresh
+	lineageTag: f4a8ca57-0461-4fa9-9503-2c64037042e0
+
+	measure 'Total Investigadores' = DISTINCTCOUNT('silver_catastropure'[investigador])
+		formatString: 0
+		lineageTag: 66774682-34c4-4e09-9870-7aeabebc4c2d
+
+	measure 'Total Grupos' = DISTINCTCOUNT('silver_catastropure'[grupo_investigacion])
+		formatString: 0
+		lineageTag: b8d1b728-e49f-4783-bc95-05b1b312c14e
+
+	measure 'Inv Académico' = CALCULATE([Total Investigadores], silver_catastropure[Vicerrectorado]= "Vicerrectorado Académico")
+		formatString: 0
+		lineageTag: 97222c0d-5c21-49b7-b614-66ee18f2443b
+
+	measure 'Inv Investigación' = CALCULATE([Total Investigadores], 'silver_catastropure'[Vicerrectorado] = "Vicerrectorado de Investigación e Innovación")
+		formatString: 0
+		lineageTag: ac619093-6c5f-4297-83df-716a3d573968
+
+	measure 'Grupos Académico' = CALCULATE([Total Grupos], 'silver_catastropure'[Vicerrectorado] = "Vicerrectorado Académico")
+		formatString: 0
+		lineageTag: 80924336-a0da-4439-bb4e-e5e8924e5b92
+
+	measure 'Grupos Investigación' = CALCULATE([Total Grupos], 'silver_catastropure'[Vicerrectorado] = "Vicerrectorado de Investigación e Innovación", 'silver_catastropure'[grupo_investigacion] <> "Sin grupo asignado")
+		formatString: 0
+		lineageTag: e6c7c57f-ed86-41da-99ce-63530f66d0fd
+
+	measure 'Total Facultades' =
+			
+			CALCULATE(
+			    DISTINCTCOUNT('silver_catastropure'[Unidad_Investigacion]),
+			    'silver_catastropure'[Vicerrectorado] = "Vicerrectorado Académico"
+			)
+		formatString: 0
+		lineageTag: 8e9c37a1-e130-4619-8ae6-0dd253db294e
+
+	measure 'Total Departamentos' =
+			
+			CALCULATE(
+			    DISTINCTCOUNT('silver_catastropure'[Unidad_Investigacion]),
+			    'silver_catastropure'[Vicerrectorado] = "Vicerrectorado de Investigación e Innovación"
+			)
+		formatString: 0
+		lineageTag: dea29e65-6ad8-4c06-a33d-845338b40a56
+
+	column investigador
+		dataType: string
+		lineageTag: f1d97e8b-4202-49da-9682-58c6b6a50047
+		summarizeBy: none
+		sourceColumn: investigador
+
+		annotation SummarizationSetBy = Automatic
+
+	column facultad
+		dataType: string
+		lineageTag: 6446f40e-0b96-414e-bdde-51706c9c54e3
+		summarizeBy: none
+		sourceColumn: facultad
+
+		annotation SummarizationSetBy = Automatic
+
+	column departamento
+		dataType: string
+		lineageTag: c958ed3c-01af-46d6-9cf0-cea2eafb8641
+		summarizeBy: none
+		sourceColumn: departamento
+
+		annotation SummarizationSetBy = Automatic
+
+	column pagina
+		dataType: int64
+		formatString: 0
+		lineageTag: 99e84604-cacb-42c1-a7ee-860e7d4c9580
+		summarizeBy: sum
+		sourceColumn: pagina
+
+		annotation SummarizationSetBy = Automatic
+
+	column url_perfil
+		dataType: string
+		lineageTag: 918ba208-c222-45d0-b6ef-531c25aef6bd
+		summarizeBy: none
+		sourceColumn: url_perfil
+
+		annotation SummarizationSetBy = Automatic
+
+	column fecha_extraccion
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 10b6b9f0-fdc8-4505-8784-f89518ee0088
+		summarizeBy: none
+		sourceColumn: fecha_extraccion
+
+		variation Variación
+			isDefault
+			relationship: 5dcb00ba-26dc-4b55-86cb-af75ed7c2c7b
+			defaultHierarchy: LocalDateTable_cb049f35-0d3a-448b-90bf-ea4f0695f414.'Jerarquía de fechas'
+
+		annotation SummarizationSetBy = Automatic
+
+	column Atributo
+		dataType: string
+		lineageTag: 88176434-c6f0-4a0c-acd9-ecba0c2f94f1
+		summarizeBy: none
+		sourceColumn: Atributo
+
+		annotation SummarizationSetBy = Automatic
+
+	column grupo_investigacion
+		dataType: string
+		lineageTag: ab6c0cb4-8180-4c21-ba8c-45d37803e50c
+		summarizeBy: none
+		sourceColumn: grupo_investigacion
+
+		annotation SummarizationSetBy = Automatic
+
+	column unidad_real
+		dataType: string
+		lineageTag: 6dd0ce6b-d981-45ff-b40b-48dc00fc77f0
+		summarizeBy: none
+		sourceColumn: unidad_real
+
+		annotation SummarizationSetBy = Automatic
+
+	column merge
+		dataType: string
+		lineageTag: 572f0bd6-1a21-48b6-b94c-ca3522d22262
+		summarizeBy: none
+		sourceColumn: merge
+
+		annotation SummarizationSetBy = Automatic
+
+	column Vicerrectorado
+		dataType: string
+		lineageTag: c92e9b67-a758-445f-a72f-944a6850ba91
+		summarizeBy: none
+		sourceColumn: Vicerrectorado
+
+		annotation SummarizationSetBy = Automatic
+
+	column Unidad_Investigacion
+		dataType: string
+		lineageTag: d89a1b3e-c37b-4e33-b90d-0639ec22da03
+		summarizeBy: none
+		sourceColumn: Unidad_Investigacion
+
+		annotation SummarizationSetBy = Automatic
+
+	partition silver_catastropure = m
+		mode: import
+		source =
+				let
+				    Origen = Table.NestedJoin(silver_investigadores, {"merge"}, silver_jerarquía, {"grupo_merge_jerarquia"}, "silver_jerarquía", JoinKind.Inner),
+				    #"Se expandió silver_jerarquía" = Table.ExpandTableColumn(Origen, "silver_jerarquía", {"Vicerrectorado", "Unidad_Investigacion"}, {"Vicerrectorado", "Unidad_Investigacion"})
+				in
+				    #"Se expandió silver_jerarquía"
+
+	annotation PBI_NavigationStepName = Navegación
+
+	annotation PBI_ResultType = Table
+
