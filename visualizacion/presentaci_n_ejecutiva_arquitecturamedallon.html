@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UCuenca-Sabe! - Trazabilidad y Ecosistema de Datos</title>
+    <!-- Importación de Google Fonts oficiales del manual de marca de la Universidad de Cuenca -->
+    <link href="https://fonts.googleapis.com/css2?family=Alegreya:ital,wght@0,400;0,500;0,700;1,400;1,700&family=Fira+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
+    <!-- Tailwind CSS para la maquetación responsiva ágil -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        ucazul: '#002856',       /* Azul Oficial UCuenca - 80% */
+                        ucrojo: '#A51008',       /* Rojo Oficial UCuenca - 10% */
+                        ucgris: '#6F6F6F',       /* Gris Oficial UCuenca - 10% */
+                        ucgrisclaro: '#DADADA',  /* Gris Claro Oficial UCuenca */
+                        ucbgclaro: '#F8FAFC'     /* Fondo ejecutivo ultra-claro */
+                    },
+                    fontFamily: {
+                        sans: ['Fira Sans', 'Inter', 'sans-serif'], /* FF Meta Pro Emulation */
+                        serif: ['Alegreya', 'serif'],               /* Alegreya Oficial */
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Fira Sans', sans-serif;
+            background-color: #F8FAFC;
+        }
+        /* Estilo para los cilindros de bases de datos */
+        .db-cylinder {
+            position: relative;
+            width: 48px;
+            height: 56px;
+            border-radius: 48px / 14px;
+        }
+        /* Transiciones de nodo interactivo */
+        .interactive-node {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .interactive-node:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px -4px rgba(0, 40, 86, 0.12);
+        }
+        /* Modal Transitions */
+        .modal-transition {
+            transition: opacity 0.25s ease-out, transform 0.25s ease-out;
+        }
+        /* Patrón de marca de fondo sutil inspirado en la pág. 20 del kit */
+        .uc-brand-bg {
+            background-image: radial-gradient(circle at 100% 0%, rgba(0, 40, 86, 0.03) 0%, transparent 40%),
+                              radial-gradient(circle at 0% 100%, rgba(165, 16, 8, 0.02) 0%, transparent 45%);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between uc-brand-bg text-slate-800">
+
+    <!-- CABECERA INSTITUCIONAL OFICIAL (Manual de Marca Nivel 2: Direcciones y Proyectos Estratégicos) -->
+    <header class="bg-white border-b border-slate-200 px-6 py-4 relative z-40">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
+            
+            <div class="flex items-center gap-5">
+                <!-- Logotipo UCuenca con tipografía Fira Sans Bold simétrica -->
+                <div class="border-r border-slate-300 pr-5">
+                    <span class="font-black text-2xl tracking-tight text-ucazul block" style="letter-spacing: -0.5px;">UCUENCA</span>
+                    <span class="text-[9px] block font-bold text-ucrojo tracking-[0.25em] uppercase -mt-1">La U que vive</span>
+                </div>
+                <div>
+                    <!-- Slogan Nivel 2 oficial: La U que vive la investigación e innovación -->
+                    <h2 class="text-xs font-extrabold text-ucazul uppercase tracking-wider">Dirección de Transformación Digital</h2>
+                    <p class="font-serif italic text-xs text-ucgris">"La U que vive la investigación e innovación"</p>
+                </div>
+            </div>
+            
+            <div class="flex items-center gap-3">
+                <span class="text-[10px] bg-slate-100 text-ucazul font-bold px-3 py-1.5 rounded border border-slate-200 uppercase tracking-wider">
+                    Iniciativa: UCuenca-Sabe!
+                </span>
+                <span class="text-[10px] bg-red-50 text-ucrojo font-bold px-3 py-1.5 rounded border border-red-100 uppercase tracking-wider">
+                    Estrategia Territorial 2026
+                </span>
+            </div>
+            
+        </div>
+        
+        <!-- Línea decorativa roja oficial del kit (Pág. 7 / Separador de Niveles) -->
+        <div class="absolute bottom-0 left-0 right-0 h-[3px] bg-ucrojo"></div>
+    </header>
+
+    <!-- CUERPO PRINCIPAL DE LA PRESENTACIÓN -->
+    <main class="flex-grow flex items-center justify-center p-4 md:p-8">
+        <div class="bg-white rounded-xl shadow-md border border-slate-200 w-full max-w-7xl p-6 md:p-10 relative overflow-hidden">
+            
+            <!-- Patrón Curvo Decorativo de Fondo (Inspirado en los Módulos de la Pág. 20 del Manual) -->
+            <div class="absolute top-0 right-0 opacity-5 pointer-events-none translate-x-12 -translate-y-12">
+                <svg width="240" height="240" viewBox="0 0 100 100" fill="none" stroke="#002856" stroke-width="12">
+                    <path d="M 0,100 A 100,100 0 0,1 100,0" />
+                </svg>
+            </div>
+
+            <!-- Título y Objetivo del Slide -->
+            <div class="mb-8 text-center md:text-left relative z-10">
+                <span class="text-ucrojo font-bold uppercase tracking-widest text-xs">Propuesta Metodológica de Trazabilidad Técnica</span>
+                <h1 class="text-2xl md:text-3xl font-black text-ucazul tracking-tight">Arquitectura de Datos para "UCuenca-Sabe!"</h1>
+                <p class="text-ucgris text-sm mt-1">Este modelo metodológico estandariza la ingesta y refinamiento de todas las fuentes de información de la universidad. Haga clic sobre cualquier capa para auditar las reglas técnicas aplicadas en esta primera fase y su proyección territorial.</p>
+            </div>
+
+            <!-- PIPELINE DE DATOS -->
+            <div class="relative bg-slate-50 rounded-xl border border-slate-200 p-8 overflow-x-auto shadow-inner">
+                <div class="min-w-[1000px] flex items-center justify-between py-4">
+
+                    <!-- BLOQUE 1: INGESTA / ORÍGENES -->
+                    <div class="flex flex-col gap-6 w-1/12 shrink-0">
+                        <div onclick="openModal('batch')" class="interactive-node cursor-pointer bg-white border border-slate-300 rounded-lg p-3 text-center">
+                            <div class="text-2xl mb-1">📂</div>
+                            <span class="block font-bold text-[10px] text-ucazul uppercase tracking-wider">Cargas Programadas</span>
+                            <span class="text-[9px] text-ucgris font-serif italic">SGA / GTH</span>
+                        </div>
+                        <div onclick="openModal('streaming')" class="interactive-node cursor-pointer bg-white border border-slate-300 rounded-lg p-3 text-center">
+                            <div class="text-2xl mb-1">☁️</div>
+                            <span class="block font-bold text-[10px] text-ucazul uppercase tracking-wider">Flujo en Tiempo Real</span>
+                            <span class="text-[9px] text-ucgris font-serif italic">Logs / Scraping</span>
+                        </div>
+                    </div>
+
+                    <!-- Conector Gráfico -->
+                    <div class="text-slate-400 font-bold text-lg select-none px-2">➔</div>
+
+                    <!-- BLOQUE 2: PIPELINE CENTRAL -->
+                    <div class="w-8/12 bg-white rounded-xl border border-slate-300 shadow-sm relative p-6">
+                        
+                        <!-- Etiqueta Superior del Pipeline -->
+                        <div class="absolute -top-3.5 left-1/2 transform -translate-x-1/2 bg-ucazul text-white text-[10px] font-bold px-6 py-1 rounded-full uppercase tracking-widest border border-slate-300">
+                            PROCESAMIENTO Y CALIDAD DE DATOS
+                        </div>
+
+                        <!-- Fases de Datos en el Pipeline -->
+                        <div class="flex justify-between items-center mt-4">
+
+                            <!-- ETAPA 0: RAW DATA -->
+                            <div onclick="openModal('raw-data')" class="interactive-node cursor-pointer flex flex-col items-center p-3 rounded-lg border border-transparent hover:border-ucazul/30 w-1/4">
+                                <span class="text-[9px] font-bold text-ucrojo uppercase tracking-wider mb-2">Aterrizaje inicial</span>
+                                <div class="text-3xl mb-2">📥</div>
+                                <span class="font-extrabold text-xs text-slate-700 uppercase">Raw Data</span>
+                                <span class="text-[9px] text-ucazul font-bold mt-0.5">Etapa 0</span>
+                                <p class="text-[9px] text-ucgris text-center mt-2 font-serif italic leading-tight">Catastro de Docentes (GTH + Analítica), DSpace y caracterizaciones crudas</p>
+                            </div>
+
+                            <div class="text-slate-300 text-lg font-bold select-none">➔</div>
+
+                            <!-- FASE 1: BRONCE -->
+                            <div onclick="openModal('bronze')" class="interactive-node cursor-pointer flex flex-col items-center p-3 rounded-lg border border-transparent hover:border-amber-600/30 w-1/4">
+                                <span class="text-[9px] font-bold text-amber-600 uppercase tracking-wider mb-2">Estructuración</span>
+                                <div class="db-cylinder bg-amber-500 border border-amber-600 flex items-center justify-center text-white font-bold text-base shadow-sm">▲</div>
+                                <span class="font-extrabold text-xs text-amber-700 uppercase mt-2">Bronze</span>
+                                <span class="text-[9px] text-ucgris text-center mt-0.5">Integración Cruda</span>
+                            </div>
+
+                            <div class="text-slate-300 text-lg font-bold select-none">➔</div>
+
+                            <!-- FASE 2: PLATA -->
+                            <div onclick="openModal('silver')" class="interactive-node cursor-pointer flex flex-col items-center p-3 rounded-lg border border-transparent hover:border-slate-500/30 w-1/4">
+                                <span class="text-[9px] font-bold text-slate-500 uppercase tracking-wider mb-2">Limpieza y Filtro</span>
+                                <div class="db-cylinder bg-slate-400 border border-slate-500 flex items-center justify-center text-white font-bold text-base shadow-sm">▲</div>
+                                <span class="font-extrabold text-xs text-slate-600 uppercase mt-2">Silver</span>
+                                <span class="text-[9px] text-ucgris text-center mt-0.5">Filtrado y Depuración</span>
+                            </div>
+
+                            <div class="text-slate-300 text-lg font-bold select-none">➔</div>
+
+                            <!-- FASE 3: ORO -->
+                            <div onclick="openModal('gold')" class="interactive-node cursor-pointer flex flex-col items-center p-3 rounded-lg border border-transparent hover:border-yellow-600/30 w-1/4">
+                                <span class="text-[9px] font-bold text-yellow-600 uppercase tracking-wider mb-2">Métricas e Índices</span>
+                                <div class="db-cylinder bg-yellow-500 border border-yellow-600 flex items-center justify-center text-white font-bold text-base shadow-sm">▲</div>
+                                <span class="font-extrabold text-xs text-yellow-600 uppercase mt-2">Gold</span>
+                                <span class="text-[9px] text-ucgris text-center mt-0.5">Métricas e Índices</span>
+                            </div>
+
+                        </div>
+                        
+                        <!-- Textos de soporte inferiores -->
+                        <div class="grid grid-cols-3 gap-4 border-t border-slate-200 mt-6 pt-4 text-[10px] text-ucgris text-center leading-relaxed font-serif italic">
+                            <div>"Almacenamiento asíncrono e histórico de fichas de investigadores de DSpace e historial del Catastro de Docentes (GTH y Analítica de Datos)."</div>
+                            <div class="border-x border-slate-200 px-2">"Homologación de nombres de docentes del catastro, líneas de investigación unificadas y validación de data laboral."</div>
+                            <div>"Consolidación de indicadores de inteligencia colectiva listos para ser explotados en el territorio."</div>
+                        </div>
+
+                    </div>
+
+                    <!-- Conector Gráfico -->
+                    <div class="text-slate-400 font-bold text-lg select-none px-2">➔</div>
+
+                    <!-- BLOQUE 3: CONSUMO / DESTINOS -->
+                    <div class="flex flex-col gap-6 w-1/12 shrink-0">
+                        <div onclick="openModal('bi')" class="interactive-node cursor-pointer bg-white border border-slate-300 rounded-lg p-3 text-center">
+                            <div class="text-2xl mb-1">📊</div>
+                            <span class="block font-bold text-[10px] text-ucazul uppercase tracking-wider">Repositorio</span>
+                            <span class="text-[9px] text-ucgris font-serif italic">Territorial y BI</span>
+                        </div>
+                        <div onclick="openModal('ml')" class="interactive-node cursor-pointer bg-white border border-slate-300 rounded-lg p-3 text-center">
+                            <div class="text-2xl mb-1">💡</div>
+                            <span class="block font-bold text-[10px] text-ucazul uppercase tracking-wider">Estudios</span>
+                            <span class="text-[9px] text-ucgris font-serif italic">Estudios y Encuestas</span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Pie integrado al contenedor con Autoría y Fechas -->
+            <div class="mt-8 pt-4 border-t border-slate-200 flex flex-col lg:flex-row justify-between items-center text-xs gap-4">
+                <div class="flex flex-col md:flex-row items-center gap-2 md:gap-4 font-serif italic text-ucgris">
+                    <span><strong class="font-sans text-ucazul not-italic">Elaborado por:</strong> Michelle Luzuriaga</span>
+                    <span class="hidden md:inline text-slate-300">|</span>
+                    <span><strong class="font-sans text-ucazul not-italic">Creación:</strong> Junio 2026</span>
+                    <span class="hidden md:inline text-slate-300">|</span>
+                    <span><strong class="font-sans text-ucazul not-italic">Última actualización:</strong> [Insertar Fecha]</span>
+                </div>
+                <span class="font-mono text-[10px] text-slate-400">Plataforma Tecnológica UCuenca-Sabe! — 2026</span>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- VENTANA EMERGENTE MODAL (POP-UP) -->
+    <div id="popupModal" class="hidden fixed inset-0 z-50 overflow-y-auto flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm modal-transition opacity-0">
+        <div class="bg-white rounded-xl border border-slate-300 shadow-2xl w-full max-w-2xl transform scale-95 transition-all duration-300 relative overflow-hidden">
+            
+            <!-- Encabezado del modal -->
+            <div class="bg-ucazul px-6 py-4 flex justify-between items-center relative">
+                <div class="flex items-center gap-3">
+                    <span id="modalCategoryBadge" class="bg-ucrojo text-white text-[9px] font-bold px-2.5 py-1 rounded uppercase tracking-wider">ETAPA 0</span>
+                    <h3 id="modalTitle" class="text-white font-bold text-lg tracking-tight">Título del Módulo</h3>
+                </div>
+                <button onclick="closeModal()" class="text-slate-300 hover:text-white text-2xl font-semibold leading-none">&times;</button>
+                
+                <div class="absolute right-12 top-0 bottom-0 opacity-10 pointer-events-none w-16">
+                    <svg height="100%" width="100%" viewBox="0 0 100 100" preserveAspectRatio="none">
+                        <path d="M 0,0 Q 50,50 100,100" stroke="white" stroke-width="8" fill="none"/>
+                    </svg>
+                </div>
+            </div>
+
+            <!-- Cuerpo del Modal -->
+            <div class="p-6 space-y-4">
+                <div id="modalConceptContainer" class="hidden">
+                    <h4 class="text-xs font-bold text-ucazul uppercase tracking-wider mb-1">Concepto Clave</h4>
+                    <p id="modalConceptText" class="text-xs text-slate-600 leading-relaxed"></p>
+                </div>
+
+                <div>
+                    <h4 class="text-xs font-bold text-ucgris uppercase tracking-wider mb-1.5">Descripción Ejecutiva</h4>
+                    <p id="modalDescription" class="text-sm text-slate-700 leading-relaxed font-serif italic bg-slate-50 border-l-4 border-ucazul p-3 rounded-r-lg">Descripción de la etapa...</p>
+                </div>
+
+                <div class="border-t border-slate-150 pt-4">
+                    <h4 id="modalSectionTitle" class="text-xs font-bold text-ucazul uppercase tracking-wider mb-3">Fuentes de Información y Estructuras Aplicadas:</h4>
+                    <div id="modalDataContent" class="space-y-3">
+                        <!-- Se poblará dinámicamente con JS -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- Botón de Cierre -->
+            <div class="bg-slate-50 px-6 py-4 border-t border-slate-100 flex justify-end">
+                <button onclick="closeModal()" class="bg-ucazul hover:bg-ucazul/95 text-white text-xs font-bold uppercase tracking-wider px-5 py-2.5 rounded transition-colors">
+                    Entendido
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- PIE DE PÁGINA CORPORATIVO -->
+    <footer class="bg-white border-t border-slate-200 px-6 py-4 relative z-40">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center text-xs text-ucgris gap-4">
+            <div class="flex items-center gap-2">
+                <span class="font-extrabold text-ucazul tracking-tight">UCUENCA</span>
+                <span class="h-3 w-px bg-slate-300"></span>
+                <span>"La U que vive la educación"</span>
+            </div>
+            <span class="font-serif italic text-slate-400">Manual de Marca Universitario 2026</span>
+        </div>
+    </footer>
+
+    <!-- SCRIPT DE CONFIGURACIÓN DE DATOS DEL MODAL -->
+    <script>
+        const modalData = {
+            'batch': {
+                badge: "FUENTES",
+                title: "Cargas Programadas (Batch Ingestion)",
+                desc: "Extracción programada y regular de los sistemas transaccionales base de la universidad para no saturar las bases de datos transaccionales activas del catastro y de los repositorios documentales.",
+                structures: [
+                    { label: "Catastro de Docentes (GTH y Analítica de Datos)", desc: "Copias periódicas de contratos, especializaciones académicas, dedicación horaria, escalafón y perfiles analíticos recopilados." },
+                    { label: "DSpace Institucional", desc: "Logs históricos de indexación de tesis, papers aprobados, metadatos de coautorías internas y externas." }
+                ]
+            },
+            'streaming': {
+                badge: "FUENTES",
+                title: "Flujos en Tiempo Real (Streaming, Logs & Scraping)",
+                desc: "Captura ágil e inmediata de eventos y logs internos de la universidad, combinada con la proyección estratégica de raspado automático (Web Scraping) de información externa de interés para el territorio.",
+                structures: [
+                    { label: "Logs de Actualización Institucional (Futuro con interoperabilidad)", desc: "Monitoreo automatizado de los cambios y modificaciones de fichas académicas y actualización de perfiles docentes en bases externas (ORCID, patentes)." },
+                    { label: "Web Scraping de Prensa y Licitaciones (Proyección / Futuro)", desc: "Raspado de portales de noticias locales, agendas de gobiernos autónomos (GADs) y portales públicos de licitación estatal para identificar de inmediato demandas del territorio." }
+                ]
+            },
+            'raw-data': {
+                badge: "ETAPA 0",
+                title: "Etapa 0: Landing Zone (Raw Data)",
+                desc: "Fase de recolección en bruto donde se unifica por primera vez la inteligencia institucional con la del territorio. Es la base metodológica aplicable a cualquier sistema que se integre a UCuenca-Sabe!",
+                structures: [
+                    { label: "1. Data Institucional (La Primera Fila)", desc: "Bases crudas del Catastro de Docentes (unión de GTH y Analítica de Datos para la caracterización demográfica, laboral y académica), producción científica de DSpace e inventario preliminar de líneas de investigación de los profesores." },
+                    { label: "2. Data Externa", desc: "Información de gremios productivos, requerimientos de análisis de decisores públicos territoriales, y lineamientos de organismos de cooperación internacional." },
+                    { label: "3. Datos Abiertos Curados", desc: "Repisitorios externos (censos del INEC, históricos SENESCYT) depurados metodológicamente por la universidad para complementar los análisis de impacto regional." }
+                ]
+            },
+            'bronze': {
+                badge: "CAPA BRONCE",
+                concept: "Integración cruda. Los datos se consolidan en tablas estructuradas, pero conservan toda la granularidad y posibles inconsistencias del origen.",
+                title: "Capa Bronce (Raw Integration)",
+                desc: "Modelado inicial de los datos recolectados. En esta fase, la información se organiza de forma unificada en tablas institucionales dinámicas, sirviendo como el archivo histórico crudo de la universidad.",
+                structures: [
+                    { label: "Catastro de Docentes (GTH y Analítica) - Historial Crudo", desc: "Almacenamiento asíncrono e histórico de las fichas de los docentes e investigadores tal y como se extraen del sistema administrativo transaccional y el módulo de analítica." },
+                    { label: "DSpace (Producción) - Historial Crudo", desc: "Almacenamiento de metadatos de papers indexados y registros documentales autodeclarados." },
+                    { label: "Líneas de Investigación - Declaración Base", desc: "Listado original de especialidades docentes antes de someterse a reglas de consistencia de datos." }
+                ]
+            },
+            'silver': {
+                badge: "CAPA PLATA",
+                concept: "Validación y calidad. Aquí ocurre la verdadera transformación técnica.",
+                title: "Capa Plata (Filtered / Cleaned / Augmented)",
+                desc: "Proceso de depuración, tipificación y enriquecimiento de datos. Se eliminan duplicados, se corrigen errores de registro y se estructura la información con esquemas consistentes y listos para el análisis.",
+                structures: [
+                    { label: "Estandarización del Catastro de Docentes", desc: "Homologación de nombres de docentes e investigadores del catastro (GTH y Analítica de Datos), unificando duplicados u homónimos bajo un ID único institucional." },
+                    { label: "Homologación Curada de Líneas de Investigación", desc: "Clasificación unificada y limpia de las verdaderas capacidades temáticas docentes para responder velozmente a requerimientos del territorio." },
+                    { label: "Consistencia de Filiación y Roles", desc: "Vinculación directa de la producción de DSpace con la dedicación de talento humano para auditoría técnica de impacto." }
+                ]
+            },
+            'gold': {
+                badge: "CAPA ORO",
+                concept: "Datos listos para la toma de decisiones directivas y consumo en herramientas como Power BI o Looker Studio.",
+                title: "Capa Oro (Business-level Aggregates)",
+                desc: "Hub de conocimiento institucional. Repositorio de datos agregados y optimizados bajo KPIs estratégicos. Diseñado específicamente para alimentar los tableros de control de Rectorado, la Dirección de Proyectos Estratégicos y los procesos de Rendición de Cuentas.",
+                structures: [
+                    { label: "Inventario de Aptitudes Científicas", desc: "Agregados y cubos de datos listos con la oferta clasificada de expertos para consultorías o vinculación regional." },
+                    { label: "Métricas de Impacto Territorial", desc: "Cruce analítico optimizado de datos públicos territoriales (INEC/SENESCYT) con la producción unificada de la universidad." },
+                    { label: "Indicadores Clave de Gestión (KPIs)", desc: "Tablas de agregados listas para un consumo de alto desempeño analítico de cara a la toma de decisiones rápidas de Rectorado." }
+                ]
+            },
+            'bi': {
+                badge: "COMPONENTE I",
+                title: "Componente I: Repositorio e Indicadores Territoriales",
+                desc: "El canal de respuesta ágil. Los modelos limpios de la Capa Oro alimentan de inmediato tableros interactivos para el Rectorado, facilitando el diseño veloz y riguroso de intervenciones públicas y posicionando la analítica ante el territorio.",
+                structures: [
+                    { label: "Despacho Rectoral Command Center", desc: "Dashboard que cruza en tiempo real las demandas territoriales de analítica con los expertos e investigadores de la universidad capaces de atenderlas." },
+                    { label: "Indicadores de Acreditación e Impacto", desc: "Métricas consolidadas de docencia e investigación de cara a la acreditación de calidad institucional." }
+                ]
+            },
+            'ml': {
+                badge: "COMPONENTES II y III",
+                title: "Agenda de Investigación y Programa de Encuestas",
+                desc: "La inteligencia de negocio aplicada al beneficio mutuo. Este componente utiliza la ciencia de datos para caracterizar la demanda del desarrollo regional y posicionar a la universidad como un referente ante empresas y gremios.",
+                structures: [
+                    { label: "Componente II: Agenda Priorizada", desc: "Analítica predictiva enfocada en financiamiento, cupos, dinámicas de inserción laboral y el impacto del desarrollo de la universidad en su zona de influencia." },
+                    { label: "Componente III: Programa Permanente de Encuestas", desc: "Generación de encuestas técnicas aplicadas a empresas y gremios, abriendo canales estandarizados de consultorías, peritajes y vinculación remunerada de nuestros profesores." }
+                ]
+            }
+        };
+
+        // Abre el pop-up modal con transiciones fluidas
+        function openModal(key) {
+            const data = modalData[key];
+            if (!data) return;
+
+            document.getElementById('modalCategoryBadge').innerText = data.badge;
+            document.getElementById('modalTitle').innerText = data.title;
+
+            const conceptContainer = document.getElementById('modalConceptContainer');
+            if (data.concept) {
+                document.getElementById('modalConceptText').innerText = data.concept;
+                conceptContainer.classList.remove('hidden');
+            } else {
+                conceptContainer.classList.add('hidden');
+            }
+
+            document.getElementById('modalDescription').innerText = `"${data.desc}"`;
+
+            const sectionTitle = document.getElementById('modalSectionTitle');
+            if (key === 'raw-data' || key === 'bronze' || key === 'silver' || key === 'gold') {
+                sectionTitle.innerText = "Fuentes de Información y Estructuras Aplicadas:";
+            } else {
+                sectionTitle.innerText = "Estructuras y Modelos Clave Integrados:";
+            }
+
+            const container = document.getElementById('modalDataContent');
+            container.innerHTML = ''; 
+
+            data.structures.forEach(item => {
+                const block = document.createElement('div');
+                block.className = "bg-slate-50 border-l-4 border-ucrojo p-3 rounded-r-lg hover:bg-slate-100 transition-colors";
+                block.innerHTML = `
+                    <strong class="text-xs text-ucazul uppercase tracking-wider block mb-1">${item.label}</strong>
+                    <p class="text-xs text-slate-500 leading-relaxed font-serif">${item.desc}</p>
+                `;
+                container.appendChild(block);
+            });
+
+            const modal = document.getElementById('popupModal');
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                modal.querySelector('div').classList.remove('scale-95');
+            }, 50);
+        }
+
+        // Cierra el pop-up modal
+        function closeModal() {
+            const modal = document.getElementById('popupModal');
+            modal.classList.add('opacity-0');
+            modal.querySelector('div').classList.add('scale-95');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 250);
+        }
+
+        // Clic fuera del modal para cerrar
+        document.getElementById('popupModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+
+        // Soporte para tecla Escape
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape') {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+</html>
