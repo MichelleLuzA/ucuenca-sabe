@@ -26,8 +26,8 @@ El proyecto implementa una arquitectura de datos en **tres capas (Medallón)** p
 | Capa | Descripción | Contenido | Acceso |
 |------|-------------|-----------|--------|
 | **🥉 Bronze** | Datos crudos, sin transformar | Fuentes originales (GTH, VIUC, DSpace, INEC, BCE) | ⚠️ **RESTRINGIDO** - Contiene datos personales (cédulas) |
-| **🥈 Silver** | Datos limpios, estandarizados y enriquecidos | Datos anonimizados, con variables complementarias | ✅ Acceso general |
-| **🥇 Gold** | Datos agregados y optimizados para visualización | Métricas, indicadores, KPIs | ✅ Acceso general |
+| **🥈 Silver** | Datos limpios, estandarizados y enriquecidos | Datos anonimizados, con variables complementarias | ✅ Acceso general -por confirmar- |
+| **🥇 Gold** | Datos agregados y optimizados para visualización | Métricas, indicadores, KPIs | ✅ Acceso general `por confirmar- |
 
 # 🔐 Política de Datos y Privacidad
 
