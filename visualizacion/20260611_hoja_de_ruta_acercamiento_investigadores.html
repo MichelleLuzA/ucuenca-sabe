@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hoja de Ruta – Acercamiento Estratégico | Sistema de Inteligencia Territorial UCuenca</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: #f2f4f8;
+            color: #1a1f36;
+            display: flex;
+            justify-content: center;
+            padding: 2rem 1.5rem;
+        }
+
+        .container {
+            max-width: 1100px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 2.2rem;
+        }
+
+        /* Encabezado */
+        .header {
+            background: #0b1e3d;
+            color: white;
+            padding: 1.8rem 2.2rem;
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+            box-shadow: 0 6px 28px rgba(11, 30, 61, 0.18);
+        }
+        .header-icon {
+            background: rgba(255, 255, 255, 0.12);
+            border-radius: 50%;
+            width: 64px;
+            height: 64px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            flex-shrink: 0;
+        }
+        .header h1 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            letter-spacing: -0.3px;
+            line-height: 1.25;
+        }
+        .header .subtitle {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            font-weight: 400;
+            margin-top: 4px;
+        }
+
+        /* Secciones */
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #0b1e3d;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.25rem;
+        }
+        .section-subtitle {
+            font-size: 0.85rem;
+            color: #6b7280;
+            margin-bottom: 1rem;
+            line-height: 1.5;
+        }
+
+        /* Diagrama de flujo: arriba hacia abajo */
+        .flujo-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0;
+        }
+        .flujo-nodo {
+            background: white;
+            border-radius: 14px;
+            padding: 1.6rem 2rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            width: 100%;
+            max-width: 800px;
+            position: relative;
+            border-left: 5px solid;
+            z-index: 1;
+        }
+        .flujo-nodo.n1 {
+            border-left-color: #0b1e3d;
+        }
+        .flujo-nodo.n2 {
+            border-left-color: #3b82f6;
+        }
+        .flujo-nodo.n3 {
+            border-left-color: #10b981;
+        }
+        .flujo-nodo.n4 {
+            border-left-color: #8b5cf6;
+        }
+
+        .flujo-conector {
+            width: 3px;
+            height: 2.5rem;
+            background: linear-gradient(180deg, #0b1e3d 0%, #3b82f6 40%, #10b981 70%, #8b5cf6 100%);
+            position: relative;
+            z-index: 0;
+        }
+
+        .nodo-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 0.8rem;
+        }
+        .nodo-paso {
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #6b7280;
+        }
+        .nodo-fechas {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #4b5563;
+            background: #f3f4f6;
+            padding: 0.25rem 0.8rem;
+            border-radius: 20px;
+        }
+        .nodo-titulo {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #1a1f36;
+            margin-bottom: 0.7rem;
+        }
+        .nodo-quienes {
+            font-size: 0.88rem;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+        .nodo-como {
+            font-size: 0.85rem;
+            color: #4b5563;
+            line-height: 1.6;
+        }
+        .nodo-resultado {
+            margin-top: 0.9rem;
+            font-size: 0.82rem;
+            color: #1e3a5f;
+            background: #f0f4ff;
+            padding: 0.6rem 1rem;
+            border-radius: 8px;
+            line-height: 1.5;
+            display: flex;
+            align-items: flex-start;
+            gap: 0.5rem;
+        }
+
+        /* Tabla de jerarquía */
+        .jerarquia-tabla {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+            background: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 18px rgba(0, 0, 0, 0.04);
+        }
+        .jerarquia-tabla thead th {
+            background: #0b1e3d;
+            color: white;
+            padding: 0.8rem 1rem;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .jerarquia-tabla tbody td {
+            padding: 0.7rem 1rem;
+            border-bottom: 1px solid #e5e7eb;
+            vertical-align: top;
+            line-height: 1.5;
+        }
+        .jerarquia-tabla tbody tr:last-child td {
+            border-bottom: none;
+        }
+        .jerarquia-tabla .nivel-vicer {
+            background: #f8fafc;
+            font-weight: 700;
+            color: #0b1e3d;
+        }
+        .jerarquia-tabla .nivel-fac {
+            background: #f0f4ff;
+            font-weight: 600;
+            color: #1e3a5f;
+        }
+        .jerarquia-tabla .nivel-depto {
+            background: #f9fafb;
+            font-weight: 500;
+            color: #374151;
+        }
+        .jerarquia-tabla .nivel-grupo {
+            font-weight: 400;
+            color: #4b5563;
+            font-size: 0.8rem;
+        }
+        .grupos-lista {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.35rem;
+        }
+        .grupo-tag {
+            background: #eef2ff;
+            color: #1e3a5f;
+            padding: 0.25rem 0.6rem;
+            border-radius: 16px;
+            font-size: 0.73rem;
+            font-weight: 500;
+            white-space: nowrap;
+        }
+        .grupo-tag.prioritario {
+            background: #dbeafe;
+            color: #1e40af;
+            font-weight: 600;
+            border: 1px solid #3b82f6;
+        }
+
+        /* Criterios */
+        .criterios-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+        }
+        .criterio-card {
+            background: white;
+            border-radius: 10px;
+            padding: 1.2rem;
+            box-shadow: 0 3px 14px rgba(0, 0, 0, 0.04);
+            text-align: center;
+        }
+        .criterio-icon {
+            font-size: 1.8rem;
+            margin-bottom: 0.4rem;
+        }
+        .criterio-titulo {
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: #1a1f36;
+            margin-bottom: 0.3rem;
+        }
+        .criterio-texto {
+            font-size: 0.78rem;
+            color: #6b7280;
+            line-height: 1.5;
+        }
+
+        @media (max-width: 750px) {
+            .criterios-grid {
+                grid-template-columns: 1fr;
+            }
+            .flujo-nodo {
+                padding: 1.2rem 1.4rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+
+        <!-- ENCABEZADO -->
+        <div class="header">
+            <div class="header-icon">🧭</div>
+            <div>
+                <h1>Hoja de Ruta del Acercamiento a Investigadores</h1>
+                <div class="subtitle">Sistema de Inteligencia Territorial UCuenca · Fase de instalación 2026</div>
+            </div>
+        </div>
+
+        <!-- CRITERIOS DE PRIORIZACIÓN -->
+        <div>
+            <div class="section-title">🎯 ¿Cómo priorizamos los grupos a los que nos acercamos?</div>
+            <div class="section-subtitle">Tres criterios objetivos, alineados con la agenda del Sistema. El mapeo se refinó tras la reunión de validación con un grupo externo al co-diseño original.</div>
+            <div class="criterios-grid">
+                <div class="criterio-card">
+                    <div class="criterio-icon">📌</div>
+                    <div class="criterio-titulo">Afinidad temática directa</div>
+                    <div class="criterio-texto">La línea de investigación del grupo coincide con los ejes de la agenda priorizada: educación superior, impacto regional, desarrollo laboral, estudios aplicados.</div>
+                </div>
+                <div class="criterio-card">
+                    <div class="criterio-icon">📦</div>
+                    <div class="criterio-titulo">Productos transferibles</div>
+                    <div class="criterio-texto">Grupos con investigaciones, tesis, publicaciones o bases de datos ya maduras que puedan convertirse rápidamente en fichas, policy briefs o insumos del repositorio.</div>
+                </div>
+                <div class="criterio-card">
+                    <div class="criterio-icon">🤝</div>
+                    <div class="criterio-titulo">Disposición institucional</div>
+                    <div class="criterio-texto">Señales previas de interés en vinculación con el territorio, consultoría o incidencia pública, que indiquen apertura a formatos no tradicionales de transferencia.</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- FLUJO DE ACERCAMIENTO: ARRIBA HACIA ABAJO -->
+        <div>
+            <div class="section-title">📐 Lógica del acercamiento: de arriba hacia abajo</div>
+            <div class="section-subtitle">Partimos de las autoridades superiores, bajamos por la estructura institucional y llegamos a los grupos priorizados. Cada nivel abre la puerta del siguiente.</div>
+
+            <div class="flujo-container">
+
+                <!-- NIVEL 1: Vicerrectoras -->
+                <div class="flujo-nodo n1">
+                    <div class="nodo-header">
+                        <div class="nodo-paso">Nivel 1</div>
+                        <div class="nodo-fechas">Mayo 2026</div>
+                    </div>
+                    <div class="nodo-titulo">Vicerrectorado Académico y Vicerrectorado de Investigación e Innovación</div>
+                    <div class="nodo-quienes">👥 PhD. Titulares de los dos vicerrectorados que albergan facultades, departamentos y grupos de investigación.</div>
+                    <div class="nodo-como">
+                        Reunión de trabajo con el Director de Proyectos Estratégicos y el Especialista. Se presenta la agenda priorizada, se valida la ruta de descenso institucional y se acuerda el respaldo para las reuniones con decanos y directores de departamento.
+                    </div>
+                    <div class="nodo-resultado">
+                        🔑 <strong>Apertura de la puerta institucional:</strong> Con el visto bueno de ambos vicerrectorados, las reuniones con facultades y departamentos dejan de ser una gestión informal y pasan a ser parte de una prioridad institucional. Esto allana el camino sin necesidad de que el Rector baje instrucciones directas.
+                    </div>
+                </div>
+
+                <div class="flujo-conector"></div>
+
+                <!-- NIVEL 2: Decanos y Directores de Departamento -->
+                <div class="flujo-nodo n2">
+                    <div class="nodo-header">
+                        <div class="nodo-paso">Nivel 2</div>
+                        <div class="nodo-fechas">Junio – Julio 2026</div>
+                    </div>
+                    <div class="nodo-titulo">Decanos de Facultad y Directores de Departamento</div>
+                    <div class="nodo-quienes">🏛️ Autoridades de las unidades académicas donde se ubican los grupos priorizados por la agenda.</div>
+                    <div class="nodo-como">
+                        Presentación ejecutiva breve en reuniones de Consejo de Facultad o de Departamento, con foco en: <em>"Estos son los temas que el Sistema necesita y estos son los grupos de su unidad que encajan naturalmente."</em> No se pide nada extraordinario: se explora la posibilidad de asignar carga de investigación a los profesores aliados dentro de la planificación regular.
+                    </div>
+                    <div class="nodo-resultado">
+                        🔑 <strong>Puente formal hacia los grupos:</strong> El decano o director de departamento legitima el acercamiento. Los investigadores no reciben una solicitud externa: es su propia autoridad quien les dice que el Sistema es relevante. Esto también activa la conversación sobre carga horaria de investigación de manera natural.
+                    </div>
+                </div>
+
+                <div class="flujo-conector"></div>
+
+                <!-- NIVEL 3: Grupos priorizados -->
+                <div class="flujo-nodo n3">
+                    <div class="nodo-header">
+                        <div class="nodo-paso">Nivel 3</div>
+                        <div class="nodo-fechas">Julio – Septiembre 2026</div>
+                    </div>
+                    <div class="nodo-titulo">Grupos de investigación priorizados por la agenda</div>
+                    <div class="nodo-quienes">🔬 Investigadores principales y miembros de los grupos cuyas líneas coinciden con los ejes temáticos del Sistema.</div>
+                    <div class="nodo-como">
+                        Entrevistas en profundidad uno-a-uno o en grupos pequeños, lideradas por el Especialista y el Técnico. Se muestran productos prototipo del Sistema, se escucha su agenda de investigación actual y se identifican puntos de conexión concretos: una tesis que puede volverse policy brief, una base de datos que alimente el repositorio, un investigador que quiera grabar un episodio de podcast.
+                    </div>
+                    <div class="nodo-resultado">
+                        🔑 <strong>Compromiso con productos concretos:</strong> Cada grupo aliado queda vinculado a un entregable específico del Sistema. No se les pide "apoyar el proyecto": se les invita a transformar algo que ya tienen en un producto de incidencia pública, con soporte técnico y visibilidad institucional.
+                    </div>
+                </div>
+
+                <div class="flujo-conector"></div>
+
+                <!-- NIVEL 4: Apertura amplia -->
+                <div class="flujo-nodo n4">
+                    <div class="nodo-header">
+                        <div class="nodo-paso">Nivel 4</div>
+                        <div class="nodo-fechas">Octubre – Diciembre 2026</div>
+                    </div>
+                    <div class="nodo-titulo">Convocatoria abierta a toda la comunidad investigadora</div>
+                    <div class="nodo-quienes">🌐 Todos los grupos de investigación de la Universidad, incluyendo aquellos no priorizados inicialmente.</div>
+                    <div class="nodo-como">
+                        Evento público de lanzamiento del Sistema con productos ya visibles. Los protagonistas son los investigadores del Nivel 3 que ya publicaron fichas, policy briefs, episodios de podcast o alimentaron el repositorio. El mensaje es: <em>"Esto ya está funcionando. Si quieres sumarte, aquí están las puertas."</em>
+                    </div>
+                    <div class="nodo-resultado">
+                        🔑 <strong>Efecto demostración:</strong> Los grupos que no fueron priorizados en la primera ronda ven lo que sus pares lograron y se acercan por iniciativa propia. El Sistema ya no necesita buscar aliados: los aliados buscan al Sistema.
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- MAPA DE JERARQUÍA INSTITUCIONAL -->
+        <div>
+            <div class="section-title">🗺️ Estructura institucional y criterios de priorización</div>
+            <div class="section-subtitle">La jerarquía real de la Universidad de Cuenca, con los niveles que recorremos en la hoja de ruta. Los grupos priorizados se identifican por afinidad temática con la agenda, no por adscripción organizacional.</div>
+
+            <table class="jerarquia-tabla">
+                <thead>
+                    <tr>
+                        <th style="width:22%;">Nivel</th>
+                        <th style="width:30%;">Unidad</th>
+                        <th style="width:48%;">Criterio de priorización para el Sistema</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="nivel-vicer">
+                        <td>Vicerrectorados</td>
+                        <td>Vicerrectorado Académico<br>Vicerrectorado de Investigación e Innovación</td>
+                        <td>Son la puerta de entrada institucional. Albergan facultades (Académico) y departamentos + grupos (Investigación). La reunión con ellos legitima todo el descenso.</td>
+                    </tr>
+                    <tr class="nivel-fac">
+                        <td>Facultades</td>
+                        <td>12 facultades + Instituto de Idiomas</td>
+                        <td>Priorizamos aquellas facultades que albergan grupos con líneas afines a la agenda: Arquitectura, Economía, Filosofía y Educación, Ingeniería, Jurisprudencia.</td>
+                    </tr>
+                    <tr class="nivel-depto">
+                        <td>Departamentos<br><span style="font-weight:400;font-size:0.78rem;">(bajo Vicerrectorado de Investigación)</span></td>
+                        <td>9 departamentos:<br>Biociencias, Ciencias de la Computación, Economía-Empresa-Desarrollo Sostenible, Educación, Ingeniería Civil, Ingeniería Eléctrica-Electrónica-Telecomunicaciones, Química Aplicada, Recursos Hídricos y Ciencias Ambientales, Espacio y Población</td>
+                        <td>Priorizamos departamentos con grupos en: datos espaciales, economía regional, políticas educativas, agua y territorio, desarrollo sostenible, sistemas inteligentes.</td>
+                    </tr>
+                    <tr class="nivel-grupo">
+                        <td>Grupos de Investigación</td>
+                        <td>
+                            <div class="grupos-lista">
+                                <span class="grupo-tag prioritario">Economía Regional</span>
+                                <span class="grupo-tag prioritario">GIMADE</span>
+                                <span class="grupo-tag prioritario">CITMOV</span>
+                                <span class="grupo-tag prioritario">Territorium</span>
+                                <span class="grupo-tag prioritario">Políticas Educativas</span>
+                                <span class="grupo-tag prioritario">Trayectorias académicas</span>
+                                <span class="grupo-tag prioritario">Infraestructura Datos Espaciales</span>
+                                <span class="grupo-tag prioritario">Water Law and Mgmt</span>
+                                <span class="grupo-tag">ACORDES</span>
+                                <span class="grupo-tag">Empresarial</span>
+                                <span class="grupo-tag">GiCOFT</span>
+                                <span class="grupo-tag">Gestión Estratégica</span>
+                                <span class="grupo-tag">LDUT</span>
+                                <span class="grupo-tag">ECOS</span>
+                                <span class="grupo-tag">MAS</span>
+                                <span class="grupo-tag">PROMAS</span>
+                                <span class="grupo-tag">GV&T</span>
+                                <span class="grupo-tag">IA&SA</span>
+                                <span class="grupo-tag">Estudios de Género</span>
+                                <span class="grupo-tag">Sistema Familiar</span>
+                                <span class="grupo-tag">HUMSEX</span>
+                                <span class="grupo-tag">GITEICU</span>
+                                <span class="grupo-tag">EFL Teacher Ed.</span>
+                                <span class="grupo-tag">ELA</span>
+                                <span class="grupo-tag">Educación Matemática</span>
+                                <span class="grupo-tag">GIIT</span>
+                                <span class="grupo-tag">GSigma</span>
+                                <span class="grupo-tag">Gestión del Conocimiento</span>
+                                <span class="grupo-tag">Ingeniería de Software</span>
+                                <span class="grupo-tag">Dpto. Espacio y Población</span>
+                            </div>
+                        </td>
+                        <td>
+                            <strong>🔵 Grupos priorizados (Nivel 3):</strong> aquellos con afinidad temática directa con la agenda del Sistema.<br><br>
+                            <strong>Resto de grupos:</strong> se incorporan en el Nivel 4 por efecto demostración o en fases posteriores según evolucione la agenda.
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+</body>
+</html>
