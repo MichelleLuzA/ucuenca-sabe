@@ -21,3 +21,27 @@ relationship AutoDetected_fc452dbb-78f0-41bd-852f-2361386525eb
 	fromColumn: silver_catastropure.investigador
 	toColumn: raw_investigadores.investigador
 
+relationship AutoDetected_dc186d05-aed2-4b56-b60c-73be9d22c5d8
+	crossFilteringBehavior: bothDirections
+	fromCardinality: one
+	fromColumn: raw_investigadores.investigador
+	toColumn: catastro_docentes.investigador
+
+relationship AutoDetected_57bf4364-7207-4ba2-872a-9ed210754659
+	isActive: false
+	fromColumn: silver_investigadores.investigador
+	toColumn: catastro_docentes.investigador
+
+relationship AutoDetected_ee4109bf-8de9-4965-8121-3d27978c08a9
+	isActive: false
+	fromColumn: silver_catastropure.investigador
+	toColumn: catastro_docentes.investigador
+
+relationship 7b87425c-2e8e-d268-84b6-6176da3ee28e
+	fromColumn: autoridades_admin.FACULTAD_KEY
+	toColumn: Dim_Facultad.Facultad
+
+relationship 701779b4-04f6-d991-1b23-3378ecc39696
+	fromColumn: autoridades_admin.Key_nombre
+	toColumn: catastro_docentes.investigador
+

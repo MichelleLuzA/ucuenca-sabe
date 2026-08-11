@@ -1,0 +1,23 @@
+expression 'Errores en silver_catastropure' =
+		let
+		Origen = silver_catastropure,
+		  #"Errores de coincidencia detectados" = let
+		    tableWithOnlyPrimitiveTypes = Table.SelectColumns(Origen, Table.ColumnsOfType(Origen, {type nullable number, type nullable text, type nullable logical, type nullable date, type nullable datetime, type nullable datetimezone, type nullable time, type nullable duration})),
+		    recordTypeFields = Type.RecordFields(Type.TableRow(Value.Type(tableWithOnlyPrimitiveTypes))),
+		    fieldNames = Record.FieldNames(recordTypeFields),
+		    fieldTypes = List.Transform(Record.ToList(recordTypeFields), each [Type]),
+		    pairs = List.Transform(List.Positions(fieldNames), (i) => {fieldNames{i}, (v) => if v = null or Value.Is(v, fieldTypes{i}) then v else error [Message = "El tipo del valor no coincide con el tipo de la columna.", Detail = v], fieldTypes{i}})
+		in
+		    Table.TransformColumns(Origen, pairs),
+		  #"Índice agregado" = Table.AddIndexColumn(#"Errores de coincidencia detectados", "Número de fila" ,1),
+		  #"Conservar errores" = Table.SelectRowsWithErrors(#"Índice agregado", {"investigador", "facultad", "departamento", "pagina", "url_perfil", "fecha_extraccion", "Atributo", "grupo_investigacion", "unidad_real", "merge", "Vicerrectorado", "Unidad_Investigacion", "GENERO", "FECHA_NACIMIENTO", "TIPO_SERVIDOR", "ESTADO", "CARGO", "FECHA_INGRESO", "FECHA_TITULARIDAD", "MODALIDAD_EMPLEO", "CALIDAD", "DEPENDENCIA", "CANTON DE RESIDENCIA", "TIPO_DEDICACION_1", "TIPO_DEDICACION_2", "UNIDAD ACADÉMICA_1", "UNIDAD ACADÉMICA_2", "NOMBRES COMPLETOS", "PAIS ORIGEN", "TIPO_PERSONAL", "SEXO", "AÑO OBTENCIÓN TITULO", "PAIS ESTUDIO", "NIVEL TÍTULO", "TIPO TÍTULO", "NOMBRE TÍTULO", "CAMPO AMPLIO (UNESCO)", "CAMPO ESPECÍFICO (UNESCO)", "CAMPO DETALLADO (UNESCO)", "Unidad_abreviada", "CAMPO ESPECÍFICO (UNESCO)_limpio"}),
+		  #"Columnas reordenadas" = Table.ReorderColumns(#"Conservar errores", {"Número de fila", "investigador", "facultad", "departamento", "pagina", "url_perfil", "fecha_extraccion", "Atributo", "grupo_investigacion", "unidad_real", "merge", "Vicerrectorado", "Unidad_Investigacion", "GENERO", "FECHA_NACIMIENTO", "TIPO_SERVIDOR", "ESTADO", "CARGO", "FECHA_INGRESO", "FECHA_TITULARIDAD", "MODALIDAD_EMPLEO", "CALIDAD", "DEPENDENCIA", "CANTON DE RESIDENCIA", "TIPO_DEDICACION_1", "TIPO_DEDICACION_2", "UNIDAD ACADÉMICA_1", "UNIDAD ACADÉMICA_2", "NOMBRES COMPLETOS", "PAIS ORIGEN", "TIPO_PERSONAL", "SEXO", "AÑO OBTENCIÓN TITULO", "PAIS ESTUDIO", "NIVEL TÍTULO", "TIPO TÍTULO", "NOMBRE TÍTULO", "CAMPO AMPLIO (UNESCO)", "CAMPO ESPECÍFICO (UNESCO)", "CAMPO DETALLADO (UNESCO)", "Unidad_abreviada", "CAMPO ESPECÍFICO (UNESCO)_limpio"})
+		in
+		  #"Columnas reordenadas"
+	lineageTag: 3640b2bf-1a1f-4cda-862f-994d0cfbe4f5
+	queryGroup: 'Errores en las consultas: 07/07/2026 10:48:47'
+
+	annotation PBI_NavigationStepName = Navegación
+
+	annotation PBI_ResultType = Table
+

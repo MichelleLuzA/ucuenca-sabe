@@ -1,0 +1,82 @@
+table raw_investigadores
+	lineageTag: 24c5030e-d6c8-423d-8821-9ef0aae5be8c
+
+	column investigador
+		dataType: string
+		lineageTag: 66f839a5-98c2-4537-84a7-09adf6e34588
+		summarizeBy: none
+		sourceColumn: investigador
+
+		annotation SummarizationSetBy = Automatic
+
+	column facultad
+		dataType: string
+		lineageTag: 5ca4dbfb-606b-411e-b72c-4209d61e842a
+		summarizeBy: none
+		sourceColumn: facultad
+
+		annotation SummarizationSetBy = Automatic
+
+	column departamento
+		dataType: string
+		lineageTag: b0d8e9d8-0b75-476a-9276-a8bdabd84e03
+		summarizeBy: none
+		sourceColumn: departamento
+
+		annotation SummarizationSetBy = Automatic
+
+	column grupos_investigacion
+		dataType: string
+		lineageTag: 0d01a212-affb-474f-b175-d317166d4e46
+		summarizeBy: none
+		sourceColumn: grupos_investigacion
+
+		annotation SummarizationSetBy = Automatic
+
+	column pagina
+		dataType: int64
+		formatString: 0
+		lineageTag: 10c15da8-f299-431f-b1bf-0faebce373e1
+		summarizeBy: sum
+		sourceColumn: pagina
+
+		annotation SummarizationSetBy = Automatic
+
+	column url_perfil
+		dataType: string
+		lineageTag: d4ad0c60-85d9-458e-bc7b-99a596b37e9c
+		summarizeBy: none
+		sourceColumn: url_perfil
+
+		annotation SummarizationSetBy = Automatic
+
+	column fecha_extraccion
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: b0e36648-d855-4089-8dd0-92cf41a66ad8
+		summarizeBy: none
+		sourceColumn: fecha_extraccion
+
+		variation Variación
+			isDefault
+			relationship: f82b1d61-1e88-4272-980f-dac5f0f37071
+			defaultHierarchy: LocalDateTable_d7639b60-2e1d-4a14-9112-85ac817f2070.'Jerarquía de fechas'
+
+		annotation SummarizationSetBy = Automatic
+
+	partition raw_investigadores = m
+		mode: import
+		source =
+				let
+				  Origen = Excel.Workbook(File.Contents("C:\Users\michu\mis-proyectos\ucuenca-sabe\data\bronze\investigacion\investigadores_raw.xlsx"), null, true),
+				  #"Navegación 1" = Origen{[Item = "Sheet1", Kind = "Sheet"]}[Data],
+				  #"Encabezados promovidos" = Table.PromoteHeaders(#"Navegación 1", [PromoteAllScalars = true]),
+				  #"Tipo de columna cambiado" = Table.TransformColumnTypes(#"Encabezados promovidos", {{"investigador", type text}, {"facultad", type text}, {"departamento", type text}, {"grupos_investigacion", type text}, {"pagina", Int64.Type}, {"url_perfil", type text}, {"fecha_extraccion", type datetime}}, "es"),
+				    #"Valor reemplazado" = Table.ReplaceValue(#"Tipo de columna cambiado",", PhD","",Replacer.ReplaceText,{"investigador"})
+				in
+				  #"Valor reemplazado"
+
+	annotation PBI_NavigationStepName = Navegación
+
+	annotation PBI_ResultType = Table
+

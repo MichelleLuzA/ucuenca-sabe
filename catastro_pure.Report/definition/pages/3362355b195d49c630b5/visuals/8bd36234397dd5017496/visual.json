@@ -1,0 +1,59 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
+  "name": "8bd36234397dd5017496",
+  "position": {
+    "x": 1132,
+    "y": 0,
+    "z": 14000,
+    "height": 88,
+    "width": 320,
+    "tabOrder": 13000
+  },
+  "visual": {
+    "visualType": "slicer",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "catastro_docentes"
+                    }
+                  },
+                  "Property": "TIPO TÍTULO"
+                }
+              },
+              "queryRef": "catastro_docentes.TIPO TÍTULO",
+              "nativeQueryRef": "TIPO TÍTULO",
+              "active": true
+            }
+          ]
+        }
+      }
+    },
+    "objects": {
+      "selectionIcon": [
+        {
+          "properties": {}
+        }
+      ],
+      "data": [
+        {
+          "properties": {
+            "mode": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Dropdown'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

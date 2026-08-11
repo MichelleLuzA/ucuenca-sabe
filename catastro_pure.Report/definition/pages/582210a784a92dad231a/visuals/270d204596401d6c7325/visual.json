@@ -1,0 +1,116 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.10.0/schema.json",
+  "name": "270d204596401d6c7325",
+  "position": {
+    "x": 377.77777777777777,
+    "y": 91.111111111111114,
+    "z": 5000,
+    "height": 140,
+    "width": 572.22222222222217,
+    "tabOrder": 5000
+  },
+  "visual": {
+    "visualType": "cardVisual",
+    "query": {
+      "queryState": {
+        "Data": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "silver_catastropure"
+                    }
+                  },
+                  "Property": "Pct_Maestria"
+                }
+              },
+              "queryRef": "silver_catastropure.Pct_Maestria",
+              "nativeQueryRef": "Maestrías",
+              "displayName": "Maestrías"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "silver_catastropure"
+                    }
+                  },
+                  "Property": "Pct_Especialidad_Salud"
+                }
+              },
+              "queryRef": "silver_catastropure.Pct_Especialidad_Salud",
+              "nativeQueryRef": "Especialistas Salud",
+              "displayName": "Especialistas Salud"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "silver_catastropure"
+                    }
+                  },
+                  "Property": "Pct_PhD"
+                }
+              },
+              "queryRef": "silver_catastropure.Pct_PhD",
+              "nativeQueryRef": "Doctores PhD",
+              "displayName": "Doctores PhD"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "silver_catastropure"
+                  }
+                },
+                "Property": "Pct_Maestria"
+              }
+            },
+            "direction": "Descending"
+          }
+        ],
+        "isDefaultSort": true
+      }
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'🎓 Formación'"
+                }
+              }
+            },
+            "alignment": {
+              "expr": {
+                "Literal": {
+                  "Value": "'center'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

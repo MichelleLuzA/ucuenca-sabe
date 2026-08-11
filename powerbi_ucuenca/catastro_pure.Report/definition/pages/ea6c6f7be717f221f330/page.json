@@ -1,0 +1,8 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/page/2.1.0/schema.json",
+  "name": "ea6c6f7be717f221f330",
+  "displayName": "Explorador de Talento",
+  "displayOption": "ActualSize",
+  "height": 1000,
+  "width": 950
+}

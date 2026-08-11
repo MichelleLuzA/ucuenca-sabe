@@ -1,0 +1,8 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/page/2.1.0/schema.json",
+  "name": "3362355b195d49c630b5",
+  "displayName": "Radiografía Docentes",
+  "displayOption": "ActualSize",
+  "height": 1620,
+  "width": 1620
+}

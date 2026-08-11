@@ -1,0 +1,389 @@
+table catastro_docentes
+	lineageTag: a86453f1-9c90-4d0a-b5e5-147e5b1e2597
+
+	column APELLIDOS
+		dataType: string
+		lineageTag: 4802eaad-51c9-4dd4-aee8-99bdd4e239d0
+		summarizeBy: none
+		sourceColumn: APELLIDOS
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column NOMBRES
+		dataType: string
+		lineageTag: 86401269-02bb-4ba9-8d3b-568db5d4598b
+		summarizeBy: none
+		sourceColumn: NOMBRES
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column GENERO
+		dataType: string
+		lineageTag: 354f37d9-a695-4c61-b57f-4de9014d0c11
+		summarizeBy: none
+		sourceColumn: GENERO
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column FECHA_NACIMIENTO
+		dataType: string
+		lineageTag: 15a53898-a72b-48c6-bd0d-814e6a01b09f
+		summarizeBy: none
+		sourceColumn: FECHA_NACIMIENTO
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column TIPO_SERVIDOR
+		dataType: string
+		lineageTag: f8abdd42-9a02-4686-b1a1-6a58ca0ba761
+		summarizeBy: none
+		sourceColumn: TIPO_SERVIDOR
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column ESTADO
+		dataType: string
+		lineageTag: 2179d67c-b5d7-4265-ba4b-500b3eaf1f4b
+		summarizeBy: none
+		sourceColumn: ESTADO
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column CARGO
+		dataType: string
+		lineageTag: 90bfc964-40a8-4674-860f-5d728179fdc7
+		summarizeBy: none
+		sourceColumn: CARGO
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column FECHA_INGRESO
+		dataType: string
+		lineageTag: b1e7ed7c-fa21-4c5f-bed9-0c8f4c70e420
+		summarizeBy: none
+		sourceColumn: FECHA_INGRESO
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column FECHA_TITULARIDAD
+		dataType: string
+		lineageTag: 1c1463c7-ee02-485d-bba0-25677c663f70
+		summarizeBy: none
+		sourceColumn: FECHA_TITULARIDAD
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column MODALIDAD_EMPLEO
+		dataType: string
+		lineageTag: c966962c-60ef-411a-a60f-353f42dd53ad
+		summarizeBy: none
+		sourceColumn: MODALIDAD_EMPLEO
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column CALIDAD
+		dataType: string
+		lineageTag: ae012bae-7942-465a-9d37-6f1e08098892
+		summarizeBy: none
+		sourceColumn: CALIDAD
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column DEPENDENCIA
+		dataType: string
+		lineageTag: 733e4846-28a8-464c-bb82-e2a5b9f83800
+		summarizeBy: none
+		sourceColumn: DEPENDENCIA
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'CANTON DE RESIDENCIA'
+		dataType: string
+		lineageTag: 33f81d6f-14d0-4ef2-88ff-41b331170d5a
+		summarizeBy: none
+		sourceColumn: CANTON DE RESIDENCIA
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column CEDULA_NORM
+		dataType: string
+		lineageTag: 445914cb-cc7a-4a11-9ba5-6c35f1070871
+		summarizeBy: none
+		sourceColumn: CEDULA_NORM
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column TIPO_DEDICACION_1
+		dataType: string
+		lineageTag: 20d4dde2-1dde-46ba-ad91-fb02eb8deab5
+		summarizeBy: none
+		sourceColumn: TIPO_DEDICACION_1
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column TIPO_DEDICACION_2
+		dataType: string
+		lineageTag: a95d0f69-ec29-443b-8286-ab34043ecff1
+		summarizeBy: none
+		sourceColumn: TIPO_DEDICACION_2
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'UNIDAD ACADÉMICA_1'
+		dataType: string
+		lineageTag: f101c8ff-ff97-4d29-898c-5c7a9db23270
+		summarizeBy: none
+		sourceColumn: UNIDAD ACADÉMICA_1
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'UNIDAD ACADÉMICA_2'
+		dataType: string
+		lineageTag: 133dfe5b-f275-40ea-a059-de73a09ad80f
+		summarizeBy: none
+		sourceColumn: UNIDAD ACADÉMICA_2
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'NOMBRES COMPLETOS'
+		dataType: string
+		lineageTag: 8d28111d-d6d9-4a42-956f-cd6fd68f2fcc
+		summarizeBy: none
+		sourceColumn: NOMBRES COMPLETOS
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'PAIS ORIGEN'
+		dataType: string
+		lineageTag: 757c0f49-e6b4-40cd-99f4-7d51a2a073d1
+		summarizeBy: none
+		sourceColumn: PAIS ORIGEN
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column TIPO_PERSONAL
+		dataType: string
+		lineageTag: e8b2bd5f-f971-4f13-9f2c-72270637bba6
+		summarizeBy: none
+		sourceColumn: TIPO_PERSONAL
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column SEXO
+		dataType: string
+		lineageTag: 91ba8634-df72-4ed8-b7dc-5c8893ebaff1
+		summarizeBy: none
+		sourceColumn: SEXO
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'AÑO OBTENCIÓN TITULO'
+		dataType: string
+		lineageTag: 0350ae32-5ec9-4412-82e1-5943a1896944
+		summarizeBy: none
+		sourceColumn: AÑO OBTENCIÓN TITULO
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'PAIS ESTUDIO'
+		dataType: string
+		lineageTag: 04cf1518-f24e-437e-ba84-473af4b6807f
+		summarizeBy: none
+		sourceColumn: PAIS ESTUDIO
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'NIVEL TÍTULO'
+		dataType: string
+		lineageTag: 07c9f803-d7fe-4f98-b8ec-e23417cdf4d6
+		summarizeBy: none
+		sourceColumn: NIVEL TÍTULO
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'TIPO TÍTULO'
+		dataType: string
+		lineageTag: 6160a0f7-5e88-4ea4-8dda-4d16e4535206
+		summarizeBy: none
+		sourceColumn: TIPO TÍTULO
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'NOMBRE TÍTULO'
+		dataType: string
+		lineageTag: 42147c5a-f1ed-4e06-9a2c-169ca98be048
+		summarizeBy: none
+		sourceColumn: NOMBRE TÍTULO
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'CAMPO AMPLIO (UNESCO)'
+		dataType: string
+		lineageTag: 7c0ebb26-357a-479d-a42d-569461152dc4
+		summarizeBy: none
+		sourceColumn: CAMPO AMPLIO (UNESCO)
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'CAMPO ESPECÍFICO (UNESCO)'
+		dataType: string
+		lineageTag: 48d4c1ae-52cc-4cff-b2b5-26a7e3fa6862
+		summarizeBy: none
+		sourceColumn: CAMPO ESPECÍFICO (UNESCO)
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'CAMPO DETALLADO (UNESCO)'
+		dataType: string
+		lineageTag: f9e4bd5a-b543-4e20-972e-51f2090f0667
+		summarizeBy: none
+		sourceColumn: CAMPO DETALLADO (UNESCO)
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column investigador
+		dataType: string
+		lineageTag: 4080a304-effd-4be8-a668-a493d7cb94fb
+		summarizeBy: none
+		sourceColumn: investigador
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+	column Key_nombre
+		dataType: string
+		lineageTag: d16a000c-2636-4ba2-94f7-8145761fe81c
+		summarizeBy: none
+		sourceColumn: Key_nombre
+
+		annotation SummarizationSetBy = Automatic
+
+	column Antiguedad = DATEDIFF([FECHA_INGRESO], TODAY(), YEAR)
+		formatString: 0
+		lineageTag: 7c564294-fc75-4749-9942-9198462b564c
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column anios_titularidad = DATEDIFF([FECHA_TITULARIDAD], TODAY(), YEAR)
+		formatString: 0
+		lineageTag: 9216b68e-d9bc-4196-af39-eb669d671199
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column EDAD = DATEDIFF([FECHA_NACIMIENTO], TODAY(), YEAR)
+		formatString: 0
+		lineageTag: 73419077-6926-4ac0-ad83-446177579f40
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	partition catastro_docentes = m
+		mode: import
+		source =
+				let
+				  Origen = Parquet.Document(File.Contents("C:\Users\michu\mis-proyectos\ucuenca-sabe\data\silver\catastro_docentes.parquet")),
+				    #"Texto limpio" = Table.TransformColumns(Origen,{{"APELLIDOS", Text.Clean, type text}, {"NOMBRES", Text.Clean, type text}}),
+				    #"Texto recortado" = Table.TransformColumns(#"Texto limpio",{{"APELLIDOS", Text.Trim, type text}, {"NOMBRES", Text.Trim, type text}}),
+				    #"Personalizada agregada" = Table.AddColumn(#"Texto recortado", "investigador", each Text.Trim([NOMBRES]) & " " & Text.Trim([APELLIDOS])),
+				    #"Texto recortado1" = Table.TransformColumns(#"Personalizada agregada",{{"investigador", Text.Trim, type text}}),
+				    #"Texto limpio1" = Table.TransformColumns(#"Texto recortado1",{{"investigador", Text.Clean, type text}}),
+				    #"Personalizada agregada1" = Table.AddColumn(#"Texto limpio1", "Key_nombre", each Text.Upper(
+				    Text.Replace(
+				        Text.Replace(
+				            Text.Replace(
+				                Text.Replace(
+				                    Text.Replace(
+				                        Text.Replace(
+				                            Text.Replace(
+				                                Text.Replace(
+				                                    Text.Replace(
+				                                        Text.Trim(Text.Clean([NOMBRES COMPLETOS])),
+				                                        "Á", "A"
+				                                    ),
+				                                    "É", "E"
+				                                ),
+				                                "Í", "I"
+				                            ),
+				                            "Ó", "O"
+				                        ),
+				                        "Ú", "U"
+				                    ),
+				                    "Ü", "U"
+				                ),
+				                "Ñ", "N"
+				            ),
+				            ",", ""
+				        ),
+				        "  ", " "
+				    )
+				))
+				in
+				    #"Personalizada agregada1"
+
+	annotation PBI_NavigationStepName = Navegación
+
+	annotation PBI_ResultType = Table
+
