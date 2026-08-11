@@ -1,0 +1,79 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.10.0/schema.json",
+  "name": "a1e83a3796ab29d03160",
+  "position": {
+    "x": 238.57142857142858,
+    "y": 164.28571428571431,
+    "z": 6000,
+    "height": 127.14285714285715,
+    "width": 224.28571428571431,
+    "tabOrder": 6000
+  },
+  "visual": {
+    "visualType": "cardVisual",
+    "query": {
+      "queryState": {
+        "Data": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "silver_catastropure"
+                    }
+                  },
+                  "Property": "Años_Titularidad"
+                }
+              },
+              "queryRef": "silver_catastropure.Años_Titularidad",
+              "nativeQueryRef": "Años",
+              "displayName": "Años"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "silver_catastropure"
+                  }
+                },
+                "Property": "Años_Titularidad"
+              }
+            },
+            "direction": "Descending"
+          }
+        ],
+        "isDefaultSort": true
+      }
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Hasta titularidad'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

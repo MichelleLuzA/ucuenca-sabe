@@ -1,0 +1,113 @@
+{
+  "version": "1.1.0",
+  "diagrams": [
+    {
+      "ordinal": 0,
+      "scrollPosition": {
+        "x": 0,
+        "y": 0
+      },
+      "nodes": [
+        {
+          "location": {
+            "x": 0,
+            "y": 0
+          },
+          "nodeIndex": "raw_investigadores",
+          "nodeLineageTag": "24c5030e-d6c8-423d-8821-9ef0aae5be8c",
+          "size": {
+            "height": 248,
+            "width": 234
+          },
+          "zIndex": 5
+        },
+        {
+          "location": {
+            "x": 692.61842944117961,
+            "y": 360.76495326609518
+          },
+          "nodeIndex": "silver_catastropure",
+          "nodeLineageTag": "f4a8ca57-0461-4fa9-9503-2c64037042e0",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 6
+        },
+        {
+          "location": {
+            "x": 903.71389608008826,
+            "y": 0
+          },
+          "nodeIndex": "silver_investigadores",
+          "nodeLineageTag": "9f848272-b5e7-4a32-ae88-d160eb06ee1d",
+          "size": {
+            "height": 300,
+            "width": 234
+          },
+          "zIndex": 3
+        },
+        {
+          "location": {
+            "x": 626.484354259866,
+            "y": 0
+          },
+          "nodeIndex": "silver_jerarquía",
+          "nodeLineageTag": "060ebf7a-1e0b-4d28-bc3f-a3683ea1dc5c",
+          "size": {
+            "height": 241.36507864054684,
+            "width": 234
+          },
+          "zIndex": 4
+        },
+        {
+          "location": {
+            "x": 0,
+            "y": 448.75640528221595
+          },
+          "nodeIndex": "catastro_docentes",
+          "nodeLineageTag": "a86453f1-9c90-4d0a-b5e5-147e5b1e2597",
+          "size": {
+            "height": 170.52686346199368,
+            "width": 234
+          },
+          "zIndex": 7
+        },
+        {
+          "location": {
+            "x": 1314.462984300168,
+            "y": 169.75247342129339
+          },
+          "nodeIndex": "Sankey_Facultad_Depto",
+          "nodeLineageTag": "7b944efc-3851-47f5-a5e4-770c2f96ee7c",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 2
+        },
+        {
+          "location": {
+            "x": 387.449208081974,
+            "y": 15.084248917049276
+          },
+          "nodeIndex": "autoridades_admin",
+          "nodeLineageTag": "c454c6c6-0789-46c9-864e-1a83e0c3bf60",
+          "size": {
+            "height": 248,
+            "width": 234
+          },
+          "zIndex": 1
+        }
+      ],
+      "name": "Todas las tablas",
+      "zoomValue": 79.553182037699983,
+      "pinKeyFieldsToTop": false,
+      "showExtraHeaderInfo": false,
+      "hideKeyFieldsWhenCollapsed": false,
+      "tablesLocked": false
+    }
+  ],
+  "selectedDiagram": "Todas las tablas",
+  "defaultDiagram": "Todas las tablas"
+}

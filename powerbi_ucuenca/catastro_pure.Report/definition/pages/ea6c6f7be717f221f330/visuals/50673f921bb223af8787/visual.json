@@ -1,0 +1,58 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.10.0/schema.json",
+  "name": "50673f921bb223af8787",
+  "position": {
+    "x": 118,
+    "y": 0,
+    "z": 0,
+    "height": 88,
+    "width": 832,
+    "tabOrder": 0
+  },
+  "visual": {
+    "visualType": "textbox",
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": "EXPLORADOR DE TALENTO ",
+                    "textStyle": {
+                      "fontWeight": "bold",
+                      "fontFamily": "Segoe UI Light",
+                      "fontSize": "24pt",
+                      "color": "#003156"
+                    }
+                  },
+                  {
+                    "value": "👤 ",
+                    "textStyle": {
+                      "fontWeight": "bold",
+                      "fontFamily": "Segoe UI Light",
+                      "fontSize": "24pt",
+                      "color": "#0f1115"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "Perfiles y Trayectorias de Investigadores",
+                    "textStyle": {
+                      "color": "#6f6f6f"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

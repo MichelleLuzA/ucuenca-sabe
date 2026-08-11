@@ -6,9 +6,14 @@ model Model
 		legacyRedirects
 		returnErrorValuesAsNull
 
+/// Errores en las consultas cargadas en 07/07/2026 10:48:47.
+queryGroup 'Errores en las consultas: 07/07/2026 10:48:47'
+
+	annotation PBI_QueryGroupOrder = 0
+
 annotation __PBI_TimeIntelligenceEnabled = 1
 
-annotation PBI_QueryOrder = ["raw_investigadores","silver_jerarquía","silver_investigadores","silver_catastropure"]
+annotation PBI_QueryOrder = ["raw_investigadores","silver_jerarquía","silver_investigadores","silver_catastropure","catastro_docentes","Errores en silver_catastropure","autoridades_admin"]
 
 annotation PBI_ProTooling = ["DevMode"]
 
@@ -20,6 +25,10 @@ ref table silver_investigadores
 ref table LocalDateTable_9a2da4ad-c70d-4fef-a2f7-430326d22bd6
 ref table silver_catastropure
 ref table LocalDateTable_cb049f35-0d3a-448b-90bf-ea4f0695f414
+ref table catastro_docentes
+ref table Sankey_Facultad_Depto
+ref table autoridades_admin
+ref table Dim_Facultad
 
 ref cultureInfo es-ES
 

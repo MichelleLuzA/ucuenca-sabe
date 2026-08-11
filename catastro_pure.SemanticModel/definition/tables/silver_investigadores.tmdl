@@ -1,6 +1,12 @@
 table silver_investigadores
 	lineageTag: 9f848272-b5e7-4a32-ae88-d160eb06ee1d
 
+	measure Total_Investigadores =
+			
+			DISTINCTCOUNT('silver_investigadores'[investigador])
+		formatString: 0
+		lineageTag: ae6dc0ac-1c1b-4d07-a33c-228fe56d194f
+
 	column investigador
 		dataType: string
 		lineageTag: dc94d11c-5c1b-444d-9eaa-7472dfef2071
@@ -92,7 +98,7 @@ table silver_investigadores
 		mode: import
 		source = ```
 				let
-				  Origen = Excel.Workbook(File.Contents("C:\Users\michu\Documents\ucuenca-sabe\data\bronze\investigacion\investigadores_raw.xlsx"), null, true),
+				  Origen = Excel.Workbook(File.Contents("C:\Users\michu\mis-proyectos\ucuenca-sabe\data\bronze\investigacion\investigadores_raw.xlsx"), null, true),
 				  #"Navegación 1" = Origen{[Item = "Sheet1", Kind = "Sheet"]}[Data],
 				  #"Encabezados promovidos" = Table.PromoteHeaders(#"Navegación 1", [PromoteAllScalars = true]),
 				  #"Tipo de columna cambiado" = Table.TransformColumnTypes(#"Encabezados promovidos", {{"investigador", type text}, {"facultad", type text}, {"departamento", type text}, {"grupos_investigacion", type text}, {"pagina", Int64.Type}, {"url_perfil", type text}, {"fecha_extraccion", type datetime}}, "es"),
@@ -114,9 +120,11 @@ table silver_investigadores
 				    #"Personalizada agregada1" = Table.AddColumn(#"Personalizada agregada", "merge", each if [grupo_investigacion] = "Sin grupo asignado" then 
 				        "Sin grupo asignado|" & [unidad_real]
 				    else 
-				        [grupo_investigacion])
+				        [grupo_investigacion]),
+				    #"Valor reemplazado1" = Table.ReplaceValue(#"Personalizada agregada1",", PhD","",Replacer.ReplaceText,{"investigador"}),
+				    #"Filas filtradas1" = Table.SelectRows(#"Valor reemplazado1", each true)
 				in
-				    #"Personalizada agregada1"
+				    #"Filas filtradas1"
 				```
 
 	annotation PBI_NavigationStepName = Navegación

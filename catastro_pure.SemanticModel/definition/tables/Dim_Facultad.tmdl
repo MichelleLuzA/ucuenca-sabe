@@ -1,0 +1,30 @@
+table Dim_Facultad
+	lineageTag: ef7c6467-035f-4528-8364-6a15bd793a85
+
+	column Facultad
+		lineageTag: e412e2bf-d2ca-44e2-b0ea-57254407855c
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Facultad]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Dim_Facultad = calculated
+		mode: import
+		source =
+				
+				DISTINCT(
+				    UNION(
+				        SELECTCOLUMNS(
+				            catastro_docentes,
+				            "Facultad", catastro_docentes[facultad_key]
+				        ),
+				        SELECTCOLUMNS(
+				            autoridades_admin,
+				            "Facultad", autoridades_admin[facultad_key]
+				        )
+				    )
+				)
+
+	annotation PBI_Id = 01e16fc23d8f43a18e97ba2374b26fc4
+

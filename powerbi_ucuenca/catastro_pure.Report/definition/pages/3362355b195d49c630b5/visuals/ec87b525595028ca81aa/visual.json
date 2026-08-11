@@ -1,0 +1,201 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.10.0/schema.json",
+  "name": "ec87b525595028ca81aa",
+  "position": {
+    "x": 447.5,
+    "y": 387.5,
+    "z": 8000,
+    "height": 267.5,
+    "width": 560,
+    "tabOrder": 8000
+  },
+  "visual": {
+    "visualType": "donutChart",
+    "query": {
+      "queryState": {
+        "Category": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "catastro_docentes"
+                    }
+                  },
+                  "Property": "TIPO_DEDICACION_1"
+                }
+              },
+              "queryRef": "catastro_docentes.TIPO_DEDICACION_1",
+              "nativeQueryRef": "TIPO_DEDICACION_1",
+              "active": true
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "catastro_docentes"
+                    }
+                  },
+                  "Property": "SEXO"
+                }
+              },
+              "queryRef": "catastro_docentes.SEXO",
+              "nativeQueryRef": "SEXO",
+              "active": false
+            }
+          ]
+        },
+        "Y": {
+          "projections": [
+            {
+              "field": {
+                "Aggregation": {
+                  "Expression": {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "catastro_docentes"
+                        }
+                      },
+                      "Property": "TIPO_DEDICACION_1"
+                    }
+                  },
+                  "Function": 5
+                }
+              },
+              "queryRef": "CountNonNull(catastro_docentes.TIPO_DEDICACION_1)",
+              "nativeQueryRef": "Recuento de TIPO_DEDICACION_1"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Aggregation": {
+                "Expression": {
+                  "Column": {
+                    "Expression": {
+                      "SourceRef": {
+                        "Entity": "catastro_docentes"
+                      }
+                    },
+                    "Property": "TIPO_DEDICACION_1"
+                  }
+                },
+                "Function": 5
+              }
+            },
+            "direction": "Descending"
+          }
+        ],
+        "isDefaultSort": true
+      }
+    },
+    "objects": {
+      "legend": [
+        {
+          "properties": {
+            "showTitle": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Dedicación Horaria'"
+                }
+              }
+            },
+            "alignment": {
+              "expr": {
+                "Literal": {
+                  "Value": "'center'"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "background": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "c5b4c24474b3d0b61eec",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "catastro_docentes"
+              }
+            },
+            "Property": "TIPO_DEDICACION_1"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "ead3f7516640b6091b82",
+        "field": {
+          "Aggregation": {
+            "Expression": {
+              "Column": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "catastro_docentes"
+                  }
+                },
+                "Property": "TIPO_DEDICACION_1"
+              }
+            },
+            "Function": 5
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "63c731c06546009ebaad",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "catastro_docentes"
+              }
+            },
+            "Property": "SEXO"
+          }
+        },
+        "type": "Categorical"
+      }
+    ]
+  }
+}

@@ -317,7 +317,209 @@ for col, width in column_widths.items():
 # 8. CONGELAR PANELES (encabezados)
 # ============================================================
 ws.freeze_panes = 'A5'
-
+# ============================================================
+# HOJA DE INSTRUCTIVO
+# ============================================================
+def crear_hoja_instructivo(wb):
+    ws_inst = wb.create_sheet("INSTRUCTIVO", 0)  # La pone primero
+    ws_inst.sheet_view.showGridLines = False
+    
+    # Título principal
+    ws_inst.merge_cells('A1:G1')
+    titulo = ws_inst['A1']
+    titulo.value = "📋 INSTRUCTIVO DE LLENADO - MATRIZ DE CONTRATOS"
+    titulo.font = Font(name='Calibri', size=18, bold=True, color=COLOR_AZUL_OSCURO)
+    titulo.alignment = Alignment(horizontal='center', vertical='center')
+    titulo.fill = PatternFill(start_color=COLOR_AZUL_CLARO, end_color=COLOR_AZUL_CLARO, fill_type='solid')
+    
+    # Subtítulo
+    ws_inst.merge_cells('A2:G2')
+    subt = ws_inst['A2']
+    subt.value = "Instrucciones para el llenado de la matriz (hoja 'Contratos UCUENCA EP')"
+    subt.font = Font(name='Calibri', size=11, color=COLOR_AZUL_OSCURO)
+    subt.alignment = Alignment(horizontal='center', vertical='center')
+    subt.fill = PatternFill(start_color=COLOR_AZUL_MUY_CLARO, end_color=COLOR_AZUL_MUY_CLARO, fill_type='solid')
+    
+    # ============================================================
+    # SECCIÓN 1: REGLAS BÁSICAS
+    # ============================================================
+    row = 4
+    ws_inst[f'A{row}'] = "🔹 REGLAS BÁSICAS"
+    ws_inst[f'A{row}'].font = Font(name='Calibri', size=12, bold=True, color=COLOR_AZUL_OSCURO)
+    row += 1
+    reglas = [
+        "• Complete UNA FILA por cada contrato.",
+        "• Máximo 2 servicios por contrato (use las columnas Servicio 1 y Servicio 2).",
+        "• No modifique los encabezados (fila 4) ni las fórmulas.",
+        "• Las columnas con fondo AMARILLO tienen listas desplegables: SELECCIONE un valor.",
+        "• Las columnas con fondo AZUL CLARO son de TEXTO LIBRE (escriba lo que corresponda).",
+        "• Las columnas con fondo BLANCO/GRIS son DATOS ESTRUCTURADOS (fechas, montos, etc.)."
+    ]
+    for regla in reglas:
+        ws_inst[f'A{row}'] = regla
+        ws_inst[f'A{row}'].font = Font(name='Calibri', size=10)
+        row += 1
+    row += 1
+    
+    # ============================================================
+    # SECCIÓN 2: EXPLICACIÓN DE COLUMNAS
+    # ============================================================
+    ws_inst[f'A{row}'] = "🔹 EXPLICACIÓN DE COLUMNAS"
+    ws_inst[f'A{row}'].font = Font(name='Calibri', size=12, bold=True, color=COLOR_AZUL_OSCURO)
+    row += 1
+    
+    # Encabezados de la tabla
+    headers_cols = ["Columna", "Tipo", "Qué llenar", "Ejemplo"]
+    for col, header in enumerate(headers_cols, 1):
+        cell = ws_inst.cell(row=row, column=col, value=header)
+        cell.font = Font(name='Calibri', size=10, bold=True, color=COLOR_BLANCO)
+        cell.alignment = Alignment(horizontal='center', vertical='center')
+        cell.fill = PatternFill(start_color=COLOR_AZUL_OSCURO, end_color=COLOR_AZUL_OSCURO, fill_type='solid')
+    row += 1
+    
+    # Datos de columnas (16 columnas)
+    columnas_info = [
+        ("A: ID Contrato", "Texto", "Identificador único", "CON-2026-001"),
+        ("B: Objeto", "Texto libre", "Descripción del contrato", "Fiscalización de obra vial"),
+        ("C-E: Fechas", "Fecha", "DD/MM/YYYY", "15/05/2026"),
+        ("F: Monto", "Número", "Valor en dólares (sin signos)", "45000"),
+        ("G: % Retención", "Número", "Porcentaje (ej: 8 para 8%)", "8"),
+        ("H: Tipo Ret.", "Lista", "Seleccione de la lista", "IVA"),
+        ("I: ID Cliente", "Texto", "Código del cliente", "CLI-001"),
+        ("J: Razón Social", "Texto libre", "Nombre del cliente", "Constructora ABC"),
+        ("K: Sector", "Lista", "Público / Privado / Mixto", "Privado"),
+        ("L: Actividad", "Lista", "Sector económico", "Construcción"),
+        ("M: Cat. Servicio 1", "Lista", "Categoría del servicio principal", "Ingeniería y arquitectura"),
+        ("N: Subcat. Servicio 1", "Lista", "Subcategoría del servicio principal", "Fiscalización de obras"),
+        ("O: Cat. Servicio 2", "Lista", "Categoría del 2do servicio (opcional)", ""),
+        ("P: Subcat. Servicio 2", "Lista", "Subcategoría del 2do servicio (opcional)", "")
+    ]
+    
+    for info in columnas_info:
+        for col_idx, val in enumerate(info, 1):
+            cell = ws_inst.cell(row=row, column=col_idx, value=val)
+            cell.font = Font(name='Calibri', size=9)
+            cell.alignment = Alignment(horizontal='left', vertical='center', wrap_text=True)
+            # Color según tipo de columna
+            if "Lista" in info[1]:
+                cell.fill = PatternFill(start_color=COLOR_AMARILLO_LISTA, end_color=COLOR_AMARILLO_LISTA, fill_type='solid')
+            elif "Texto libre" in info[1]:
+                cell.fill = PatternFill(start_color=COLOR_AZUL_MUY_CLARO, end_color=COLOR_AZUL_MUY_CLARO, fill_type='solid')
+            else:
+                if row % 2 == 0:
+                    cell.fill = PatternFill(start_color=COLOR_GRIS_ALTERNO, end_color=COLOR_GRIS_ALTERNO, fill_type='solid')
+                else:
+                    cell.fill = PatternFill(start_color=COLOR_BLANCO, end_color=COLOR_BLANCO, fill_type='solid')
+            cell.border = Border(
+                left=Side(style='thin', color=COLOR_GRIS_BORDE),
+                right=Side(style='thin', color=COLOR_GRIS_BORDE),
+                top=Side(style='thin', color=COLOR_GRIS_BORDE),
+                bottom=Side(style='thin', color=COLOR_GRIS_BORDE)
+            )
+        row += 1
+    row += 1
+    
+    # ============================================================
+    # SECCIÓN 3: LISTAS DE VALORES PERMITIDOS
+    # ============================================================
+    ws_inst[f'A{row}'] = "🔹 LISTAS DE VALORES PERMITIDOS (para columnas con lista)"
+    ws_inst[f'A{row}'].font = Font(name='Calibri', size=12, bold=True, color=COLOR_AZUL_OSCURO)
+    row += 1
+    
+    # Tabla de listas
+    listas_info = [
+        ("Categorías (Nivel 1)", "\n".join(CATEGORIAS)),
+        ("Sectores", "\n".join(SECTORES)),
+        ("Actividades", "\n".join(ACTIVIDADES)),
+        ("Tipos de Retención", "\n".join(TIPOS_RETENCION))
+    ]
+    
+    # Encabezados de la tabla de listas
+    for col, header in enumerate(["Lista", "Valores permitidos"], 1):
+        cell = ws_inst.cell(row=row, column=col, value=header)
+        cell.font = Font(name='Calibri', size=10, bold=True, color=COLOR_BLANCO)
+        cell.alignment = Alignment(horizontal='center', vertical='center')
+        cell.fill = PatternFill(start_color=COLOR_AZUL_OSCURO, end_color=COLOR_AZUL_OSCURO, fill_type='solid')
+    row += 1
+    
+    for lista, valores in listas_info:
+        cell1 = ws_inst.cell(row=row, column=1, value=lista)
+        cell1.font = Font(name='Calibri', size=9, bold=True)
+        cell1.alignment = Alignment(horizontal='left', vertical='center')
+        cell1.fill = PatternFill(start_color=COLOR_AZUL_MUY_CLARO, end_color=COLOR_AZUL_MUY_CLARO, fill_type='solid')
+        
+        cell2 = ws_inst.cell(row=row, column=2, value=valores)
+        cell2.font = Font(name='Calibri', size=9)
+        cell2.alignment = Alignment(horizontal='left', vertical='center', wrap_text=True)
+        cell2.fill = PatternFill(start_color=COLOR_BLANCO, end_color=COLOR_BLANCO, fill_type='solid')
+        
+        # Borde
+        for col in [1, 2]:
+            ws_inst.cell(row=row, column=col).border = Border(
+                left=Side(style='thin', color=COLOR_GRIS_BORDE),
+                right=Side(style='thin', color=COLOR_GRIS_BORDE),
+                top=Side(style='thin', color=COLOR_GRIS_BORDE),
+                bottom=Side(style='thin', color=COLOR_GRIS_BORDE)
+            )
+        row += 1
+    row += 1
+    
+    # ============================================================
+    # SECCIÓN 4: EJEMPLO VISUAL
+    # ============================================================
+    ws_inst[f'A{row}'] = "🔹 EJEMPLO DE LLENADO (fila de la hoja 'Contratos')"
+    ws_inst[f'A{row}'].font = Font(name='Calibri', size=12, bold=True, color=COLOR_AZUL_OSCURO)
+    row += 1
+    
+    # Copiar la primera fila de ejemplo (la de CON-2026-001) con colores
+    ejemplo_data = [
+        "CON-2026-001", "Fiscalización de obra vial", "15/05/2026", "01/06/2026", "31/12/2026",
+        "45,000.00", "8%", "IVA", "CLI-001", "Constructora ABC", "Privado", "Construcción",
+        "Ingeniería y arquitectura", "Fiscalización de obras", "", ""
+    ]
+    for col_idx, val in enumerate(ejemplo_data, 1):
+        cell = ws_inst.cell(row=row, column=col_idx, value=val)
+        cell.font = Font(name='Calibri', size=9)
+        cell.alignment = Alignment(horizontal='center', vertical='center')
+        # Color según columna (simulando la hoja de contratos)
+        if col_idx in [2, 10]:  # texto libre
+            cell.fill = PatternFill(start_color=COLOR_AZUL_MUY_CLARO, end_color=COLOR_AZUL_MUY_CLARO, fill_type='solid')
+        elif col_idx in [8, 11, 12, 13, 14, 15, 16]:  # listas
+            cell.fill = PatternFill(start_color=COLOR_AMARILLO_LISTA, end_color=COLOR_AMARILLO_LISTA, fill_type='solid')
+        else:
+            cell.fill = PatternFill(start_color=COLOR_BLANCO, end_color=COLOR_BLANCO, fill_type='solid')
+        cell.border = Border(
+            left=Side(style='thin', color=COLOR_GRIS_BORDE),
+            right=Side(style='thin', color=COLOR_GRIS_BORDE),
+            top=Side(style='thin', color=COLOR_GRIS_BORDE),
+            bottom=Side(style='thin', color=COLOR_GRIS_BORDE)
+        )
+    row += 2
+    
+    # ============================================================
+    # SECCIÓN 5: CONTACTO
+    # ============================================================
+    ws_inst[f'A{row}'] = "🔹 ¿DUDAS? CONTACTO"
+    ws_inst[f'A{row}'].font = Font(name='Calibri', size=12, bold=True, color=COLOR_AZUL_OSCURO)
+    row += 1
+    ws_inst[f'A{row}'] = "Si tiene preguntas sobre el llenado, comuníquese con:"
+    ws_inst[f'A{row}'].font = Font(name='Calibri', size=10)
+    row += 1
+    ws_inst[f'A{row}'] = "📧 [Tu correo]  |  📞 [Tu teléfono]  |  💬 [Tu canal de comunicación]"
+    ws_inst[f'A{row}'].font = Font(name='Calibri', size=10, bold=True, color=COLOR_AZUL_OSCURO)
+    ws_inst[f'A{row}'].fill = PatternFill(start_color=COLOR_AZUL_CLARO, end_color=COLOR_AZUL_CLARO, fill_type='solid')
+    
+    # Ajustar ancho de columnas en hoja instructivo
+    ws_inst.column_dimensions['A'].width = 25
+    ws_inst.column_dimensions['B'].width = 40
+    ws_inst.column_dimensions['C'].width = 20
+    ws_inst.column_dimensions['D'].width = 20
+    ws_inst.column_dimensions['E'].width = 20
+    ws_inst.column_dimensions['F'].width = 20
+    ws_inst.column_dimensions['G'].width = 20
+    
+    return ws_inst
+crear_hoja_instructivo(wb)
 # ============================================================
 # 9. GUARDAR ARCHIVO
 # ============================================================

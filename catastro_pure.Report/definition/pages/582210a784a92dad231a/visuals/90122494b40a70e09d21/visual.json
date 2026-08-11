@@ -1,0 +1,50 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.10.0/schema.json",
+  "name": "90122494b40a70e09d21",
+  "position": {
+    "x": 115,
+    "y": 0,
+    "z": 0,
+    "height": 83.75,
+    "width": 888.75,
+    "tabOrder": 0
+  },
+  "visual": {
+    "visualType": "textbox",
+    "objects": {
+      "general": [
+        {
+          "properties": {
+            "paragraphs": [
+              {
+                "textRuns": [
+                  {
+                    "value": "PUENTES DE INVESTIGACIÓN ",
+                    "textStyle": {
+                      "fontWeight": "bold",
+                      "fontFamily": "Segoe UI Light",
+                      "fontSize": "24pt",
+                      "color": "#003156"
+                    }
+                  }
+                ]
+              },
+              {
+                "textRuns": [
+                  {
+                    "value": "¿Cómo se conectan Facultades y Departamentos?",
+                    "textStyle": {
+                      "fontSize": "12pt",
+                      "color": "#6f6f6f"
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

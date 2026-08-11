@@ -1,0 +1,227 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
+  "name": "be1c5b3ea8c0e0934358",
+  "position": {
+    "x": 1047.1428571428571,
+    "y": 152.85714285714286,
+    "z": 13000,
+    "height": 147.5,
+    "width": 395,
+    "tabOrder": 13000
+  },
+  "visual": {
+    "visualType": "pivotTable",
+    "query": {
+      "queryState": {
+        "Rows": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "autoridades_admin"
+                    }
+                  },
+                  "Property": "DENOMINACION DEL CARGO"
+                }
+              },
+              "queryRef": "autoridades_admin.DENOMINACION DEL CARGO",
+              "nativeQueryRef": "DENOMINACION DEL CARGO",
+              "active": true
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "autoridades_admin"
+                    }
+                  },
+                  "Property": "CARRERA"
+                }
+              },
+              "queryRef": "autoridades_admin.CARRERA",
+              "nativeQueryRef": "CARRERA",
+              "active": true
+            }
+          ]
+        },
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Aggregation": {
+                  "Expression": {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "autoridades_admin"
+                        }
+                      },
+                      "Property": "Key_nombre"
+                    }
+                  },
+                  "Function": 3
+                }
+              },
+              "queryRef": "Min(autoridades_admin.Key_nombre)",
+              "nativeQueryRef": "Key_nombre"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Column": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "autoridades_admin"
+                  }
+                },
+                "Property": "DENOMINACION DEL CARGO"
+              }
+            },
+            "direction": "Descending"
+          },
+          {
+            "field": {
+              "Column": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "autoridades_admin"
+                  }
+                },
+                "Property": "CARRERA"
+              }
+            },
+            "direction": "Descending"
+          }
+        ]
+      }
+    },
+    "expansionStates": [
+      {
+        "roles": [
+          "Rows"
+        ],
+        "levels": [
+          {
+            "queryRefs": [
+              "autoridades_admin.DENOMINACION DEL CARGO"
+            ],
+            "isCollapsed": true,
+            "identityKeys": [
+              {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "autoridades_admin"
+                    }
+                  },
+                  "Property": "DENOMINACION DEL CARGO"
+                }
+              }
+            ],
+            "isPinned": true
+          },
+          {
+            "queryRefs": [
+              "autoridades_admin.CARRERA"
+            ],
+            "isCollapsed": true,
+            "isPinned": true
+          }
+        ],
+        "root": {
+          "children": [
+            {
+              "identityValues": [
+                {
+                  "Literal": {
+                    "Value": "'DIRECTOR/A DE LA CARRERA'"
+                  }
+                }
+              ],
+              "isToggled": true
+            }
+          ]
+        }
+      }
+    ],
+    "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "fd5f1bca0aeb9b0cb683",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "autoridades_admin"
+              }
+            },
+            "Property": "DENOMINACION DEL CARGO"
+          }
+        },
+        "type": "Categorical",
+        "filter": {
+          "Version": 2,
+          "From": [
+            {
+              "Name": "a",
+              "Entity": "autoridades_admin",
+              "Type": 0
+            }
+          ],
+          "Where": [
+            {
+              "Condition": {
+                "In": {
+                  "Expressions": [
+                    {
+                      "Column": {
+                        "Expression": {
+                          "SourceRef": {
+                            "Source": "a"
+                          }
+                        },
+                        "Property": "DENOMINACION DEL CARGO"
+                      }
+                    }
+                  ],
+                  "Values": [
+                    [
+                      {
+                        "Literal": {
+                          "Value": "'DIRECTOR'"
+                        }
+                      }
+                    ],
+                    [
+                      {
+                        "Literal": {
+                          "Value": "'DIRECTOR/A DE LA CARRERA'"
+                        }
+                      }
+                    ],
+                    [
+                      {
+                        "Literal": {
+                          "Value": "'DIRECTOR/A DEL INSTITUTO UNIVERSITARIO DE IDIOMAS'"
+                        }
+                      }
+                    ]
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      }
+    ]
+  }
+}

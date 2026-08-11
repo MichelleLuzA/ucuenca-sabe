@@ -1,0 +1,142 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.10.0/schema.json",
+  "name": "8656663c97fd1732f04a",
+  "position": {
+    "x": 14.444444444444445,
+    "y": 551.11111111111109,
+    "z": 9000,
+    "height": 388.88888888888886,
+    "width": 925.55555555555554,
+    "tabOrder": 9000
+  },
+  "visual": {
+    "visualType": "sankey_diagram_visiochart_8c1a6a012eec472d899f79bf867da012",
+    "query": {
+      "queryState": {
+        "measure": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "silver_catastropure"
+                    }
+                  },
+                  "Property": "Total Investigadores"
+                }
+              },
+              "queryRef": "silver_catastropure.Total Investigadores",
+              "nativeQueryRef": "Total Investigadores"
+            }
+          ]
+        },
+        "category": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "silver_catastropure"
+                    }
+                  },
+                  "Property": "Vicerrectorado"
+                }
+              },
+              "queryRef": "silver_catastropure.Vicerrectorado",
+              "nativeQueryRef": "Vicerrectorado"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "catastro_docentes"
+                    }
+                  },
+                  "Property": "CAMPO AMPLIO (UNESCO)"
+                }
+              },
+              "queryRef": "catastro_docentes.CAMPO AMPLIO (UNESCO)",
+              "nativeQueryRef": "CAMPO AMPLIO (UNESCO)"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "silver_catastropure"
+                  }
+                },
+                "Property": "Total Investigadores"
+              }
+            },
+            "direction": "Descending"
+          }
+        ],
+        "isDefaultSort": true
+      }
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "visualHeader": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "visualTooltip": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          }
+        }
+      ],
+      "background": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

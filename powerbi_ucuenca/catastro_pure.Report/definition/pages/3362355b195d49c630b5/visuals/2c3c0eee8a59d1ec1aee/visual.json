@@ -1,0 +1,97 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.10.0/schema.json",
+  "name": "2c3c0eee8a59d1ec1aee",
+  "position": {
+    "x": 1222,
+    "y": 24,
+    "z": 5000,
+    "height": 128,
+    "width": 226,
+    "tabOrder": 5000
+  },
+  "visual": {
+    "visualType": "cardVisual",
+    "query": {
+      "queryState": {
+        "Data": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "silver_catastropure"
+                    }
+                  },
+                  "Property": "Años_Titularidad"
+                }
+              },
+              "queryRef": "silver_catastropure.Años_Titularidad",
+              "nativeQueryRef": "Años",
+              "displayName": "Años"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "silver_catastropure"
+                  }
+                },
+                "Property": "Años_Titularidad"
+              }
+            },
+            "direction": "Descending"
+          }
+        ],
+        "isDefaultSort": true
+      }
+    },
+    "visualContainerObjects": {
+      "title": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            },
+            "text": {
+              "expr": {
+                "Literal": {
+                  "Value": "'Hasta titularidad'"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "c26c2bfc4260d6abe25a",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "silver_catastropure"
+              }
+            },
+            "Property": "Años_Titularidad"
+          }
+        },
+        "type": "Advanced"
+      }
+    ]
+  }
+}

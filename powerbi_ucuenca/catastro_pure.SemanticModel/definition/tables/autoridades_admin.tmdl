@@ -1,0 +1,107 @@
+table autoridades_admin
+	lineageTag: c454c6c6-0789-46c9-864e-1a83e0c3bf60
+
+	column N°
+		dataType: int64
+		formatString: 0
+		lineageTag: ee1226bd-02e5-42fe-ae99-644b38d69071
+		summarizeBy: sum
+		sourceColumn: N°
+
+		annotation SummarizationSetBy = Automatic
+
+	column NOMBRES
+		dataType: string
+		lineageTag: 8f92351d-c435-4996-8f00-7f9d3b38211f
+		summarizeBy: none
+		sourceColumn: NOMBRES
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'DENOMINACION DEL CARGO'
+		dataType: string
+		lineageTag: b059c784-3b7d-40c8-9212-568e03591a97
+		summarizeBy: none
+		sourceColumn: DENOMINACION DEL CARGO
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'CORREO ELECTRONICO'
+		dataType: string
+		lineageTag: 56309c83-6264-4fc8-81d8-75e1a23b0dab
+		summarizeBy: none
+		sourceColumn: CORREO ELECTRONICO
+
+		annotation SummarizationSetBy = Automatic
+
+	column CARRERA
+		dataType: string
+		lineageTag: 92cb4e74-5f50-4407-aa75-15237894ecff
+		summarizeBy: none
+		sourceColumn: CARRERA
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'FACULTAD / INSTITUTO'
+		dataType: string
+		lineageTag: a219fc20-f205-48a8-a896-beaf7baaeb43
+		summarizeBy: none
+		sourceColumn: FACULTAD / INSTITUTO
+
+		annotation SummarizationSetBy = Automatic
+
+	column Key_nombre
+		dataType: string
+		lineageTag: cf86ae09-eae7-4237-8480-4c517c181f06
+		summarizeBy: none
+		sourceColumn: Key_nombre
+
+		annotation SummarizationSetBy = Automatic
+
+	partition autoridades_admin = m
+		mode: import
+		source =
+				let
+				  Origen = Excel.Workbook(File.Contents("C:\Users\michu\mis-proyectos\ucuenca-sabe\data\bronze\internas\autoridades_admin.xlsx"), null, true),
+				  #"Navegación 1" = Origen{[Item = "Hoja1", Kind = "Sheet"]}[Data],
+				  #"Encabezados promovidos" = Table.PromoteHeaders(#"Navegación 1", [PromoteAllScalars = true]),
+				  #"Tipo de columna cambiado" = Table.TransformColumnTypes(#"Encabezados promovidos", {{"N°", Int64.Type}, {"NOMBRES", type text}, {"DENOMINACION DEL CARGO", type text}, {"CORREO ELECTRONICO", type text}, {"CARRERA", type text}, {"FACULTAD / INSTITUTO", type text}}, "es"),
+				    #"Columnas quitadas" = Table.RemoveColumns(#"Tipo de columna cambiado",{"Column7", "Column8", "Column9", "Column10", "Column11", "Column12", "Column13"}),
+				    #"Personalizada agregada" = Table.AddColumn(#"Columnas quitadas", "Key_nombre", each Text.Upper(
+				    Text.Replace(
+				        Text.Replace(
+				            Text.Replace(
+				                Text.Replace(
+				                    Text.Replace(
+				                        Text.Replace(
+				                            Text.Replace(
+				                                Text.Replace(
+				                                    Text.Replace(
+				                                        Text.Trim(Text.Clean([NOMBRES])),
+				                                        "Á", "A"
+				                                    ),
+				                                    "É", "E"
+				                                ),
+				                                "Í", "I"
+				                            ),
+				                            "Ó", "O"
+				                        ),
+				                        "Ú", "U"
+				                    ),
+				                    "Ü", "U"
+				                ),
+				                "Ñ", "N"
+				            ),
+				            ",", ""
+				        ),
+				        "  ", " "
+				    )
+				)),
+				    #"Filas filtradas" = Table.SelectRows(#"Personalizada agregada", each ([Key_nombre] <> null))
+				in
+				  #"Filas filtradas"
+
+	annotation PBI_NavigationStepName = Navegación
+
+	annotation PBI_ResultType = Table
+

@@ -1,0 +1,50 @@
+{
+    "name": "UCuenca_KitMarca_2026_Treemap_Perfect",
+    "dataColors": [
+        "#003156", 
+        "#A51008", 
+        "#6F6F6F", 
+        "#DADADA", 
+        "#002856", 
+        "#335A78", 
+        "#66839A", 
+        "#BC322B", 
+        "#C7443D", 
+        "#D2554F", 
+        "#DD6761", 
+        "#E97873"
+    ],
+    "background": "#F8F9FA",
+    "foreground": "#003156",
+    "tableAccent": "#003156",
+    "visualStyles": {
+        "page": {
+            "*": {
+                "background": [
+                    {
+                        "color": { "solid": { "color": "#F8F9FA" } },
+                        "transparency": 0
+                    }
+                ]
+            }
+        },
+        "treemap": {
+            "*": {
+                "labels": [
+                    {
+                        "show": true,
+                        "fontSize": 11,
+                        "fontFamily": "Segoe UI Semibold"
+                    }
+                ],
+                "dataLabels": [
+                    {
+                        "show": true,
+                        "fontSize": 9,
+                        "fontColor": { "solid": { "color": "#FFFFFF" } }
+                    }
+                ]
+            }
+        }
+    }
+}

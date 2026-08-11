@@ -68,12 +68,13 @@ table raw_investigadores
 		mode: import
 		source =
 				let
-				  Origen = Excel.Workbook(File.Contents("C:\Users\michu\Documents\ucuenca-sabe\data\bronze\investigacion\investigadores_raw.xlsx"), null, true),
+				  Origen = Excel.Workbook(File.Contents("C:\Users\michu\mis-proyectos\ucuenca-sabe\data\bronze\investigacion\investigadores_raw.xlsx"), null, true),
 				  #"Navegación 1" = Origen{[Item = "Sheet1", Kind = "Sheet"]}[Data],
 				  #"Encabezados promovidos" = Table.PromoteHeaders(#"Navegación 1", [PromoteAllScalars = true]),
-				  #"Tipo de columna cambiado" = Table.TransformColumnTypes(#"Encabezados promovidos", {{"investigador", type text}, {"facultad", type text}, {"departamento", type text}, {"grupos_investigacion", type text}, {"pagina", Int64.Type}, {"url_perfil", type text}, {"fecha_extraccion", type datetime}}, "es")
+				  #"Tipo de columna cambiado" = Table.TransformColumnTypes(#"Encabezados promovidos", {{"investigador", type text}, {"facultad", type text}, {"departamento", type text}, {"grupos_investigacion", type text}, {"pagina", Int64.Type}, {"url_perfil", type text}, {"fecha_extraccion", type datetime}}, "es"),
+				    #"Valor reemplazado" = Table.ReplaceValue(#"Tipo de columna cambiado",", PhD","",Replacer.ReplaceText,{"investigador"})
 				in
-				  #"Tipo de columna cambiado"
+				    #"Valor reemplazado"
 
 	annotation PBI_NavigationStepName = Navegación
 

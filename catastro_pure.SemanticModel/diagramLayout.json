@@ -10,8 +10,8 @@
       "nodes": [
         {
           "location": {
-            "x": 343.18475118062986,
-            "y": 136
+            "x": 763.01159105407589,
+            "y": 6.2851037154371987
           },
           "nodeIndex": "raw_investigadores",
           "nodeLineageTag": "24c5030e-d6c8-423d-8821-9ef0aae5be8c",
@@ -19,12 +19,12 @@
             "height": 248,
             "width": 234
           },
-          "zIndex": 1
+          "zIndex": 7
         },
         {
           "location": {
-            "x": 50,
-            "y": -50
+            "x": 1024.4719056162637,
+            "y": 387.1623888709313
           },
           "nodeIndex": "silver_catastropure",
           "nodeLineageTag": "f4a8ca57-0461-4fa9-9503-2c64037042e0",
@@ -36,8 +36,8 @@
         },
         {
           "location": {
-            "x": 706.36163941535983,
-            "y": 29
+            "x": 1054.5563852505811,
+            "y": 0
           },
           "nodeIndex": "silver_investigadores",
           "nodeLineageTag": "9f848272-b5e7-4a32-ae88-d160eb06ee1d",
@@ -49,20 +49,85 @@
         },
         {
           "location": {
-            "x": 1007.3616394153601,
-            "y": 9.12994172754648
+            "x": 1320.3598044441328,
+            "y": 0
           },
           "nodeIndex": "silver_jerarquía",
           "nodeLineageTag": "060ebf7a-1e0b-4d28-bc3f-a3683ea1dc5c",
           "size": {
-            "height": 176,
+            "height": 241.36507864054684,
             "width": 234
           },
           "zIndex": 3
+        },
+        {
+          "location": {
+            "x": 0,
+            "y": 367.05005698153235
+          },
+          "nodeIndex": "catastro_docentes",
+          "nodeLineageTag": "a86453f1-9c90-4d0a-b5e5-147e5b1e2597",
+          "size": {
+            "height": 252.23321176267729,
+            "width": 275.48168452188554
+          },
+          "zIndex": 5
+        },
+        {
+          "location": {
+            "x": 1314.462984300168,
+            "y": 169.75247342129339
+          },
+          "nodeIndex": "Sankey_Facultad_Depto",
+          "nodeLineageTag": "7b944efc-3851-47f5-a5e4-770c2f96ee7c",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 1
+        },
+        {
+          "location": {
+            "x": 477.95470158426951,
+            "y": 0
+          },
+          "nodeIndex": "autoridades_admin",
+          "nodeLineageTag": "c454c6c6-0789-46c9-864e-1a83e0c3bf60",
+          "size": {
+            "height": 248,
+            "width": 234
+          },
+          "zIndex": 8
+        },
+        {
+          "location": {
+            "x": 122.21781210991031,
+            "y": 0
+          },
+          "nodeIndex": "Dim_Facultad",
+          "nodeLineageTag": "ef7c6467-035f-4528-8364-6a15bd793a85",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 6
+        },
+        {
+          "location": {
+            "x": 574.85973913306225,
+            "y": 464.81684521885506
+          },
+          "nodeIndex": "Dim_Docente",
+          "nodeLineageTag": "9c404a62-4289-41b2-9de0-f335ddc28c50",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 9
         }
       ],
       "name": "Todas las tablas",
-      "zoomValue": 100,
+      "zoomValue": 79.553182037699983,
       "pinKeyFieldsToTop": false,
       "showExtraHeaderInfo": false,
       "hideKeyFieldsWhenCollapsed": false,
