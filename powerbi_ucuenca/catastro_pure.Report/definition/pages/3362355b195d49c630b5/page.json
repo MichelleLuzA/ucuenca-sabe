@@ -3,11 +3,6 @@
   "name": "3362355b195d49c630b5",
   "displayName": "Radiografía Docentes",
   "displayOption": "ActualSize",
-  "height": 1000,
-  "width": 1620,
-  "pageBinding": {
-    "name": "d559809e3c076b8363d8",
-    "type": "Default",
-    "parameters": []
-  }
+  "height": 1620,
+  "width": 1620
 }

@@ -37,8 +37,11 @@ relationship AutoDetected_ee4109bf-8de9-4965-8121-3d27978c08a9
 	fromColumn: silver_catastropure.investigador
 	toColumn: catastro_docentes.investigador
 
-relationship AutoDetected_33f5fcbe-0042-408a-8cf4-591e44687e93
-	crossFilteringBehavior: bothDirections
+relationship 7b87425c-2e8e-d268-84b6-6176da3ee28e
+	fromColumn: autoridades_admin.FACULTAD_KEY
+	toColumn: Dim_Facultad.Facultad
+
+relationship 701779b4-04f6-d991-1b23-3378ecc39696
 	fromColumn: autoridades_admin.Key_nombre
-	toColumn: catastro_docentes.Key_nombre
+	toColumn: catastro_docentes.investigador
 

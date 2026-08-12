@@ -2,12 +2,12 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
   "name": "be1c5b3ea8c0e0934358",
   "position": {
-    "x": 1047.1428571428571,
-    "y": 152.85714285714286,
-    "z": 13000,
-    "height": 147.5,
-    "width": 395,
-    "tabOrder": 13000
+    "x": 448,
+    "y": 514,
+    "z": 9000,
+    "height": 266,
+    "width": 694,
+    "tabOrder": 9000
   },
   "visual": {
     "visualType": "pivotTable",
@@ -15,21 +15,6 @@
       "queryState": {
         "Rows": {
           "projections": [
-            {
-              "field": {
-                "Column": {
-                  "Expression": {
-                    "SourceRef": {
-                      "Entity": "autoridades_admin"
-                    }
-                  },
-                  "Property": "DENOMINACION DEL CARGO"
-                }
-              },
-              "queryRef": "autoridades_admin.DENOMINACION DEL CARGO",
-              "nativeQueryRef": "DENOMINACION DEL CARGO",
-              "active": true
-            },
             {
               "field": {
                 "Column": {
@@ -66,7 +51,28 @@
                 }
               },
               "queryRef": "Min(autoridades_admin.Key_nombre)",
-              "nativeQueryRef": "Key_nombre"
+              "nativeQueryRef": "DIRECTOR",
+              "displayName": "DIRECTOR"
+            },
+            {
+              "field": {
+                "Aggregation": {
+                  "Expression": {
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "autoridades_admin"
+                        }
+                      },
+                      "Property": "CORREO ELECTRONICO"
+                    }
+                  },
+                  "Function": 3
+                }
+              },
+              "queryRef": "Min(autoridades_admin.CORREO ELECTRONICO)",
+              "nativeQueryRef": "CORREO ELECTRONICO",
+              "displayName": "CORREO ELECTRONICO"
             }
           ]
         }
@@ -75,26 +81,18 @@
         "sort": [
           {
             "field": {
-              "Column": {
+              "Aggregation": {
                 "Expression": {
-                  "SourceRef": {
-                    "Entity": "autoridades_admin"
+                  "Column": {
+                    "Expression": {
+                      "SourceRef": {
+                        "Entity": "autoridades_admin"
+                      }
+                    },
+                    "Property": "CORREO ELECTRONICO"
                   }
                 },
-                "Property": "DENOMINACION DEL CARGO"
-              }
-            },
-            "direction": "Descending"
-          },
-          {
-            "field": {
-              "Column": {
-                "Expression": {
-                  "SourceRef": {
-                    "Entity": "autoridades_admin"
-                  }
-                },
-                "Property": "CARRERA"
+                "Function": 3
               }
             },
             "direction": "Descending"
@@ -110,7 +108,7 @@
         "levels": [
           {
             "queryRefs": [
-              "autoridades_admin.DENOMINACION DEL CARGO"
+              "autoridades_admin.CARRERA"
             ],
             "isCollapsed": true,
             "identityKeys": [
@@ -121,36 +119,38 @@
                       "Entity": "autoridades_admin"
                     }
                   },
-                  "Property": "DENOMINACION DEL CARGO"
+                  "Property": "CARRERA"
                 }
               }
             ],
             "isPinned": true
-          },
-          {
-            "queryRefs": [
-              "autoridades_admin.CARRERA"
-            ],
-            "isCollapsed": true,
-            "isPinned": true
           }
         ],
-        "root": {
-          "children": [
-            {
-              "identityValues": [
-                {
-                  "Literal": {
-                    "Value": "'DIRECTOR/A DE LA CARRERA'"
-                  }
-                }
-              ],
-              "isToggled": true
-            }
-          ]
-        }
+        "root": {}
       }
     ],
+    "objects": {
+      "subTotals": [
+        {
+          "properties": {
+            "columnSubtotals": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            },
+            "rowSubtotals": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
     "drillFilterOtherVisuals": true
   },
   "filterConfig": {
@@ -220,7 +220,60 @@
               }
             }
           ]
-        }
+        },
+        "howCreated": "User"
+      },
+      {
+        "name": "0d84d2f36a76cd7e93ea",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "autoridades_admin"
+              }
+            },
+            "Property": "CARRERA"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "63590e93c3e3de3beaba",
+        "field": {
+          "Aggregation": {
+            "Expression": {
+              "Column": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "autoridades_admin"
+                  }
+                },
+                "Property": "Key_nombre"
+              }
+            },
+            "Function": 3
+          }
+        },
+        "type": "Advanced"
+      },
+      {
+        "name": "a12ea58e33c0c2b98a2e",
+        "field": {
+          "Aggregation": {
+            "Expression": {
+              "Column": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "autoridades_admin"
+                  }
+                },
+                "Property": "CORREO ELECTRONICO"
+              }
+            },
+            "Function": 3
+          }
+        },
+        "type": "Advanced"
       }
     ]
   }

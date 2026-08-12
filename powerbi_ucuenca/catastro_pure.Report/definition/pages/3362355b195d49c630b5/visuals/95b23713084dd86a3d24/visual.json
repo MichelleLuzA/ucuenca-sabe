@@ -1,13 +1,13 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.10.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
   "name": "95b23713084dd86a3d24",
   "position": {
-    "x": 1007.5,
-    "y": 677.5,
-    "z": 11000,
-    "height": 310,
-    "width": 475,
-    "tabOrder": 11000
+    "x": 426,
+    "y": 1090,
+    "z": 8000,
+    "height": 320,
+    "width": 590,
+    "tabOrder": 8000
   },
   "visual": {
     "visualType": "barChart",
@@ -23,35 +23,30 @@
                       "Entity": "catastro_docentes"
                     }
                   },
-                  "Property": "Antiguedad"
+                  "Property": "CALIDAD"
                 }
               },
-              "queryRef": "catastro_docentes.Antiguedad",
-              "nativeQueryRef": "Antiguedad",
+              "queryRef": "catastro_docentes.CALIDAD",
+              "nativeQueryRef": "Recuento de CALIDAD1",
               "active": true
             }
           ]
         },
-        "Tooltips": {
+        "Series": {
           "projections": [
             {
               "field": {
-                "Aggregation": {
+                "Column": {
                   "Expression": {
-                    "Column": {
-                      "Expression": {
-                        "SourceRef": {
-                          "Entity": "catastro_docentes"
-                        }
-                      },
-                      "Property": "investigador"
+                    "SourceRef": {
+                      "Entity": "catastro_docentes"
                     }
                   },
-                  "Function": 3
+                  "Property": "GENERO"
                 }
               },
-              "queryRef": "Min(catastro_docentes.investigador)",
-              "nativeQueryRef": "Primera fecha: investigador"
+              "queryRef": "catastro_docentes.GENERO",
+              "nativeQueryRef": "GENERO"
             }
           ]
         },
@@ -67,14 +62,14 @@
                           "Entity": "catastro_docentes"
                         }
                       },
-                      "Property": "investigador"
+                      "Property": "Antiguedad"
                     }
                   },
-                  "Function": 5
+                  "Function": 1
                 }
               },
-              "queryRef": "CountNonNull(catastro_docentes.investigador)",
-              "nativeQueryRef": "Recuento de investigador"
+              "queryRef": "Sum(catastro_docentes.Antiguedad)",
+              "nativeQueryRef": "Promedio de Antiguedad"
             }
           ]
         }
@@ -91,10 +86,10 @@
                         "Entity": "catastro_docentes"
                       }
                     },
-                    "Property": "investigador"
+                    "Property": "Antiguedad"
                   }
                 },
-                "Function": 5
+                "Function": 1
               }
             },
             "direction": "Descending"
@@ -131,6 +126,13 @@
               "expr": {
                 "Literal": {
                   "Value": "'Antigüedad'"
+                }
+              }
+            },
+            "roundRange": {
+              "expr": {
+                "Literal": {
+                  "Value": "false"
                 }
               }
             }
@@ -251,15 +253,20 @@
         }
       },
       {
-        "name": "ed6eaa409d1a31b27c95",
+        "name": "1e4c521006aeee995514",
         "field": {
-          "Column": {
+          "Aggregation": {
             "Expression": {
-              "SourceRef": {
-                "Entity": "catastro_docentes"
+              "Column": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "catastro_docentes"
+                  }
+                },
+                "Property": "Antiguedad"
               }
             },
-            "Property": "Antiguedad"
+            "Function": 4
           }
         },
         "type": "Advanced",
@@ -278,13 +285,18 @@
                 "Comparison": {
                   "ComparisonKind": 3,
                   "Left": {
-                    "Column": {
+                    "Aggregation": {
                       "Expression": {
-                        "SourceRef": {
-                          "Source": "c"
+                        "Column": {
+                          "Expression": {
+                            "SourceRef": {
+                              "Source": "c"
+                            }
+                          },
+                          "Property": "Antiguedad"
                         }
                       },
-                      "Property": "Antiguedad"
+                      "Function": 4
                     }
                   },
                   "Right": {
@@ -296,10 +308,25 @@
               }
             }
           ]
-        }
+        },
+        "howCreated": "User"
       },
       {
-        "name": "cca9d2944bdb8bd9c1b3",
+        "name": "a82d763e9a217b829a66",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "catastro_docentes"
+              }
+            },
+            "Property": "CALIDAD"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "d71e689b90538a8217cb",
         "field": {
           "Aggregation": {
             "Expression": {
@@ -309,32 +336,27 @@
                     "Entity": "catastro_docentes"
                   }
                 },
-                "Property": "investigador"
+                "Property": "Antiguedad"
               }
             },
-            "Function": 5
+            "Function": 1
           }
         },
         "type": "Advanced"
       },
       {
-        "name": "faa89e022253dcbac1db",
+        "name": "dcf7398677b79b604414",
         "field": {
-          "Aggregation": {
+          "Column": {
             "Expression": {
-              "Column": {
-                "Expression": {
-                  "SourceRef": {
-                    "Entity": "catastro_docentes"
-                  }
-                },
-                "Property": "investigador"
+              "SourceRef": {
+                "Entity": "catastro_docentes"
               }
             },
-            "Function": 3
+            "Property": "GENERO"
           }
         },
-        "type": "Advanced"
+        "type": "Categorical"
       }
     ]
   }

@@ -1,13 +1,13 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.10.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
   "name": "a5f4018266621618804e",
   "position": {
     "x": 0,
-    "y": 87.5,
-    "z": 15000,
-    "height": 912.5,
-    "width": 470,
-    "tabOrder": 15000
+    "y": 160,
+    "z": 10000,
+    "height": 902,
+    "width": 424,
+    "tabOrder": 10000
   },
   "visual": {
     "visualType": "advancedSlicerVisual",
@@ -20,14 +20,14 @@
                 "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "catastro_docentes"
+                      "Entity": "Dim_Facultad"
                     }
                   },
-                  "Property": "UNIDAD ACADÉMICA_1"
+                  "Property": "Facultad"
                 }
               },
-              "queryRef": "catastro_docentes.UNIDAD ACADÉMICA_1",
-              "nativeQueryRef": "UNIDAD ACADÉMICA_1"
+              "queryRef": "Dim_Facultad.Facultad",
+              "nativeQueryRef": "Facultad"
             }
           ]
         }
@@ -76,49 +76,7 @@
       ],
       "general": [
         {
-          "properties": {
-            "filter": {
-              "filter": {
-                "Version": 2,
-                "From": [
-                  {
-                    "Name": "c",
-                    "Entity": "catastro_docentes",
-                    "Type": 0
-                  }
-                ],
-                "Where": [
-                  {
-                    "Condition": {
-                      "In": {
-                        "Expressions": [
-                          {
-                            "Column": {
-                              "Expression": {
-                                "SourceRef": {
-                                  "Source": "c"
-                                }
-                              },
-                              "Property": "UNIDAD ACADÉMICA_1"
-                            }
-                          }
-                        ],
-                        "Values": [
-                          [
-                            {
-                              "Literal": {
-                                "Value": "'FACULTAD DE INGENIERÍA'"
-                              }
-                            }
-                          ]
-                        ]
-                      }
-                    }
-                  }
-                ]
-              }
-            }
-          }
+          "properties": {}
         }
       ]
     },
@@ -127,15 +85,15 @@
   "filterConfig": {
     "filters": [
       {
-        "name": "9f5dc0560450ac016ad9",
+        "name": "bafd693d5608b4780142",
         "field": {
           "Column": {
             "Expression": {
               "SourceRef": {
-                "Entity": "catastro_docentes"
+                "Entity": "Dim_Facultad"
               }
             },
-            "Property": "UNIDAD ACADÉMICA_1"
+            "Property": "Facultad"
           }
         },
         "type": "Categorical",
@@ -143,8 +101,8 @@
           "Version": 2,
           "From": [
             {
-              "Name": "c",
-              "Entity": "catastro_docentes",
+              "Name": "d",
+              "Entity": "Dim_Facultad",
               "Type": 0
             }
           ],
@@ -159,10 +117,10 @@
                           "Column": {
                             "Expression": {
                               "SourceRef": {
-                                "Source": "c"
+                                "Source": "d"
                               }
                             },
-                            "Property": "UNIDAD ACADÉMICA_1"
+                            "Property": "Facultad"
                           }
                         }
                       ],
@@ -177,14 +135,21 @@
                         [
                           {
                             "Literal": {
-                              "Value": "'VICERRECTORADO DE INVESTIGACIÓN'"
+                              "Value": "'UCUENCA TEC'"
                             }
                           }
                         ],
                         [
                           {
                             "Literal": {
-                              "Value": "'UCUENCA TEC'"
+                              "Value": "'VICERRECTORADO DE INVESTIGACION'"
+                            }
+                          }
+                        ],
+                        [
+                          {
+                            "Literal": {
+                              "Value": "'INSTITUTO UNIVERSITARIO DE IDIOMAS'"
                             }
                           }
                         ]

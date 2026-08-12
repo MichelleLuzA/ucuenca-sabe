@@ -28,6 +28,7 @@ ref table LocalDateTable_cb049f35-0d3a-448b-90bf-ea4f0695f414
 ref table catastro_docentes
 ref table Sankey_Facultad_Depto
 ref table autoridades_admin
+ref table Dim_Facultad
 
 ref cultureInfo es-ES
 

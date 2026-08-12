@@ -1,13 +1,13 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.10.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
   "name": "d97245fc132c1e218278",
   "position": {
-    "x": 964,
-    "y": 14,
-    "z": 6000,
-    "height": 126,
-    "width": 218,
-    "tabOrder": 6000
+    "x": 644,
+    "y": 96,
+    "z": 5000,
+    "height": 144,
+    "width": 256,
+    "tabOrder": 5000
   },
   "visual": {
     "visualType": "cardVisual",
@@ -17,18 +17,22 @@
           "projections": [
             {
               "field": {
-                "Measure": {
+                "Aggregation": {
                   "Expression": {
-                    "SourceRef": {
-                      "Entity": "silver_catastropure"
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "catastro_docentes"
+                        }
+                      },
+                      "Property": "Antiguedad"
                     }
                   },
-                  "Property": "Antiguedad_Promedio"
+                  "Function": 1
                 }
               },
-              "queryRef": "silver_catastropure.Antiguedad_Promedio",
-              "nativeQueryRef": "Años",
-              "displayName": "Años"
+              "queryRef": "Sum(catastro_docentes.Antiguedad)",
+              "nativeQueryRef": "Promedio de Antiguedad"
             }
           ]
         }
@@ -37,13 +41,18 @@
         "sort": [
           {
             "field": {
-              "Measure": {
+              "Aggregation": {
                 "Expression": {
-                  "SourceRef": {
-                    "Entity": "silver_catastropure"
+                  "Column": {
+                    "Expression": {
+                      "SourceRef": {
+                        "Entity": "catastro_docentes"
+                      }
+                    },
+                    "Property": "Antiguedad"
                   }
                 },
-                "Property": "Antiguedad_Promedio"
+                "Function": 1
               }
             },
             "direction": "Descending"

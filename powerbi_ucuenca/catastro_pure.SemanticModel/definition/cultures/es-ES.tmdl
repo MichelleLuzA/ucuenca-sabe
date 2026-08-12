@@ -1275,8 +1275,15 @@ cultureInfo es-ES
 			            "State": "Generated",
 			            "Weight": 0.99
 			          }
+			        },
+			        {
+			          "date": {
+			            "State": "Generated",
+			            "Weight": 0.7
+			          }
 			        }
-			      ]
+			      ],
+			      "SemanticType": "Time"
 			    },
 			    "silver_catastropure.tipo_servidor": {
 			      "Definition": {
@@ -1403,8 +1410,15 @@ cultureInfo es-ES
 			            "State": "Generated",
 			            "Weight": 0.99
 			          }
+			        },
+			        {
+			          "date": {
+			            "State": "Generated",
+			            "Weight": 0.7
+			          }
 			        }
-			      ]
+			      ],
+			      "SemanticType": "Time"
 			    },
 			    "silver_catastropure.fecha_titularidad": {
 			      "Definition": {
@@ -2479,8 +2493,15 @@ cultureInfo es-ES
 			            "State": "Generated",
 			            "Weight": 0.99
 			          }
+			        },
+			        {
+			          "date": {
+			            "State": "Generated",
+			            "Weight": 0.7
+			          }
 			        }
-			      ]
+			      ],
+			      "SemanticType": "Time"
 			    },
 			    "catastro_docente.tipo_servidor": {
 			      "Definition": {
@@ -2607,8 +2628,15 @@ cultureInfo es-ES
 			            "State": "Generated",
 			            "Weight": 0.99
 			          }
+			        },
+			        {
+			          "date": {
+			            "State": "Generated",
+			            "Weight": 0.7
+			          }
 			        }
-			      ]
+			      ],
+			      "SemanticType": "Time"
 			    },
 			    "catastro_docente.fecha_titularidad": {
 			      "Definition": {
@@ -3006,8 +3034,15 @@ cultureInfo es-ES
 			          "año obtención titulo": {
 			            "State": "Generated"
 			          }
+			        },
+			        {
+			          "date": {
+			            "State": "Generated",
+			            "Weight": 0.7
+			          }
 			        }
-			      ]
+			      ],
+			      "SemanticType": "Time"
 			    },
 			    "catastro_docente.pais_estudio": {
 			      "Definition": {
@@ -3435,29 +3470,6 @@ cultureInfo es-ES
 			        }
 			      ]
 			    },
-			    "catastro_docente.key_nombre": {
-			      "Definition": {
-			        "Binding": {
-			          "ConceptualEntity": "catastro_docentes",
-			          "ConceptualProperty": "Key_nombre"
-			        }
-			      },
-			      "State": "Generated",
-			      "Terms": [
-			        {
-			          "key nombre": {
-			            "State": "Generated"
-			          }
-			        },
-			        {
-			          "Key_nombre": {
-			            "Type": "Noun",
-			            "State": "Generated",
-			            "Weight": 0.99
-			          }
-			        }
-			      ]
-			    },
 			    "sankey_facultad_depto": {
 			      "Definition": {
 			        "Binding": {
@@ -3810,9 +3822,3014 @@ cultureInfo es-ES
 			          }
 			        }
 			      ]
+			    },
+			    "silver_catastropure.fecha_nacimiento.jerarquía_de_fecha": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "silver_catastropure",
+			          "VariationSource": "FECHA_NACIMIENTO",
+			          "VariationSet": "Variación",
+			          "Hierarchy": "Jerarquía de fechas"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "jerarquía de fecha": {
+			            "State": "Generated"
+			          }
+			        }
+			      ]
+			    },
+			    "silver_catastropure.fecha_nacimiento.año": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "silver_catastropure",
+			          "VariationSource": "FECHA_NACIMIENTO",
+			          "VariationSet": "Variación",
+			          "Hierarchy": "Jerarquía de fechas",
+			          "HierarchyLevel": "Año"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "año": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "fecha nacimiento año": {
+			            "State": "Generated"
+			          }
+			        }
+			      ]
+			    },
+			    "silver_catastropure.fecha_nacimiento.trimestre": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "silver_catastropure",
+			          "VariationSource": "FECHA_NACIMIENTO",
+			          "VariationSet": "Variación",
+			          "Hierarchy": "Jerarquía de fechas",
+			          "HierarchyLevel": "Trimestre"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "trimestre": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "fecha nacimiento trimestre": {
+			            "State": "Generated"
+			          }
+			        }
+			      ]
+			    },
+			    "silver_catastropure.fecha_nacimiento.me": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "silver_catastropure",
+			          "VariationSource": "FECHA_NACIMIENTO",
+			          "VariationSet": "Variación",
+			          "Hierarchy": "Jerarquía de fechas",
+			          "HierarchyLevel": "Mes"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "me": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "fecha nacimiento me": {
+			            "State": "Generated"
+			          }
+			        }
+			      ]
+			    },
+			    "silver_catastropure.fecha_nacimiento.día": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "silver_catastropure",
+			          "VariationSource": "FECHA_NACIMIENTO",
+			          "VariationSet": "Variación",
+			          "Hierarchy": "Jerarquía de fechas",
+			          "HierarchyLevel": "Día"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "día": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "fecha nacimiento día": {
+			            "State": "Generated"
+			          }
+			        }
+			      ]
+			    },
+			    "silver_catastropure.fecha_ingreso.jerarquía_de_fecha": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "silver_catastropure",
+			          "VariationSource": "FECHA_INGRESO",
+			          "VariationSet": "Variación",
+			          "Hierarchy": "Jerarquía de fechas"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "jerarquía de fecha": {
+			            "State": "Generated"
+			          }
+			        }
+			      ]
+			    },
+			    "silver_catastropure.fecha_ingreso.año": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "silver_catastropure",
+			          "VariationSource": "FECHA_INGRESO",
+			          "VariationSet": "Variación",
+			          "Hierarchy": "Jerarquía de fechas",
+			          "HierarchyLevel": "Año"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "año": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "fecha ingreso año": {
+			            "State": "Generated"
+			          }
+			        }
+			      ]
+			    },
+			    "silver_catastropure.fecha_ingreso.trimestre": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "silver_catastropure",
+			          "VariationSource": "FECHA_INGRESO",
+			          "VariationSet": "Variación",
+			          "Hierarchy": "Jerarquía de fechas",
+			          "HierarchyLevel": "Trimestre"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "trimestre": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "fecha ingreso trimestre": {
+			            "State": "Generated"
+			          }
+			        }
+			      ]
+			    },
+			    "silver_catastropure.fecha_ingreso.me": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "silver_catastropure",
+			          "VariationSource": "FECHA_INGRESO",
+			          "VariationSet": "Variación",
+			          "Hierarchy": "Jerarquía de fechas",
+			          "HierarchyLevel": "Mes"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "me": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "fecha ingreso me": {
+			            "State": "Generated"
+			          }
+			        }
+			      ]
+			    },
+			    "silver_catastropure.fecha_ingreso.día": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "silver_catastropure",
+			          "VariationSource": "FECHA_INGRESO",
+			          "VariationSet": "Variación",
+			          "Hierarchy": "Jerarquía de fechas",
+			          "HierarchyLevel": "Día"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "día": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "fecha ingreso día": {
+			            "State": "Generated"
+			          }
+			        }
+			      ]
+			    },
+			    "catastro_docente.fecha_nacimiento.jerarquía_de_fecha": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "catastro_docentes",
+			          "VariationSource": "FECHA_NACIMIENTO",
+			          "VariationSet": "Variación",
+			          "Hierarchy": "Jerarquía de fechas"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "jerarquía de fecha": {
+			            "State": "Generated"
+			          }
+			        }
+			      ]
+			    },
+			    "catastro_docente.fecha_nacimiento.año": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "catastro_docentes",
+			          "VariationSource": "FECHA_NACIMIENTO",
+			          "VariationSet": "Variación",
+			          "Hierarchy": "Jerarquía de fechas",
+			          "HierarchyLevel": "Año"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "año": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "fecha nacimiento año": {
+			            "State": "Generated"
+			          }
+			        }
+			      ]
+			    },
+			    "catastro_docente.fecha_nacimiento.trimestre": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "catastro_docentes",
+			          "VariationSource": "FECHA_NACIMIENTO",
+			          "VariationSet": "Variación",
+			          "Hierarchy": "Jerarquía de fechas",
+			          "HierarchyLevel": "Trimestre"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "trimestre": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "fecha nacimiento trimestre": {
+			            "State": "Generated"
+			          }
+			        }
+			      ]
+			    },
+			    "catastro_docente.fecha_nacimiento.me": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "catastro_docentes",
+			          "VariationSource": "FECHA_NACIMIENTO",
+			          "VariationSet": "Variación",
+			          "Hierarchy": "Jerarquía de fechas",
+			          "HierarchyLevel": "Mes"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "me": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "fecha nacimiento me": {
+			            "State": "Generated"
+			          }
+			        }
+			      ]
+			    },
+			    "catastro_docente.fecha_nacimiento.día": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "catastro_docentes",
+			          "VariationSource": "FECHA_NACIMIENTO",
+			          "VariationSet": "Variación",
+			          "Hierarchy": "Jerarquía de fechas",
+			          "HierarchyLevel": "Día"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "día": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "fecha nacimiento día": {
+			            "State": "Generated"
+			          }
+			        }
+			      ]
+			    },
+			    "catastro_docente.fecha_ingreso.jerarquía_de_fecha": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "catastro_docentes",
+			          "VariationSource": "FECHA_INGRESO",
+			          "VariationSet": "Variación",
+			          "Hierarchy": "Jerarquía de fechas"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "jerarquía de fecha": {
+			            "State": "Generated"
+			          }
+			        }
+			      ]
+			    },
+			    "catastro_docente.fecha_ingreso.año": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "catastro_docentes",
+			          "VariationSource": "FECHA_INGRESO",
+			          "VariationSet": "Variación",
+			          "Hierarchy": "Jerarquía de fechas",
+			          "HierarchyLevel": "Año"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "año": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "fecha ingreso año": {
+			            "State": "Generated"
+			          }
+			        }
+			      ]
+			    },
+			    "catastro_docente.fecha_ingreso.trimestre": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "catastro_docentes",
+			          "VariationSource": "FECHA_INGRESO",
+			          "VariationSet": "Variación",
+			          "Hierarchy": "Jerarquía de fechas",
+			          "HierarchyLevel": "Trimestre"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "trimestre": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "fecha ingreso trimestre": {
+			            "State": "Generated"
+			          }
+			        }
+			      ]
+			    },
+			    "catastro_docente.fecha_ingreso.me": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "catastro_docentes",
+			          "VariationSource": "FECHA_INGRESO",
+			          "VariationSet": "Variación",
+			          "Hierarchy": "Jerarquía de fechas",
+			          "HierarchyLevel": "Mes"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "me": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "fecha ingreso me": {
+			            "State": "Generated"
+			          }
+			        }
+			      ]
+			    },
+			    "catastro_docente.fecha_ingreso.día": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "catastro_docentes",
+			          "VariationSource": "FECHA_INGRESO",
+			          "VariationSet": "Variación",
+			          "Hierarchy": "Jerarquía de fechas",
+			          "HierarchyLevel": "Día"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "día": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "fecha ingreso día": {
+			            "State": "Generated"
+			          }
+			        }
+			      ]
+			    },
+			    "catastro_docente.año_obtención_titulo.jerarquía_de_fecha": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "catastro_docentes",
+			          "VariationSource": "AÑO OBTENCIÓN TITULO",
+			          "VariationSet": "Variación",
+			          "Hierarchy": "Jerarquía de fechas"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "jerarquía de fecha": {
+			            "State": "Generated"
+			          }
+			        }
+			      ]
+			    },
+			    "catastro_docente.año_obtención_titulo.año": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "catastro_docentes",
+			          "VariationSource": "AÑO OBTENCIÓN TITULO",
+			          "VariationSet": "Variación",
+			          "Hierarchy": "Jerarquía de fechas",
+			          "HierarchyLevel": "Año"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "año": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "año obtención titulo año": {
+			            "State": "Generated"
+			          }
+			        }
+			      ]
+			    },
+			    "catastro_docente.año_obtención_titulo.trimestre": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "catastro_docentes",
+			          "VariationSource": "AÑO OBTENCIÓN TITULO",
+			          "VariationSet": "Variación",
+			          "Hierarchy": "Jerarquía de fechas",
+			          "HierarchyLevel": "Trimestre"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "trimestre": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "año obtención titulo trimestre": {
+			            "State": "Generated"
+			          }
+			        }
+			      ]
+			    },
+			    "catastro_docente.año_obtención_titulo.me": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "catastro_docentes",
+			          "VariationSource": "AÑO OBTENCIÓN TITULO",
+			          "VariationSet": "Variación",
+			          "Hierarchy": "Jerarquía de fechas",
+			          "HierarchyLevel": "Mes"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "me": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "año obtención titulo me": {
+			            "State": "Generated"
+			          }
+			        }
+			      ]
+			    },
+			    "catastro_docente.año_obtención_titulo.día": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "catastro_docentes",
+			          "VariationSource": "AÑO OBTENCIÓN TITULO",
+			          "VariationSet": "Variación",
+			          "Hierarchy": "Jerarquía de fechas",
+			          "HierarchyLevel": "Día"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "día": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "año obtención titulo día": {
+			            "State": "Generated"
+			          }
+			        }
+			      ]
+			    },
+			    "catastro_docente.antiguedad": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "catastro_docentes",
+			          "ConceptualProperty": "Antiguedad"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "antiguedad": {
+			            "State": "Generated"
+			          }
+			        }
+			      ]
+			    },
+			    "catastro_docente.anios_titularidad": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "catastro_docentes",
+			          "ConceptualProperty": "anios_titularidad"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "anios titularidad": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "anio titularidad": {
+			            "Type": "Noun",
+			            "State": "Generated",
+			            "Weight": 0.78
+			          }
+			        },
+			        {
+			          "anios_titularidad": {
+			            "Type": "Noun",
+			            "State": "Generated",
+			            "Weight": 0.99
+			          }
+			        }
+			      ]
+			    },
+			    "catastro_docente.edad": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "catastro_docentes",
+			          "ConceptualProperty": "EDAD"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "edad": {
+			            "State": "Generated"
+			          }
+			        }
+			      ]
+			    },
+			    "autoridades_admin.facultad_key": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "autoridades_admin",
+			          "ConceptualProperty": "FACULTAD_KEY"
+			        }
+			      },
+			      "State": "Generated",
+			      "Visibility": {
+			        "Value": "Hidden"
+			      },
+			      "Terms": [
+			        {
+			          "facultad key": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "FACULTAD_KEY": {
+			            "Type": "Noun",
+			            "State": "Generated",
+			            "Weight": 0.99
+			          }
+			        },
+			        {
+			          "facultad solution": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.475
+			          }
+			        },
+			        {
+			          "facultad explanation": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.475
+			          }
+			        },
+			        {
+			          "facultad basis": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.475
+			          }
+			        },
+			        {
+			          "facultad recipe": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.475
+			          }
+			        },
+			        {
+			          "facultad interpretation": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.475
+			          }
+			        },
+			        {
+			          "facultad resolution": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.475
+			          }
+			        },
+			        {
+			          "facultad answer": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.461
+			          }
+			        },
+			        {
+			          "facultad mean": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.461
+			          }
+			        },
+			        {
+			          "facultad secret": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.461
+			          }
+			        },
+			        {
+			          "facultad source": {
+			            "Type": "Noun",
+			            "State": "Suggested",
+			            "Source": {
+			              "Agent": "Thesaurus"
+			            },
+			            "Weight": 0.461
+			          }
+			        }
+			      ]
+			    },
+			    "dim_facultad": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Dim_Facultad"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "dim facultad": {
+			            "State": "Generated"
+			          }
+			        },
+			        {
+			          "Dim_Facultad": {
+			            "Type": "Noun",
+			            "State": "Generated",
+			            "Weight": 0.99
+			          }
+			        }
+			      ]
+			    },
+			    "dim_facultad.facultad": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "Dim_Facultad",
+			          "ConceptualProperty": "Facultad"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "facultad": {
+			            "State": "Generated"
+			          }
+			        }
+			      ]
+			    },
+			    "autoridades_admin.antiguedad": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "autoridades_admin",
+			          "ConceptualProperty": "ANTIGUEDAD"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "antiguedad": {
+			            "State": "Generated"
+			          }
+			        }
+			      ]
+			    },
+			    "autoridades_admin.tipo_titulo": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "autoridades_admin",
+			          "ConceptualProperty": "TIPO TITULO"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "tipo titulo": {
+			            "State": "Generated"
+			          }
+			        }
+			      ]
+			    },
+			    "autoridades_admin.nivel_titulo": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "autoridades_admin",
+			          "ConceptualProperty": "NIVEL TITULO"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "nivel titulo": {
+			            "State": "Generated"
+			          }
+			        }
+			      ]
+			    },
+			    "autoridades_admin.nombre_titulo": {
+			      "Definition": {
+			        "Binding": {
+			          "ConceptualEntity": "autoridades_admin",
+			          "ConceptualProperty": "NOMBRE TITULO"
+			        }
+			      },
+			      "State": "Generated",
+			      "Terms": [
+			        {
+			          "nombre titulo": {
+			            "State": "Generated"
+			          }
+			        }
+			      ]
 			    }
 			  },
 			  "Relationships": {
+			    "catastro_docente_año_obtención_titulo_jerarquía_de_fecha_has_catastro_docente_año_obtención_titulo_me": {
+			      "Binding": {
+			        "ConceptualEntity": "catastro_docentes"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "catastro_docente.año_obtención_titulo.jerarquía_de_fecha": {
+			          "Target": {
+			            "Entity": "catastro_docente.año_obtención_titulo.jerarquía_de_fecha"
+			          }
+			        },
+			        "catastro_docente.año_obtención_titulo.me": {
+			          "Target": {
+			            "Entity": "catastro_docente.año_obtención_titulo.me"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "catastro_docente.año_obtención_titulo.jerarquía_de_fecha"
+			            },
+			            "Object": {
+			              "Role": "catastro_docente.año_obtención_titulo.me"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "jerarquía_de_fechas_have_me"
+			        }
+			      ]
+			    },
+			    "catastro_docente_año_obtención_titulo_jerarquía_de_fecha_has_catastro_docente_año_obtención_titulo_trimestre": {
+			      "Binding": {
+			        "ConceptualEntity": "catastro_docentes"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "catastro_docente.año_obtención_titulo.jerarquía_de_fecha": {
+			          "Target": {
+			            "Entity": "catastro_docente.año_obtención_titulo.jerarquía_de_fecha"
+			          }
+			        },
+			        "catastro_docente.año_obtención_titulo.trimestre": {
+			          "Target": {
+			            "Entity": "catastro_docente.año_obtención_titulo.trimestre"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "catastro_docente.año_obtención_titulo.jerarquía_de_fecha"
+			            },
+			            "Object": {
+			              "Role": "catastro_docente.año_obtención_titulo.trimestre"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "jerarquía_de_fechas_have_trimestres"
+			        }
+			      ]
+			    },
+			    "catastro_docente_año_obtención_titulo_jerarquía_de_fecha_has_catastro_docente_año_obtención_titulo_año": {
+			      "Binding": {
+			        "ConceptualEntity": "catastro_docentes"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "catastro_docente.año_obtención_titulo.jerarquía_de_fecha": {
+			          "Target": {
+			            "Entity": "catastro_docente.año_obtención_titulo.jerarquía_de_fecha"
+			          }
+			        },
+			        "catastro_docente.año_obtención_titulo.año": {
+			          "Target": {
+			            "Entity": "catastro_docente.año_obtención_titulo.año"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "catastro_docente.año_obtención_titulo.jerarquía_de_fecha"
+			            },
+			            "Object": {
+			              "Role": "catastro_docente.año_obtención_titulo.año"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "jerarquía_de_fechas_have_años"
+			        }
+			      ]
+			    },
+			    "catastro_docente_año_obtención_titulo_has_jerarquía_de_fecha": {
+			      "Binding": {
+			        "ConceptualEntity": "catastro_docentes"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "catastro_docente.año_obtención_titulo": {
+			          "Target": {
+			            "Entity": "catastro_docente.año_obtención_titulo"
+			          }
+			        },
+			        "catastro_docente.año_obtención_titulo.jerarquía_de_fecha": {
+			          "Target": {
+			            "Entity": "catastro_docente.año_obtención_titulo.jerarquía_de_fecha"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "catastro_docente.año_obtención_titulo"
+			            },
+			            "Object": {
+			              "Role": "catastro_docente.año_obtención_titulo.jerarquía_de_fecha"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "año_obtención_titulos_have_jerarquía_de_fechas"
+			        }
+			      ]
+			    },
+			    "catastro_docente_fecha_ingreso_me_has_catastro_docente_fecha_ingreso_día": {
+			      "Binding": {
+			        "ConceptualEntity": "catastro_docentes"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "catastro_docente.fecha_ingreso.me": {
+			          "Target": {
+			            "Entity": "catastro_docente.fecha_ingreso.me"
+			          }
+			        },
+			        "catastro_docente.fecha_ingreso.día": {
+			          "Target": {
+			            "Entity": "catastro_docente.fecha_ingreso.día"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "catastro_docente.fecha_ingreso.me"
+			            },
+			            "Object": {
+			              "Role": "catastro_docente.fecha_ingreso.día"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "me_have_días"
+			        },
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "catastro_docente.fecha_ingreso.día"
+			            },
+			            "Object": {
+			              "Role": "catastro_docente.fecha_ingreso.me"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "días_have_me"
+			        },
+			        {
+			          "Preposition": {
+			            "Subject": {
+			              "Role": "catastro_docente.fecha_ingreso.día"
+			            },
+			            "Prepositions": [
+			              {
+			                "in": {
+			                  "State": "Generated"
+			                }
+			              }
+			            ],
+			            "Object": {
+			              "Role": "catastro_docente.fecha_ingreso.me"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "días_are_in_me6"
+			        }
+			      ]
+			    },
+			    "catastro_docente_fecha_ingreso_trimestre_has_catastro_docente_fecha_ingreso_me": {
+			      "Binding": {
+			        "ConceptualEntity": "catastro_docentes"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "catastro_docente.fecha_ingreso.trimestre": {
+			          "Target": {
+			            "Entity": "catastro_docente.fecha_ingreso.trimestre"
+			          }
+			        },
+			        "catastro_docente.fecha_ingreso.me": {
+			          "Target": {
+			            "Entity": "catastro_docente.fecha_ingreso.me"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "catastro_docente.fecha_ingreso.trimestre"
+			            },
+			            "Object": {
+			              "Role": "catastro_docente.fecha_ingreso.me"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "trimestres_have_me"
+			        },
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "catastro_docente.fecha_ingreso.me"
+			            },
+			            "Object": {
+			              "Role": "catastro_docente.fecha_ingreso.trimestre"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "me_have_trimestres"
+			        },
+			        {
+			          "Preposition": {
+			            "Subject": {
+			              "Role": "catastro_docente.fecha_ingreso.me"
+			            },
+			            "Prepositions": [
+			              {
+			                "in": {
+			                  "State": "Generated"
+			                }
+			              }
+			            ],
+			            "Object": {
+			              "Role": "catastro_docente.fecha_ingreso.trimestre"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "me_are_in_trimestres6"
+			        }
+			      ]
+			    },
+			    "catastro_docente_fecha_ingreso_año_has_catastro_docente_fecha_ingreso_trimestre": {
+			      "Binding": {
+			        "ConceptualEntity": "catastro_docentes"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "catastro_docente.fecha_ingreso.año": {
+			          "Target": {
+			            "Entity": "catastro_docente.fecha_ingreso.año"
+			          }
+			        },
+			        "catastro_docente.fecha_ingreso.trimestre": {
+			          "Target": {
+			            "Entity": "catastro_docente.fecha_ingreso.trimestre"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "catastro_docente.fecha_ingreso.año"
+			            },
+			            "Object": {
+			              "Role": "catastro_docente.fecha_ingreso.trimestre"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "años_have_trimestres"
+			        },
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "catastro_docente.fecha_ingreso.trimestre"
+			            },
+			            "Object": {
+			              "Role": "catastro_docente.fecha_ingreso.año"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "trimestres_have_años"
+			        },
+			        {
+			          "Preposition": {
+			            "Subject": {
+			              "Role": "catastro_docente.fecha_ingreso.trimestre"
+			            },
+			            "Prepositions": [
+			              {
+			                "in": {
+			                  "State": "Generated"
+			                }
+			              }
+			            ],
+			            "Object": {
+			              "Role": "catastro_docente.fecha_ingreso.año"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "trimestres_are_in_años6"
+			        }
+			      ]
+			    },
+			    "catastro_docente_fecha_ingreso_jerarquía_de_fecha_has_catastro_docente_fecha_ingreso_día": {
+			      "Binding": {
+			        "ConceptualEntity": "catastro_docentes"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "catastro_docente.fecha_ingreso.jerarquía_de_fecha": {
+			          "Target": {
+			            "Entity": "catastro_docente.fecha_ingreso.jerarquía_de_fecha"
+			          }
+			        },
+			        "catastro_docente.fecha_ingreso.día": {
+			          "Target": {
+			            "Entity": "catastro_docente.fecha_ingreso.día"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "catastro_docente.fecha_ingreso.jerarquía_de_fecha"
+			            },
+			            "Object": {
+			              "Role": "catastro_docente.fecha_ingreso.día"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "jerarquía_de_fechas_have_días"
+			        }
+			      ]
+			    },
+			    "catastro_docente_fecha_ingreso_jerarquía_de_fecha_has_catastro_docente_fecha_ingreso_me": {
+			      "Binding": {
+			        "ConceptualEntity": "catastro_docentes"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "catastro_docente.fecha_ingreso.jerarquía_de_fecha": {
+			          "Target": {
+			            "Entity": "catastro_docente.fecha_ingreso.jerarquía_de_fecha"
+			          }
+			        },
+			        "catastro_docente.fecha_ingreso.me": {
+			          "Target": {
+			            "Entity": "catastro_docente.fecha_ingreso.me"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "catastro_docente.fecha_ingreso.jerarquía_de_fecha"
+			            },
+			            "Object": {
+			              "Role": "catastro_docente.fecha_ingreso.me"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "jerarquía_de_fechas_have_me1"
+			        }
+			      ]
+			    },
+			    "catastro_docente_fecha_ingreso_jerarquía_de_fecha_has_catastro_docente_fecha_ingreso_trimestre": {
+			      "Binding": {
+			        "ConceptualEntity": "catastro_docentes"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "catastro_docente.fecha_ingreso.jerarquía_de_fecha": {
+			          "Target": {
+			            "Entity": "catastro_docente.fecha_ingreso.jerarquía_de_fecha"
+			          }
+			        },
+			        "catastro_docente.fecha_ingreso.trimestre": {
+			          "Target": {
+			            "Entity": "catastro_docente.fecha_ingreso.trimestre"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "catastro_docente.fecha_ingreso.jerarquía_de_fecha"
+			            },
+			            "Object": {
+			              "Role": "catastro_docente.fecha_ingreso.trimestre"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "jerarquía_de_fechas_have_trimestres1"
+			        }
+			      ]
+			    },
+			    "catastro_docente_fecha_ingreso_jerarquía_de_fecha_has_catastro_docente_fecha_ingreso_año": {
+			      "Binding": {
+			        "ConceptualEntity": "catastro_docentes"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "catastro_docente.fecha_ingreso.jerarquía_de_fecha": {
+			          "Target": {
+			            "Entity": "catastro_docente.fecha_ingreso.jerarquía_de_fecha"
+			          }
+			        },
+			        "catastro_docente.fecha_ingreso.año": {
+			          "Target": {
+			            "Entity": "catastro_docente.fecha_ingreso.año"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "catastro_docente.fecha_ingreso.jerarquía_de_fecha"
+			            },
+			            "Object": {
+			              "Role": "catastro_docente.fecha_ingreso.año"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "jerarquía_de_fechas_have_años1"
+			        }
+			      ]
+			    },
+			    "catastro_docente_fecha_ingreso_has_jerarquía_de_fecha": {
+			      "Binding": {
+			        "ConceptualEntity": "catastro_docentes"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "catastro_docente.fecha_ingreso": {
+			          "Target": {
+			            "Entity": "catastro_docente.fecha_ingreso"
+			          }
+			        },
+			        "catastro_docente.fecha_ingreso.jerarquía_de_fecha": {
+			          "Target": {
+			            "Entity": "catastro_docente.fecha_ingreso.jerarquía_de_fecha"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "catastro_docente.fecha_ingreso"
+			            },
+			            "Object": {
+			              "Role": "catastro_docente.fecha_ingreso.jerarquía_de_fecha"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "fecha_ingresos_have_jerarquía_de_fechas"
+			        }
+			      ]
+			    },
+			    "catastro_docente_fecha_nacimiento_me_has_catastro_docente_fecha_nacimiento_día": {
+			      "Binding": {
+			        "ConceptualEntity": "catastro_docentes"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "catastro_docente.fecha_nacimiento.me": {
+			          "Target": {
+			            "Entity": "catastro_docente.fecha_nacimiento.me"
+			          }
+			        },
+			        "catastro_docente.fecha_nacimiento.día": {
+			          "Target": {
+			            "Entity": "catastro_docente.fecha_nacimiento.día"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "catastro_docente.fecha_nacimiento.me"
+			            },
+			            "Object": {
+			              "Role": "catastro_docente.fecha_nacimiento.día"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "me_have_días1"
+			        },
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "catastro_docente.fecha_nacimiento.día"
+			            },
+			            "Object": {
+			              "Role": "catastro_docente.fecha_nacimiento.me"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "días_have_me1"
+			        },
+			        {
+			          "Preposition": {
+			            "Subject": {
+			              "Role": "catastro_docente.fecha_nacimiento.día"
+			            },
+			            "Prepositions": [
+			              {
+			                "in": {
+			                  "State": "Generated"
+			                }
+			              }
+			            ],
+			            "Object": {
+			              "Role": "catastro_docente.fecha_nacimiento.me"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "días_are_in_me5"
+			        }
+			      ]
+			    },
+			    "catastro_docente_fecha_nacimiento_trimestre_has_catastro_docente_fecha_nacimiento_me": {
+			      "Binding": {
+			        "ConceptualEntity": "catastro_docentes"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "catastro_docente.fecha_nacimiento.trimestre": {
+			          "Target": {
+			            "Entity": "catastro_docente.fecha_nacimiento.trimestre"
+			          }
+			        },
+			        "catastro_docente.fecha_nacimiento.me": {
+			          "Target": {
+			            "Entity": "catastro_docente.fecha_nacimiento.me"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "catastro_docente.fecha_nacimiento.trimestre"
+			            },
+			            "Object": {
+			              "Role": "catastro_docente.fecha_nacimiento.me"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "trimestres_have_me1"
+			        },
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "catastro_docente.fecha_nacimiento.me"
+			            },
+			            "Object": {
+			              "Role": "catastro_docente.fecha_nacimiento.trimestre"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "me_have_trimestres1"
+			        },
+			        {
+			          "Preposition": {
+			            "Subject": {
+			              "Role": "catastro_docente.fecha_nacimiento.me"
+			            },
+			            "Prepositions": [
+			              {
+			                "in": {
+			                  "State": "Generated"
+			                }
+			              }
+			            ],
+			            "Object": {
+			              "Role": "catastro_docente.fecha_nacimiento.trimestre"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "me_are_in_trimestres5"
+			        }
+			      ]
+			    },
+			    "catastro_docente_fecha_nacimiento_año_has_catastro_docente_fecha_nacimiento_trimestre": {
+			      "Binding": {
+			        "ConceptualEntity": "catastro_docentes"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "catastro_docente.fecha_nacimiento.año": {
+			          "Target": {
+			            "Entity": "catastro_docente.fecha_nacimiento.año"
+			          }
+			        },
+			        "catastro_docente.fecha_nacimiento.trimestre": {
+			          "Target": {
+			            "Entity": "catastro_docente.fecha_nacimiento.trimestre"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "catastro_docente.fecha_nacimiento.año"
+			            },
+			            "Object": {
+			              "Role": "catastro_docente.fecha_nacimiento.trimestre"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "años_have_trimestres1"
+			        },
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "catastro_docente.fecha_nacimiento.trimestre"
+			            },
+			            "Object": {
+			              "Role": "catastro_docente.fecha_nacimiento.año"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "trimestres_have_años1"
+			        },
+			        {
+			          "Preposition": {
+			            "Subject": {
+			              "Role": "catastro_docente.fecha_nacimiento.trimestre"
+			            },
+			            "Prepositions": [
+			              {
+			                "in": {
+			                  "State": "Generated"
+			                }
+			              }
+			            ],
+			            "Object": {
+			              "Role": "catastro_docente.fecha_nacimiento.año"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "trimestres_are_in_años5"
+			        }
+			      ]
+			    },
+			    "catastro_docente_fecha_nacimiento_jerarquía_de_fecha_has_catastro_docente_fecha_nacimiento_día": {
+			      "Binding": {
+			        "ConceptualEntity": "catastro_docentes"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "catastro_docente.fecha_nacimiento.jerarquía_de_fecha": {
+			          "Target": {
+			            "Entity": "catastro_docente.fecha_nacimiento.jerarquía_de_fecha"
+			          }
+			        },
+			        "catastro_docente.fecha_nacimiento.día": {
+			          "Target": {
+			            "Entity": "catastro_docente.fecha_nacimiento.día"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "catastro_docente.fecha_nacimiento.jerarquía_de_fecha"
+			            },
+			            "Object": {
+			              "Role": "catastro_docente.fecha_nacimiento.día"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "jerarquía_de_fechas_have_días1"
+			        }
+			      ]
+			    },
+			    "catastro_docente_fecha_nacimiento_jerarquía_de_fecha_has_catastro_docente_fecha_nacimiento_me": {
+			      "Binding": {
+			        "ConceptualEntity": "catastro_docentes"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "catastro_docente.fecha_nacimiento.jerarquía_de_fecha": {
+			          "Target": {
+			            "Entity": "catastro_docente.fecha_nacimiento.jerarquía_de_fecha"
+			          }
+			        },
+			        "catastro_docente.fecha_nacimiento.me": {
+			          "Target": {
+			            "Entity": "catastro_docente.fecha_nacimiento.me"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "catastro_docente.fecha_nacimiento.jerarquía_de_fecha"
+			            },
+			            "Object": {
+			              "Role": "catastro_docente.fecha_nacimiento.me"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "jerarquía_de_fechas_have_me2"
+			        }
+			      ]
+			    },
+			    "catastro_docente_fecha_nacimiento_jerarquía_de_fecha_has_catastro_docente_fecha_nacimiento_trimestre": {
+			      "Binding": {
+			        "ConceptualEntity": "catastro_docentes"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "catastro_docente.fecha_nacimiento.jerarquía_de_fecha": {
+			          "Target": {
+			            "Entity": "catastro_docente.fecha_nacimiento.jerarquía_de_fecha"
+			          }
+			        },
+			        "catastro_docente.fecha_nacimiento.trimestre": {
+			          "Target": {
+			            "Entity": "catastro_docente.fecha_nacimiento.trimestre"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "catastro_docente.fecha_nacimiento.jerarquía_de_fecha"
+			            },
+			            "Object": {
+			              "Role": "catastro_docente.fecha_nacimiento.trimestre"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "jerarquía_de_fechas_have_trimestres2"
+			        }
+			      ]
+			    },
+			    "catastro_docente_fecha_nacimiento_jerarquía_de_fecha_has_catastro_docente_fecha_nacimiento_año": {
+			      "Binding": {
+			        "ConceptualEntity": "catastro_docentes"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "catastro_docente.fecha_nacimiento.jerarquía_de_fecha": {
+			          "Target": {
+			            "Entity": "catastro_docente.fecha_nacimiento.jerarquía_de_fecha"
+			          }
+			        },
+			        "catastro_docente.fecha_nacimiento.año": {
+			          "Target": {
+			            "Entity": "catastro_docente.fecha_nacimiento.año"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "catastro_docente.fecha_nacimiento.jerarquía_de_fecha"
+			            },
+			            "Object": {
+			              "Role": "catastro_docente.fecha_nacimiento.año"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "jerarquía_de_fechas_have_años2"
+			        }
+			      ]
+			    },
+			    "catastro_docente_fecha_nacimiento_has_jerarquía_de_fecha": {
+			      "Binding": {
+			        "ConceptualEntity": "catastro_docentes"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "catastro_docente.fecha_nacimiento": {
+			          "Target": {
+			            "Entity": "catastro_docente.fecha_nacimiento"
+			          }
+			        },
+			        "catastro_docente.fecha_nacimiento.jerarquía_de_fecha": {
+			          "Target": {
+			            "Entity": "catastro_docente.fecha_nacimiento.jerarquía_de_fecha"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "catastro_docente.fecha_nacimiento"
+			            },
+			            "Object": {
+			              "Role": "catastro_docente.fecha_nacimiento.jerarquía_de_fecha"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "fecha_nacimientos_have_jerarquía_de_fechas"
+			        }
+			      ]
+			    },
+			    "silver_catastropure_fecha_ingreso_me_has_silver_catastropure_fecha_ingreso_día": {
+			      "Binding": {
+			        "ConceptualEntity": "silver_catastropure"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "silver_catastropure.fecha_ingreso.me": {
+			          "Target": {
+			            "Entity": "silver_catastropure.fecha_ingreso.me"
+			          }
+			        },
+			        "silver_catastropure.fecha_ingreso.día": {
+			          "Target": {
+			            "Entity": "silver_catastropure.fecha_ingreso.día"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "silver_catastropure.fecha_ingreso.me"
+			            },
+			            "Object": {
+			              "Role": "silver_catastropure.fecha_ingreso.día"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "me_have_días2"
+			        },
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "silver_catastropure.fecha_ingreso.día"
+			            },
+			            "Object": {
+			              "Role": "silver_catastropure.fecha_ingreso.me"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "días_have_me2"
+			        },
+			        {
+			          "Preposition": {
+			            "Subject": {
+			              "Role": "silver_catastropure.fecha_ingreso.día"
+			            },
+			            "Prepositions": [
+			              {
+			                "in": {
+			                  "State": "Generated"
+			                }
+			              }
+			            ],
+			            "Object": {
+			              "Role": "silver_catastropure.fecha_ingreso.me"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "días_are_in_me4"
+			        }
+			      ]
+			    },
+			    "silver_catastropure_fecha_ingreso_trimestre_has_silver_catastropure_fecha_ingreso_me": {
+			      "Binding": {
+			        "ConceptualEntity": "silver_catastropure"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "silver_catastropure.fecha_ingreso.trimestre": {
+			          "Target": {
+			            "Entity": "silver_catastropure.fecha_ingreso.trimestre"
+			          }
+			        },
+			        "silver_catastropure.fecha_ingreso.me": {
+			          "Target": {
+			            "Entity": "silver_catastropure.fecha_ingreso.me"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "silver_catastropure.fecha_ingreso.trimestre"
+			            },
+			            "Object": {
+			              "Role": "silver_catastropure.fecha_ingreso.me"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "trimestres_have_me2"
+			        },
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "silver_catastropure.fecha_ingreso.me"
+			            },
+			            "Object": {
+			              "Role": "silver_catastropure.fecha_ingreso.trimestre"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "me_have_trimestres2"
+			        },
+			        {
+			          "Preposition": {
+			            "Subject": {
+			              "Role": "silver_catastropure.fecha_ingreso.me"
+			            },
+			            "Prepositions": [
+			              {
+			                "in": {
+			                  "State": "Generated"
+			                }
+			              }
+			            ],
+			            "Object": {
+			              "Role": "silver_catastropure.fecha_ingreso.trimestre"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "me_are_in_trimestres4"
+			        }
+			      ]
+			    },
+			    "silver_catastropure_fecha_ingreso_año_has_silver_catastropure_fecha_ingreso_trimestre": {
+			      "Binding": {
+			        "ConceptualEntity": "silver_catastropure"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "silver_catastropure.fecha_ingreso.año": {
+			          "Target": {
+			            "Entity": "silver_catastropure.fecha_ingreso.año"
+			          }
+			        },
+			        "silver_catastropure.fecha_ingreso.trimestre": {
+			          "Target": {
+			            "Entity": "silver_catastropure.fecha_ingreso.trimestre"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "silver_catastropure.fecha_ingreso.año"
+			            },
+			            "Object": {
+			              "Role": "silver_catastropure.fecha_ingreso.trimestre"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "años_have_trimestres2"
+			        },
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "silver_catastropure.fecha_ingreso.trimestre"
+			            },
+			            "Object": {
+			              "Role": "silver_catastropure.fecha_ingreso.año"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "trimestres_have_años2"
+			        },
+			        {
+			          "Preposition": {
+			            "Subject": {
+			              "Role": "silver_catastropure.fecha_ingreso.trimestre"
+			            },
+			            "Prepositions": [
+			              {
+			                "in": {
+			                  "State": "Generated"
+			                }
+			              }
+			            ],
+			            "Object": {
+			              "Role": "silver_catastropure.fecha_ingreso.año"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "trimestres_are_in_años4"
+			        }
+			      ]
+			    },
+			    "silver_catastropure_fecha_ingreso_jerarquía_de_fecha_has_silver_catastropure_fecha_ingreso_día": {
+			      "Binding": {
+			        "ConceptualEntity": "silver_catastropure"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "silver_catastropure.fecha_ingreso.jerarquía_de_fecha": {
+			          "Target": {
+			            "Entity": "silver_catastropure.fecha_ingreso.jerarquía_de_fecha"
+			          }
+			        },
+			        "silver_catastropure.fecha_ingreso.día": {
+			          "Target": {
+			            "Entity": "silver_catastropure.fecha_ingreso.día"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "silver_catastropure.fecha_ingreso.jerarquía_de_fecha"
+			            },
+			            "Object": {
+			              "Role": "silver_catastropure.fecha_ingreso.día"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "jerarquía_de_fechas_have_días2"
+			        }
+			      ]
+			    },
+			    "silver_catastropure_fecha_ingreso_jerarquía_de_fecha_has_silver_catastropure_fecha_ingreso_me": {
+			      "Binding": {
+			        "ConceptualEntity": "silver_catastropure"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "silver_catastropure.fecha_ingreso.jerarquía_de_fecha": {
+			          "Target": {
+			            "Entity": "silver_catastropure.fecha_ingreso.jerarquía_de_fecha"
+			          }
+			        },
+			        "silver_catastropure.fecha_ingreso.me": {
+			          "Target": {
+			            "Entity": "silver_catastropure.fecha_ingreso.me"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "silver_catastropure.fecha_ingreso.jerarquía_de_fecha"
+			            },
+			            "Object": {
+			              "Role": "silver_catastropure.fecha_ingreso.me"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "jerarquía_de_fechas_have_me3"
+			        }
+			      ]
+			    },
+			    "silver_catastropure_fecha_ingreso_jerarquía_de_fecha_has_silver_catastropure_fecha_ingreso_trimestre": {
+			      "Binding": {
+			        "ConceptualEntity": "silver_catastropure"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "silver_catastropure.fecha_ingreso.jerarquía_de_fecha": {
+			          "Target": {
+			            "Entity": "silver_catastropure.fecha_ingreso.jerarquía_de_fecha"
+			          }
+			        },
+			        "silver_catastropure.fecha_ingreso.trimestre": {
+			          "Target": {
+			            "Entity": "silver_catastropure.fecha_ingreso.trimestre"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "silver_catastropure.fecha_ingreso.jerarquía_de_fecha"
+			            },
+			            "Object": {
+			              "Role": "silver_catastropure.fecha_ingreso.trimestre"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "jerarquía_de_fechas_have_trimestres3"
+			        }
+			      ]
+			    },
+			    "silver_catastropure_fecha_ingreso_jerarquía_de_fecha_has_silver_catastropure_fecha_ingreso_año": {
+			      "Binding": {
+			        "ConceptualEntity": "silver_catastropure"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "silver_catastropure.fecha_ingreso.jerarquía_de_fecha": {
+			          "Target": {
+			            "Entity": "silver_catastropure.fecha_ingreso.jerarquía_de_fecha"
+			          }
+			        },
+			        "silver_catastropure.fecha_ingreso.año": {
+			          "Target": {
+			            "Entity": "silver_catastropure.fecha_ingreso.año"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "silver_catastropure.fecha_ingreso.jerarquía_de_fecha"
+			            },
+			            "Object": {
+			              "Role": "silver_catastropure.fecha_ingreso.año"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "jerarquía_de_fechas_have_años3"
+			        }
+			      ]
+			    },
+			    "silver_catastropure_fecha_ingreso_has_jerarquía_de_fecha": {
+			      "Binding": {
+			        "ConceptualEntity": "silver_catastropure"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "silver_catastropure.fecha_ingreso": {
+			          "Target": {
+			            "Entity": "silver_catastropure.fecha_ingreso"
+			          }
+			        },
+			        "silver_catastropure.fecha_ingreso.jerarquía_de_fecha": {
+			          "Target": {
+			            "Entity": "silver_catastropure.fecha_ingreso.jerarquía_de_fecha"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "silver_catastropure.fecha_ingreso"
+			            },
+			            "Object": {
+			              "Role": "silver_catastropure.fecha_ingreso.jerarquía_de_fecha"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "fecha_ingresos_have_jerarquía_de_fechas1"
+			        }
+			      ]
+			    },
+			    "silver_catastropure_fecha_nacimiento_me_has_silver_catastropure_fecha_nacimiento_día": {
+			      "Binding": {
+			        "ConceptualEntity": "silver_catastropure"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "silver_catastropure.fecha_nacimiento.me": {
+			          "Target": {
+			            "Entity": "silver_catastropure.fecha_nacimiento.me"
+			          }
+			        },
+			        "silver_catastropure.fecha_nacimiento.día": {
+			          "Target": {
+			            "Entity": "silver_catastropure.fecha_nacimiento.día"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "silver_catastropure.fecha_nacimiento.me"
+			            },
+			            "Object": {
+			              "Role": "silver_catastropure.fecha_nacimiento.día"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "me_have_días3"
+			        },
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "silver_catastropure.fecha_nacimiento.día"
+			            },
+			            "Object": {
+			              "Role": "silver_catastropure.fecha_nacimiento.me"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "días_have_me3"
+			        },
+			        {
+			          "Preposition": {
+			            "Subject": {
+			              "Role": "silver_catastropure.fecha_nacimiento.día"
+			            },
+			            "Prepositions": [
+			              {
+			                "in": {
+			                  "State": "Generated"
+			                }
+			              }
+			            ],
+			            "Object": {
+			              "Role": "silver_catastropure.fecha_nacimiento.me"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "días_are_in_me3"
+			        }
+			      ]
+			    },
+			    "silver_catastropure_fecha_nacimiento_trimestre_has_silver_catastropure_fecha_nacimiento_me": {
+			      "Binding": {
+			        "ConceptualEntity": "silver_catastropure"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "silver_catastropure.fecha_nacimiento.trimestre": {
+			          "Target": {
+			            "Entity": "silver_catastropure.fecha_nacimiento.trimestre"
+			          }
+			        },
+			        "silver_catastropure.fecha_nacimiento.me": {
+			          "Target": {
+			            "Entity": "silver_catastropure.fecha_nacimiento.me"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "silver_catastropure.fecha_nacimiento.trimestre"
+			            },
+			            "Object": {
+			              "Role": "silver_catastropure.fecha_nacimiento.me"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "trimestres_have_me3"
+			        },
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "silver_catastropure.fecha_nacimiento.me"
+			            },
+			            "Object": {
+			              "Role": "silver_catastropure.fecha_nacimiento.trimestre"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "me_have_trimestres3"
+			        },
+			        {
+			          "Preposition": {
+			            "Subject": {
+			              "Role": "silver_catastropure.fecha_nacimiento.me"
+			            },
+			            "Prepositions": [
+			              {
+			                "in": {
+			                  "State": "Generated"
+			                }
+			              }
+			            ],
+			            "Object": {
+			              "Role": "silver_catastropure.fecha_nacimiento.trimestre"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "me_are_in_trimestres3"
+			        }
+			      ]
+			    },
+			    "silver_catastropure_fecha_nacimiento_año_has_silver_catastropure_fecha_nacimiento_trimestre": {
+			      "Binding": {
+			        "ConceptualEntity": "silver_catastropure"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "silver_catastropure.fecha_nacimiento.año": {
+			          "Target": {
+			            "Entity": "silver_catastropure.fecha_nacimiento.año"
+			          }
+			        },
+			        "silver_catastropure.fecha_nacimiento.trimestre": {
+			          "Target": {
+			            "Entity": "silver_catastropure.fecha_nacimiento.trimestre"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "silver_catastropure.fecha_nacimiento.año"
+			            },
+			            "Object": {
+			              "Role": "silver_catastropure.fecha_nacimiento.trimestre"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "años_have_trimestres3"
+			        },
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "silver_catastropure.fecha_nacimiento.trimestre"
+			            },
+			            "Object": {
+			              "Role": "silver_catastropure.fecha_nacimiento.año"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "trimestres_have_años3"
+			        },
+			        {
+			          "Preposition": {
+			            "Subject": {
+			              "Role": "silver_catastropure.fecha_nacimiento.trimestre"
+			            },
+			            "Prepositions": [
+			              {
+			                "in": {
+			                  "State": "Generated"
+			                }
+			              }
+			            ],
+			            "Object": {
+			              "Role": "silver_catastropure.fecha_nacimiento.año"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "trimestres_are_in_años3"
+			        }
+			      ]
+			    },
+			    "silver_catastropure_fecha_nacimiento_jerarquía_de_fecha_has_silver_catastropure_fecha_nacimiento_día": {
+			      "Binding": {
+			        "ConceptualEntity": "silver_catastropure"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "silver_catastropure.fecha_nacimiento.jerarquía_de_fecha": {
+			          "Target": {
+			            "Entity": "silver_catastropure.fecha_nacimiento.jerarquía_de_fecha"
+			          }
+			        },
+			        "silver_catastropure.fecha_nacimiento.día": {
+			          "Target": {
+			            "Entity": "silver_catastropure.fecha_nacimiento.día"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "silver_catastropure.fecha_nacimiento.jerarquía_de_fecha"
+			            },
+			            "Object": {
+			              "Role": "silver_catastropure.fecha_nacimiento.día"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "jerarquía_de_fechas_have_días3"
+			        }
+			      ]
+			    },
+			    "silver_catastropure_fecha_nacimiento_jerarquía_de_fecha_has_silver_catastropure_fecha_nacimiento_me": {
+			      "Binding": {
+			        "ConceptualEntity": "silver_catastropure"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "silver_catastropure.fecha_nacimiento.jerarquía_de_fecha": {
+			          "Target": {
+			            "Entity": "silver_catastropure.fecha_nacimiento.jerarquía_de_fecha"
+			          }
+			        },
+			        "silver_catastropure.fecha_nacimiento.me": {
+			          "Target": {
+			            "Entity": "silver_catastropure.fecha_nacimiento.me"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "silver_catastropure.fecha_nacimiento.jerarquía_de_fecha"
+			            },
+			            "Object": {
+			              "Role": "silver_catastropure.fecha_nacimiento.me"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "jerarquía_de_fechas_have_me4"
+			        }
+			      ]
+			    },
+			    "silver_catastropure_fecha_nacimiento_jerarquía_de_fecha_has_silver_catastropure_fecha_nacimiento_trimestre": {
+			      "Binding": {
+			        "ConceptualEntity": "silver_catastropure"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "silver_catastropure.fecha_nacimiento.jerarquía_de_fecha": {
+			          "Target": {
+			            "Entity": "silver_catastropure.fecha_nacimiento.jerarquía_de_fecha"
+			          }
+			        },
+			        "silver_catastropure.fecha_nacimiento.trimestre": {
+			          "Target": {
+			            "Entity": "silver_catastropure.fecha_nacimiento.trimestre"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "silver_catastropure.fecha_nacimiento.jerarquía_de_fecha"
+			            },
+			            "Object": {
+			              "Role": "silver_catastropure.fecha_nacimiento.trimestre"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "jerarquía_de_fechas_have_trimestres4"
+			        }
+			      ]
+			    },
+			    "silver_catastropure_fecha_nacimiento_jerarquía_de_fecha_has_silver_catastropure_fecha_nacimiento_año": {
+			      "Binding": {
+			        "ConceptualEntity": "silver_catastropure"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "silver_catastropure.fecha_nacimiento.jerarquía_de_fecha": {
+			          "Target": {
+			            "Entity": "silver_catastropure.fecha_nacimiento.jerarquía_de_fecha"
+			          }
+			        },
+			        "silver_catastropure.fecha_nacimiento.año": {
+			          "Target": {
+			            "Entity": "silver_catastropure.fecha_nacimiento.año"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "silver_catastropure.fecha_nacimiento.jerarquía_de_fecha"
+			            },
+			            "Object": {
+			              "Role": "silver_catastropure.fecha_nacimiento.año"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "jerarquía_de_fechas_have_años4"
+			        }
+			      ]
+			    },
+			    "silver_catastropure_fecha_nacimiento_has_jerarquía_de_fecha": {
+			      "Binding": {
+			        "ConceptualEntity": "silver_catastropure"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "silver_catastropure.fecha_nacimiento": {
+			          "Target": {
+			            "Entity": "silver_catastropure.fecha_nacimiento"
+			          }
+			        },
+			        "silver_catastropure.fecha_nacimiento.jerarquía_de_fecha": {
+			          "Target": {
+			            "Entity": "silver_catastropure.fecha_nacimiento.jerarquía_de_fecha"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "silver_catastropure.fecha_nacimiento"
+			            },
+			            "Object": {
+			              "Role": "silver_catastropure.fecha_nacimiento.jerarquía_de_fecha"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "fecha_nacimientos_have_jerarquía_de_fechas1"
+			        }
+			      ]
+			    },
+			    "silver_catastropure_Unidad_abreviada_jerarquía_unidad_abreviada_has_silver_catastropure_Unidad_abreviada_jerarquía_grupo_investigacion": {
+			      "Binding": {
+			        "ConceptualEntity": "silver_catastropure"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "silver_catastropure.Unidad_abreviada_jerarquía.unidad_abreviada": {
+			          "Target": {
+			            "Entity": "silver_catastropure.Unidad_abreviada_jerarquía.unidad_abreviada"
+			          }
+			        },
+			        "silver_catastropure.Unidad_abreviada_jerarquía.grupo_investigacion": {
+			          "Target": {
+			            "Entity": "silver_catastropure.Unidad_abreviada_jerarquía.grupo_investigacion"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "silver_catastropure.Unidad_abreviada_jerarquía.unidad_abreviada"
+			            },
+			            "Object": {
+			              "Role": "silver_catastropure.Unidad_abreviada_jerarquía.grupo_investigacion"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "unidad_abreviadas_have_grupo_investigacions"
+			        },
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "silver_catastropure.Unidad_abreviada_jerarquía.grupo_investigacion"
+			            },
+			            "Object": {
+			              "Role": "silver_catastropure.Unidad_abreviada_jerarquía.unidad_abreviada"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "grupo_investigacions_have_unidad_abreviadas"
+			        },
+			        {
+			          "Preposition": {
+			            "Subject": {
+			              "Role": "silver_catastropure.Unidad_abreviada_jerarquía.grupo_investigacion"
+			            },
+			            "Prepositions": [
+			              {
+			                "in": {
+			                  "State": "Generated"
+			                }
+			              }
+			            ],
+			            "Object": {
+			              "Role": "silver_catastropure.Unidad_abreviada_jerarquía.unidad_abreviada"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "grupo_investigacions_are_in_unidad_abreviadas"
+			        }
+			      ]
+			    },
+			    "silver_catastropure_Unidad_abreviada_jerarquía_has_grupo_investigacion": {
+			      "Binding": {
+			        "ConceptualEntity": "silver_catastropure"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "silver_catastropure.Unidad_abreviada_jerarquía": {
+			          "Target": {
+			            "Entity": "silver_catastropure.Unidad_abreviada_jerarquía"
+			          }
+			        },
+			        "silver_catastropure.Unidad_abreviada_jerarquía.grupo_investigacion": {
+			          "Target": {
+			            "Entity": "silver_catastropure.Unidad_abreviada_jerarquía.grupo_investigacion"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "silver_catastropure.Unidad_abreviada_jerarquía"
+			            },
+			            "Object": {
+			              "Role": "silver_catastropure.Unidad_abreviada_jerarquía.grupo_investigacion"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "Unidad_abreviada_jerarquías_have_grupo_investigacions"
+			        }
+			      ]
+			    },
+			    "silver_catastropure_Unidad_abreviada_jerarquía_has_unidad_abreviada": {
+			      "Binding": {
+			        "ConceptualEntity": "silver_catastropure"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "silver_catastropure.Unidad_abreviada_jerarquía": {
+			          "Target": {
+			            "Entity": "silver_catastropure.Unidad_abreviada_jerarquía"
+			          }
+			        },
+			        "silver_catastropure.Unidad_abreviada_jerarquía.unidad_abreviada": {
+			          "Target": {
+			            "Entity": "silver_catastropure.Unidad_abreviada_jerarquía.unidad_abreviada"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "silver_catastropure.Unidad_abreviada_jerarquía"
+			            },
+			            "Object": {
+			              "Role": "silver_catastropure.Unidad_abreviada_jerarquía.unidad_abreviada"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "Unidad_abreviada_jerarquías_have_unidad_abreviadas"
+			        }
+			      ]
+			    },
+			    "silver_catastropure_fecha_extraccion_me_has_silver_catastropure_fecha_extraccion_día": {
+			      "Binding": {
+			        "ConceptualEntity": "silver_catastropure"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "silver_catastropure.fecha_extraccion.me": {
+			          "Target": {
+			            "Entity": "silver_catastropure.fecha_extraccion.me"
+			          }
+			        },
+			        "silver_catastropure.fecha_extraccion.día": {
+			          "Target": {
+			            "Entity": "silver_catastropure.fecha_extraccion.día"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "silver_catastropure.fecha_extraccion.me"
+			            },
+			            "Object": {
+			              "Role": "silver_catastropure.fecha_extraccion.día"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "me_have_días4"
+			        },
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "silver_catastropure.fecha_extraccion.día"
+			            },
+			            "Object": {
+			              "Role": "silver_catastropure.fecha_extraccion.me"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "días_have_me4"
+			        },
+			        {
+			          "Preposition": {
+			            "Subject": {
+			              "Role": "silver_catastropure.fecha_extraccion.día"
+			            },
+			            "Prepositions": [
+			              {
+			                "in": {
+			                  "State": "Generated"
+			                }
+			              }
+			            ],
+			            "Object": {
+			              "Role": "silver_catastropure.fecha_extraccion.me"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "días_are_in_me2"
+			        }
+			      ]
+			    },
+			    "silver_catastropure_fecha_extraccion_trimestre_has_silver_catastropure_fecha_extraccion_me": {
+			      "Binding": {
+			        "ConceptualEntity": "silver_catastropure"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "silver_catastropure.fecha_extraccion.trimestre": {
+			          "Target": {
+			            "Entity": "silver_catastropure.fecha_extraccion.trimestre"
+			          }
+			        },
+			        "silver_catastropure.fecha_extraccion.me": {
+			          "Target": {
+			            "Entity": "silver_catastropure.fecha_extraccion.me"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "silver_catastropure.fecha_extraccion.trimestre"
+			            },
+			            "Object": {
+			              "Role": "silver_catastropure.fecha_extraccion.me"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "trimestres_have_me4"
+			        },
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "silver_catastropure.fecha_extraccion.me"
+			            },
+			            "Object": {
+			              "Role": "silver_catastropure.fecha_extraccion.trimestre"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "me_have_trimestres4"
+			        },
+			        {
+			          "Preposition": {
+			            "Subject": {
+			              "Role": "silver_catastropure.fecha_extraccion.me"
+			            },
+			            "Prepositions": [
+			              {
+			                "in": {
+			                  "State": "Generated"
+			                }
+			              }
+			            ],
+			            "Object": {
+			              "Role": "silver_catastropure.fecha_extraccion.trimestre"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "me_are_in_trimestres2"
+			        }
+			      ]
+			    },
+			    "silver_catastropure_fecha_extraccion_año_has_silver_catastropure_fecha_extraccion_trimestre": {
+			      "Binding": {
+			        "ConceptualEntity": "silver_catastropure"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "silver_catastropure.fecha_extraccion.año": {
+			          "Target": {
+			            "Entity": "silver_catastropure.fecha_extraccion.año"
+			          }
+			        },
+			        "silver_catastropure.fecha_extraccion.trimestre": {
+			          "Target": {
+			            "Entity": "silver_catastropure.fecha_extraccion.trimestre"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "silver_catastropure.fecha_extraccion.año"
+			            },
+			            "Object": {
+			              "Role": "silver_catastropure.fecha_extraccion.trimestre"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "años_have_trimestres4"
+			        },
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "silver_catastropure.fecha_extraccion.trimestre"
+			            },
+			            "Object": {
+			              "Role": "silver_catastropure.fecha_extraccion.año"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "trimestres_have_años4"
+			        },
+			        {
+			          "Preposition": {
+			            "Subject": {
+			              "Role": "silver_catastropure.fecha_extraccion.trimestre"
+			            },
+			            "Prepositions": [
+			              {
+			                "in": {
+			                  "State": "Generated"
+			                }
+			              }
+			            ],
+			            "Object": {
+			              "Role": "silver_catastropure.fecha_extraccion.año"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "trimestres_are_in_años2"
+			        }
+			      ]
+			    },
+			    "silver_catastropure_fecha_extraccion_jerarquía_de_fecha_has_silver_catastropure_fecha_extraccion_día": {
+			      "Binding": {
+			        "ConceptualEntity": "silver_catastropure"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "silver_catastropure.fecha_extraccion.jerarquía_de_fecha": {
+			          "Target": {
+			            "Entity": "silver_catastropure.fecha_extraccion.jerarquía_de_fecha"
+			          }
+			        },
+			        "silver_catastropure.fecha_extraccion.día": {
+			          "Target": {
+			            "Entity": "silver_catastropure.fecha_extraccion.día"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "silver_catastropure.fecha_extraccion.jerarquía_de_fecha"
+			            },
+			            "Object": {
+			              "Role": "silver_catastropure.fecha_extraccion.día"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "jerarquía_de_fechas_have_días4"
+			        }
+			      ]
+			    },
+			    "silver_catastropure_fecha_extraccion_jerarquía_de_fecha_has_silver_catastropure_fecha_extraccion_me": {
+			      "Binding": {
+			        "ConceptualEntity": "silver_catastropure"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "silver_catastropure.fecha_extraccion.jerarquía_de_fecha": {
+			          "Target": {
+			            "Entity": "silver_catastropure.fecha_extraccion.jerarquía_de_fecha"
+			          }
+			        },
+			        "silver_catastropure.fecha_extraccion.me": {
+			          "Target": {
+			            "Entity": "silver_catastropure.fecha_extraccion.me"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "silver_catastropure.fecha_extraccion.jerarquía_de_fecha"
+			            },
+			            "Object": {
+			              "Role": "silver_catastropure.fecha_extraccion.me"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "jerarquía_de_fechas_have_me5"
+			        }
+			      ]
+			    },
+			    "silver_catastropure_fecha_extraccion_jerarquía_de_fecha_has_silver_catastropure_fecha_extraccion_trimestre": {
+			      "Binding": {
+			        "ConceptualEntity": "silver_catastropure"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "silver_catastropure.fecha_extraccion.jerarquía_de_fecha": {
+			          "Target": {
+			            "Entity": "silver_catastropure.fecha_extraccion.jerarquía_de_fecha"
+			          }
+			        },
+			        "silver_catastropure.fecha_extraccion.trimestre": {
+			          "Target": {
+			            "Entity": "silver_catastropure.fecha_extraccion.trimestre"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "silver_catastropure.fecha_extraccion.jerarquía_de_fecha"
+			            },
+			            "Object": {
+			              "Role": "silver_catastropure.fecha_extraccion.trimestre"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "jerarquía_de_fechas_have_trimestres5"
+			        }
+			      ]
+			    },
+			    "silver_catastropure_fecha_extraccion_jerarquía_de_fecha_has_silver_catastropure_fecha_extraccion_año": {
+			      "Binding": {
+			        "ConceptualEntity": "silver_catastropure"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "silver_catastropure.fecha_extraccion.jerarquía_de_fecha": {
+			          "Target": {
+			            "Entity": "silver_catastropure.fecha_extraccion.jerarquía_de_fecha"
+			          }
+			        },
+			        "silver_catastropure.fecha_extraccion.año": {
+			          "Target": {
+			            "Entity": "silver_catastropure.fecha_extraccion.año"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "silver_catastropure.fecha_extraccion.jerarquía_de_fecha"
+			            },
+			            "Object": {
+			              "Role": "silver_catastropure.fecha_extraccion.año"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "jerarquía_de_fechas_have_años5"
+			        }
+			      ]
+			    },
+			    "silver_catastropure_fecha_extraccion_has_jerarquía_de_fecha": {
+			      "Binding": {
+			        "ConceptualEntity": "silver_catastropure"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "silver_catastropure.fecha_extraccion": {
+			          "Target": {
+			            "Entity": "silver_catastropure.fecha_extraccion"
+			          }
+			        },
+			        "silver_catastropure.fecha_extraccion.jerarquía_de_fecha": {
+			          "Target": {
+			            "Entity": "silver_catastropure.fecha_extraccion.jerarquía_de_fecha"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "silver_catastropure.fecha_extraccion"
+			            },
+			            "Object": {
+			              "Role": "silver_catastropure.fecha_extraccion.jerarquía_de_fecha"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "fecha_extraccions_have_jerarquía_de_fechas"
+			        }
+			      ]
+			    },
+			    "silver_investigadore_fecha_extraccion_me_has_silver_investigadore_fecha_extraccion_día": {
+			      "Binding": {
+			        "ConceptualEntity": "silver_investigadores"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "silver_investigadore.fecha_extraccion.me": {
+			          "Target": {
+			            "Entity": "silver_investigadore.fecha_extraccion.me"
+			          }
+			        },
+			        "silver_investigadore.fecha_extraccion.día": {
+			          "Target": {
+			            "Entity": "silver_investigadore.fecha_extraccion.día"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "silver_investigadore.fecha_extraccion.me"
+			            },
+			            "Object": {
+			              "Role": "silver_investigadore.fecha_extraccion.día"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "me_have_días5"
+			        },
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "silver_investigadore.fecha_extraccion.día"
+			            },
+			            "Object": {
+			              "Role": "silver_investigadore.fecha_extraccion.me"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "días_have_me5"
+			        },
+			        {
+			          "Preposition": {
+			            "Subject": {
+			              "Role": "silver_investigadore.fecha_extraccion.día"
+			            },
+			            "Prepositions": [
+			              {
+			                "in": {
+			                  "State": "Generated"
+			                }
+			              }
+			            ],
+			            "Object": {
+			              "Role": "silver_investigadore.fecha_extraccion.me"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "días_are_in_me1"
+			        }
+			      ]
+			    },
 			    "silver_investigadore_fecha_extraccion_trimestre_has_silver_investigadore_fecha_extraccion_me": {
 			      "Binding": {
 			        "ConceptualEntity": "silver_investigadores"
@@ -3842,7 +6859,7 @@ cultureInfo es-ES
 			          },
 			          "State": "Generated",
 			          "Weight": 0.99,
-			          "ID": "trimestres_have_me"
+			          "ID": "trimestres_have_me5"
 			        },
 			        {
 			          "Attribute": {
@@ -3855,7 +6872,7 @@ cultureInfo es-ES
 			          },
 			          "State": "Generated",
 			          "Weight": 0.99,
-			          "ID": "me_have_trimestres"
+			          "ID": "me_have_trimestres5"
 			        },
 			        {
 			          "Preposition": {
@@ -3908,7 +6925,7 @@ cultureInfo es-ES
 			          },
 			          "State": "Generated",
 			          "Weight": 0.99,
-			          "ID": "años_have_trimestres"
+			          "ID": "años_have_trimestres5"
 			        },
 			        {
 			          "Attribute": {
@@ -3921,7 +6938,7 @@ cultureInfo es-ES
 			          },
 			          "State": "Generated",
 			          "Weight": 0.99,
-			          "ID": "trimestres_have_años"
+			          "ID": "trimestres_have_años5"
 			        },
 			        {
 			          "Preposition": {
@@ -3974,7 +6991,7 @@ cultureInfo es-ES
 			          },
 			          "State": "Generated",
 			          "Weight": 0.99,
-			          "ID": "jerarquía_de_fechas_have_días"
+			          "ID": "jerarquía_de_fechas_have_días5"
 			        }
 			      ]
 			    },
@@ -4007,7 +7024,7 @@ cultureInfo es-ES
 			          },
 			          "State": "Generated",
 			          "Weight": 0.99,
-			          "ID": "jerarquía_de_fechas_have_me"
+			          "ID": "jerarquía_de_fechas_have_me6"
 			        }
 			      ]
 			    },
@@ -4040,7 +7057,7 @@ cultureInfo es-ES
 			          },
 			          "State": "Generated",
 			          "Weight": 0.99,
-			          "ID": "jerarquía_de_fechas_have_trimestres"
+			          "ID": "jerarquía_de_fechas_have_trimestres6"
 			        }
 			      ]
 			    },
@@ -4073,7 +7090,7 @@ cultureInfo es-ES
 			          },
 			          "State": "Generated",
 			          "Weight": 0.99,
-			          "ID": "jerarquía_de_fechas_have_años"
+			          "ID": "jerarquía_de_fechas_have_años6"
 			        }
 			      ]
 			    },
@@ -4106,7 +7123,7 @@ cultureInfo es-ES
 			          },
 			          "State": "Generated",
 			          "Weight": 0.99,
-			          "ID": "fecha_extraccions_have_jerarquía_de_fechas"
+			          "ID": "fecha_extraccions_have_jerarquía_de_fechas1"
 			        }
 			      ]
 			    },
@@ -4139,7 +7156,7 @@ cultureInfo es-ES
 			          },
 			          "State": "Generated",
 			          "Weight": 0.99,
-			          "ID": "me_have_días"
+			          "ID": "me_have_días6"
 			        },
 			        {
 			          "Attribute": {
@@ -4152,7 +7169,7 @@ cultureInfo es-ES
 			          },
 			          "State": "Generated",
 			          "Weight": 0.99,
-			          "ID": "días_have_me"
+			          "ID": "días_have_me6"
 			        },
 			        {
 			          "Preposition": {
@@ -4205,7 +7222,7 @@ cultureInfo es-ES
 			          },
 			          "State": "Generated",
 			          "Weight": 0.99,
-			          "ID": "trimestres_have_me1"
+			          "ID": "trimestres_have_me6"
 			        },
 			        {
 			          "Attribute": {
@@ -4218,7 +7235,7 @@ cultureInfo es-ES
 			          },
 			          "State": "Generated",
 			          "Weight": 0.99,
-			          "ID": "me_have_trimestres1"
+			          "ID": "me_have_trimestres6"
 			        },
 			        {
 			          "Preposition": {
@@ -4271,7 +7288,7 @@ cultureInfo es-ES
 			          },
 			          "State": "Generated",
 			          "Weight": 0.99,
-			          "ID": "años_have_trimestres1"
+			          "ID": "años_have_trimestres6"
 			        },
 			        {
 			          "Attribute": {
@@ -4284,7 +7301,7 @@ cultureInfo es-ES
 			          },
 			          "State": "Generated",
 			          "Weight": 0.99,
-			          "ID": "trimestres_have_años1"
+			          "ID": "trimestres_have_años6"
 			        },
 			        {
 			          "Preposition": {
@@ -4337,7 +7354,7 @@ cultureInfo es-ES
 			          },
 			          "State": "Generated",
 			          "Weight": 0.99,
-			          "ID": "jerarquía_de_fechas_have_días1"
+			          "ID": "jerarquía_de_fechas_have_días6"
 			        }
 			      ]
 			    },
@@ -4370,7 +7387,7 @@ cultureInfo es-ES
 			          },
 			          "State": "Generated",
 			          "Weight": 0.99,
-			          "ID": "jerarquía_de_fechas_have_me1"
+			          "ID": "jerarquía_de_fechas_have_me7"
 			        }
 			      ]
 			    },
@@ -4403,7 +7420,7 @@ cultureInfo es-ES
 			          },
 			          "State": "Generated",
 			          "Weight": 0.99,
-			          "ID": "jerarquía_de_fechas_have_trimestres1"
+			          "ID": "jerarquía_de_fechas_have_trimestres7"
 			        }
 			      ]
 			    },
@@ -4436,7 +7453,7 @@ cultureInfo es-ES
 			          },
 			          "State": "Generated",
 			          "Weight": 0.99,
-			          "ID": "jerarquía_de_fechas_have_años1"
+			          "ID": "jerarquía_de_fechas_have_años7"
 			        }
 			      ]
 			    },
@@ -4469,7 +7486,7 @@ cultureInfo es-ES
 			          },
 			          "State": "Generated",
 			          "Weight": 0.99,
-			          "ID": "fecha_extraccions_have_jerarquía_de_fechas1"
+			          "ID": "fecha_extraccions_have_jerarquía_de_fechas2"
 			        }
 			      ]
 			    },
@@ -4516,6 +7533,52 @@ cultureInfo es-ES
 			          "State": "Generated",
 			          "Weight": 0.99,
 			          "ID": "catastro_docentes_have_autoridades_admins"
+			        }
+			      ]
+			    },
+			    "autoridades_admin_has_dim_facultad": {
+			      "Binding": {
+			        "ConceptualEntity": "autoridades_admin"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "autoridades_admin": {
+			          "Target": {
+			            "Entity": "autoridades_admin"
+			          }
+			        },
+			        "dim_facultad": {
+			          "Target": {
+			            "Entity": "dim_facultad"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "autoridades_admin"
+			            },
+			            "Object": {
+			              "Role": "dim_facultad"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "autoridades_admins_have_dim_facultads"
+			        },
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "dim_facultad"
+			            },
+			            "Object": {
+			              "Role": "autoridades_admin"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "dim_facultads_have_autoridades_admins"
 			        }
 			      ]
 			    },
@@ -4674,6 +7737,303 @@ cultureInfo es-ES
 			          "State": "Generated",
 			          "Weight": 0.99,
 			          "ID": "raw_investigadores_have_catastro_docentes"
+			        }
+			      ]
+			    },
+			    "autoridades_admin_has_nombre_titulo": {
+			      "Binding": {
+			        "ConceptualEntity": "autoridades_admin"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "autoridades_admin": {
+			          "Target": {
+			            "Entity": "autoridades_admin"
+			          }
+			        },
+			        "autoridades_admin.nombre_titulo": {
+			          "Target": {
+			            "Entity": "autoridades_admin.nombre_titulo"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "autoridades_admin"
+			            },
+			            "Object": {
+			              "Role": "autoridades_admin.nombre_titulo"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "autoridades_admins_have_nombre_titulos"
+			        }
+			      ]
+			    },
+			    "autoridades_admin_has_nivel_titulo": {
+			      "Binding": {
+			        "ConceptualEntity": "autoridades_admin"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "autoridades_admin": {
+			          "Target": {
+			            "Entity": "autoridades_admin"
+			          }
+			        },
+			        "autoridades_admin.nivel_titulo": {
+			          "Target": {
+			            "Entity": "autoridades_admin.nivel_titulo"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "autoridades_admin"
+			            },
+			            "Object": {
+			              "Role": "autoridades_admin.nivel_titulo"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "autoridades_admins_have_nivel_titulos"
+			        }
+			      ]
+			    },
+			    "autoridades_admin_has_tipo_titulo": {
+			      "Binding": {
+			        "ConceptualEntity": "autoridades_admin"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "autoridades_admin": {
+			          "Target": {
+			            "Entity": "autoridades_admin"
+			          }
+			        },
+			        "autoridades_admin.tipo_titulo": {
+			          "Target": {
+			            "Entity": "autoridades_admin.tipo_titulo"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "autoridades_admin"
+			            },
+			            "Object": {
+			              "Role": "autoridades_admin.tipo_titulo"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "autoridades_admins_have_tipo_titulos"
+			        }
+			      ]
+			    },
+			    "autoridades_admin_has_antiguedad": {
+			      "Binding": {
+			        "ConceptualEntity": "autoridades_admin"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "autoridades_admin": {
+			          "Target": {
+			            "Entity": "autoridades_admin"
+			          }
+			        },
+			        "autoridades_admin.antiguedad": {
+			          "Target": {
+			            "Entity": "autoridades_admin.antiguedad"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "autoridades_admin"
+			            },
+			            "Object": {
+			              "Role": "autoridades_admin.antiguedad"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "autoridades_admins_have_antiguedads"
+			        }
+			      ]
+			    },
+			    "dim_facultad_has_facultad": {
+			      "Binding": {
+			        "ConceptualEntity": "Dim_Facultad"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "dim_facultad": {
+			          "Target": {
+			            "Entity": "dim_facultad"
+			          }
+			        },
+			        "dim_facultad.facultad": {
+			          "Target": {
+			            "Entity": "dim_facultad.facultad"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "dim_facultad"
+			            },
+			            "Object": {
+			              "Role": "dim_facultad.facultad"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "dim_facultads_have_facultads"
+			        }
+			      ]
+			    },
+			    "catastro_docente_has_facultad_key": {
+			      "Binding": {
+			        "ConceptualEntity": "catastro_docentes"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "catastro_docente": {
+			          "Target": {
+			            "Entity": "catastro_docente"
+			          }
+			        },
+			        "catastro_docente.facultad_key": {
+			          "Target": {
+			            "Entity": "catastro_docente.facultad_key"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "catastro_docente"
+			            },
+			            "Object": {
+			              "Role": "catastro_docente.facultad_key"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "catastro_docentes_have_facultad_keys"
+			        }
+			      ]
+			    },
+			    "catastro_docente_has_edad": {
+			      "Binding": {
+			        "ConceptualEntity": "catastro_docentes"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "catastro_docente": {
+			          "Target": {
+			            "Entity": "catastro_docente"
+			          }
+			        },
+			        "catastro_docente.edad": {
+			          "Target": {
+			            "Entity": "catastro_docente.edad"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "catastro_docente"
+			            },
+			            "Object": {
+			              "Role": "catastro_docente.edad"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "catastro_docentes_have_edads"
+			        }
+			      ]
+			    },
+			    "catastro_docente_has_anios_titularidad": {
+			      "Binding": {
+			        "ConceptualEntity": "catastro_docentes"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "catastro_docente": {
+			          "Target": {
+			            "Entity": "catastro_docente"
+			          }
+			        },
+			        "catastro_docente.anios_titularidad": {
+			          "Target": {
+			            "Entity": "catastro_docente.anios_titularidad"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "catastro_docente"
+			            },
+			            "Object": {
+			              "Role": "catastro_docente.anios_titularidad"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "catastro_docentes_have_anios_titularidads"
+			        }
+			      ]
+			    },
+			    "catastro_docente_has_antiguedad": {
+			      "Binding": {
+			        "ConceptualEntity": "catastro_docentes"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "catastro_docente": {
+			          "Target": {
+			            "Entity": "catastro_docente"
+			          }
+			        },
+			        "catastro_docente.antiguedad": {
+			          "Target": {
+			            "Entity": "catastro_docente.antiguedad"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "catastro_docente"
+			            },
+			            "Object": {
+			              "Role": "catastro_docente.antiguedad"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "catastro_docentes_have_antiguedads"
 			        }
 			      ]
 			    },
@@ -8901,20 +12261,20 @@ cultureInfo es-ES
 			        }
 			      ]
 			    },
-			    "silver_investigadore_fecha_extraccion_me_has_silver_investigadore_fecha_extraccion_día": {
+			    "catastro_docente_año_obtención_titulo_jerarquía_de_fecha_has_catastro_docente_año_obtención_titulo_día": {
 			      "Binding": {
-			        "ConceptualEntity": "silver_investigadores"
+			        "ConceptualEntity": "catastro_docentes"
 			      },
 			      "State": "Generated",
 			      "Roles": {
-			        "silver_investigadore.fecha_extraccion.me": {
+			        "catastro_docente.año_obtención_titulo.jerarquía_de_fecha": {
 			          "Target": {
-			            "Entity": "silver_investigadore.fecha_extraccion.me"
+			            "Entity": "catastro_docente.año_obtención_titulo.jerarquía_de_fecha"
 			          }
 			        },
-			        "silver_investigadore.fecha_extraccion.día": {
+			        "catastro_docente.año_obtención_titulo.día": {
 			          "Target": {
-			            "Entity": "silver_investigadore.fecha_extraccion.día"
+			            "Entity": "catastro_docente.año_obtención_titulo.día"
 			          }
 			        }
 			      },
@@ -8922,33 +12282,66 @@ cultureInfo es-ES
 			        {
 			          "Attribute": {
 			            "Subject": {
-			              "Role": "silver_investigadore.fecha_extraccion.me"
+			              "Role": "catastro_docente.año_obtención_titulo.jerarquía_de_fecha"
 			            },
 			            "Object": {
-			              "Role": "silver_investigadore.fecha_extraccion.día"
+			              "Role": "catastro_docente.año_obtención_titulo.día"
 			            }
 			          },
 			          "State": "Generated",
 			          "Weight": 0.99,
-			          "ID": "me_have_días1"
+			          "ID": "jerarquía_de_fechas_have_días7"
+			        }
+			      ]
+			    },
+			    "catastro_docente_año_obtención_titulo_año_has_catastro_docente_año_obtención_titulo_trimestre": {
+			      "Binding": {
+			        "ConceptualEntity": "catastro_docentes"
+			      },
+			      "State": "Generated",
+			      "Roles": {
+			        "catastro_docente.año_obtención_titulo.año": {
+			          "Target": {
+			            "Entity": "catastro_docente.año_obtención_titulo.año"
+			          }
+			        },
+			        "catastro_docente.año_obtención_titulo.trimestre": {
+			          "Target": {
+			            "Entity": "catastro_docente.año_obtención_titulo.trimestre"
+			          }
+			        }
+			      },
+			      "Phrasings": [
+			        {
+			          "Attribute": {
+			            "Subject": {
+			              "Role": "catastro_docente.año_obtención_titulo.año"
+			            },
+			            "Object": {
+			              "Role": "catastro_docente.año_obtención_titulo.trimestre"
+			            }
+			          },
+			          "State": "Generated",
+			          "Weight": 0.99,
+			          "ID": "años_have_trimestres7"
 			        },
 			        {
 			          "Attribute": {
 			            "Subject": {
-			              "Role": "silver_investigadore.fecha_extraccion.día"
+			              "Role": "catastro_docente.año_obtención_titulo.trimestre"
 			            },
 			            "Object": {
-			              "Role": "silver_investigadore.fecha_extraccion.me"
+			              "Role": "catastro_docente.año_obtención_titulo.año"
 			            }
 			          },
 			          "State": "Generated",
 			          "Weight": 0.99,
-			          "ID": "días_have_me1"
+			          "ID": "trimestres_have_años7"
 			        },
 			        {
 			          "Preposition": {
 			            "Subject": {
-			              "Role": "silver_investigadore.fecha_extraccion.día"
+			              "Role": "catastro_docente.año_obtención_titulo.trimestre"
 			            },
 			            "Prepositions": [
 			              {
@@ -8958,29 +12351,29 @@ cultureInfo es-ES
 			              }
 			            ],
 			            "Object": {
-			              "Role": "silver_investigadore.fecha_extraccion.me"
+			              "Role": "catastro_docente.año_obtención_titulo.año"
 			            }
 			          },
 			          "State": "Generated",
 			          "Weight": 0.99,
-			          "ID": "días_are_in_me1"
+			          "ID": "trimestres_are_in_años7"
 			        }
 			      ]
 			    },
-			    "silver_catastropure_fecha_extraccion_has_jerarquía_de_fecha": {
+			    "catastro_docente_año_obtención_titulo_trimestre_has_catastro_docente_año_obtención_titulo_me": {
 			      "Binding": {
-			        "ConceptualEntity": "silver_catastropure"
+			        "ConceptualEntity": "catastro_docentes"
 			      },
 			      "State": "Generated",
 			      "Roles": {
-			        "silver_catastropure.fecha_extraccion": {
+			        "catastro_docente.año_obtención_titulo.trimestre": {
 			          "Target": {
-			            "Entity": "silver_catastropure.fecha_extraccion"
+			            "Entity": "catastro_docente.año_obtención_titulo.trimestre"
 			          }
 			        },
-			        "silver_catastropure.fecha_extraccion.jerarquía_de_fecha": {
+			        "catastro_docente.año_obtención_titulo.me": {
 			          "Target": {
-			            "Entity": "silver_catastropure.fecha_extraccion.jerarquía_de_fecha"
+			            "Entity": "catastro_docente.año_obtención_titulo.me"
 			          }
 			        }
 			      },
@@ -8988,198 +12381,33 @@ cultureInfo es-ES
 			        {
 			          "Attribute": {
 			            "Subject": {
-			              "Role": "silver_catastropure.fecha_extraccion"
+			              "Role": "catastro_docente.año_obtención_titulo.trimestre"
 			            },
 			            "Object": {
-			              "Role": "silver_catastropure.fecha_extraccion.jerarquía_de_fecha"
+			              "Role": "catastro_docente.año_obtención_titulo.me"
 			            }
 			          },
 			          "State": "Generated",
 			          "Weight": 0.99,
-			          "ID": "fecha_extraccions_have_jerarquía_de_fechas2"
-			        }
-			      ]
-			    },
-			    "silver_catastropure_fecha_extraccion_jerarquía_de_fecha_has_silver_catastropure_fecha_extraccion_año": {
-			      "Binding": {
-			        "ConceptualEntity": "silver_catastropure"
-			      },
-			      "State": "Generated",
-			      "Roles": {
-			        "silver_catastropure.fecha_extraccion.jerarquía_de_fecha": {
-			          "Target": {
-			            "Entity": "silver_catastropure.fecha_extraccion.jerarquía_de_fecha"
-			          }
-			        },
-			        "silver_catastropure.fecha_extraccion.año": {
-			          "Target": {
-			            "Entity": "silver_catastropure.fecha_extraccion.año"
-			          }
-			        }
-			      },
-			      "Phrasings": [
-			        {
-			          "Attribute": {
-			            "Subject": {
-			              "Role": "silver_catastropure.fecha_extraccion.jerarquía_de_fecha"
-			            },
-			            "Object": {
-			              "Role": "silver_catastropure.fecha_extraccion.año"
-			            }
-			          },
-			          "State": "Generated",
-			          "Weight": 0.99,
-			          "ID": "jerarquía_de_fechas_have_años2"
-			        }
-			      ]
-			    },
-			    "silver_catastropure_fecha_extraccion_jerarquía_de_fecha_has_silver_catastropure_fecha_extraccion_trimestre": {
-			      "Binding": {
-			        "ConceptualEntity": "silver_catastropure"
-			      },
-			      "State": "Generated",
-			      "Roles": {
-			        "silver_catastropure.fecha_extraccion.jerarquía_de_fecha": {
-			          "Target": {
-			            "Entity": "silver_catastropure.fecha_extraccion.jerarquía_de_fecha"
-			          }
-			        },
-			        "silver_catastropure.fecha_extraccion.trimestre": {
-			          "Target": {
-			            "Entity": "silver_catastropure.fecha_extraccion.trimestre"
-			          }
-			        }
-			      },
-			      "Phrasings": [
-			        {
-			          "Attribute": {
-			            "Subject": {
-			              "Role": "silver_catastropure.fecha_extraccion.jerarquía_de_fecha"
-			            },
-			            "Object": {
-			              "Role": "silver_catastropure.fecha_extraccion.trimestre"
-			            }
-			          },
-			          "State": "Generated",
-			          "Weight": 0.99,
-			          "ID": "jerarquía_de_fechas_have_trimestres2"
-			        }
-			      ]
-			    },
-			    "silver_catastropure_fecha_extraccion_jerarquía_de_fecha_has_silver_catastropure_fecha_extraccion_me": {
-			      "Binding": {
-			        "ConceptualEntity": "silver_catastropure"
-			      },
-			      "State": "Generated",
-			      "Roles": {
-			        "silver_catastropure.fecha_extraccion.jerarquía_de_fecha": {
-			          "Target": {
-			            "Entity": "silver_catastropure.fecha_extraccion.jerarquía_de_fecha"
-			          }
-			        },
-			        "silver_catastropure.fecha_extraccion.me": {
-			          "Target": {
-			            "Entity": "silver_catastropure.fecha_extraccion.me"
-			          }
-			        }
-			      },
-			      "Phrasings": [
-			        {
-			          "Attribute": {
-			            "Subject": {
-			              "Role": "silver_catastropure.fecha_extraccion.jerarquía_de_fecha"
-			            },
-			            "Object": {
-			              "Role": "silver_catastropure.fecha_extraccion.me"
-			            }
-			          },
-			          "State": "Generated",
-			          "Weight": 0.99,
-			          "ID": "jerarquía_de_fechas_have_me2"
-			        }
-			      ]
-			    },
-			    "silver_catastropure_fecha_extraccion_jerarquía_de_fecha_has_silver_catastropure_fecha_extraccion_día": {
-			      "Binding": {
-			        "ConceptualEntity": "silver_catastropure"
-			      },
-			      "State": "Generated",
-			      "Roles": {
-			        "silver_catastropure.fecha_extraccion.jerarquía_de_fecha": {
-			          "Target": {
-			            "Entity": "silver_catastropure.fecha_extraccion.jerarquía_de_fecha"
-			          }
-			        },
-			        "silver_catastropure.fecha_extraccion.día": {
-			          "Target": {
-			            "Entity": "silver_catastropure.fecha_extraccion.día"
-			          }
-			        }
-			      },
-			      "Phrasings": [
-			        {
-			          "Attribute": {
-			            "Subject": {
-			              "Role": "silver_catastropure.fecha_extraccion.jerarquía_de_fecha"
-			            },
-			            "Object": {
-			              "Role": "silver_catastropure.fecha_extraccion.día"
-			            }
-			          },
-			          "State": "Generated",
-			          "Weight": 0.99,
-			          "ID": "jerarquía_de_fechas_have_días2"
-			        }
-			      ]
-			    },
-			    "silver_catastropure_fecha_extraccion_año_has_silver_catastropure_fecha_extraccion_trimestre": {
-			      "Binding": {
-			        "ConceptualEntity": "silver_catastropure"
-			      },
-			      "State": "Generated",
-			      "Roles": {
-			        "silver_catastropure.fecha_extraccion.año": {
-			          "Target": {
-			            "Entity": "silver_catastropure.fecha_extraccion.año"
-			          }
-			        },
-			        "silver_catastropure.fecha_extraccion.trimestre": {
-			          "Target": {
-			            "Entity": "silver_catastropure.fecha_extraccion.trimestre"
-			          }
-			        }
-			      },
-			      "Phrasings": [
-			        {
-			          "Attribute": {
-			            "Subject": {
-			              "Role": "silver_catastropure.fecha_extraccion.año"
-			            },
-			            "Object": {
-			              "Role": "silver_catastropure.fecha_extraccion.trimestre"
-			            }
-			          },
-			          "State": "Generated",
-			          "Weight": 0.99,
-			          "ID": "años_have_trimestres2"
+			          "ID": "trimestres_have_me7"
 			        },
 			        {
 			          "Attribute": {
 			            "Subject": {
-			              "Role": "silver_catastropure.fecha_extraccion.trimestre"
+			              "Role": "catastro_docente.año_obtención_titulo.me"
 			            },
 			            "Object": {
-			              "Role": "silver_catastropure.fecha_extraccion.año"
+			              "Role": "catastro_docente.año_obtención_titulo.trimestre"
 			            }
 			          },
 			          "State": "Generated",
 			          "Weight": 0.99,
-			          "ID": "trimestres_have_años2"
+			          "ID": "me_have_trimestres7"
 			        },
 			        {
 			          "Preposition": {
 			            "Subject": {
-			              "Role": "silver_catastropure.fecha_extraccion.trimestre"
+			              "Role": "catastro_docente.año_obtención_titulo.me"
 			            },
 			            "Prepositions": [
 			              {
@@ -9189,29 +12417,29 @@ cultureInfo es-ES
 			              }
 			            ],
 			            "Object": {
-			              "Role": "silver_catastropure.fecha_extraccion.año"
+			              "Role": "catastro_docente.año_obtención_titulo.trimestre"
 			            }
 			          },
 			          "State": "Generated",
 			          "Weight": 0.99,
-			          "ID": "trimestres_are_in_años2"
+			          "ID": "me_are_in_trimestres7"
 			        }
 			      ]
 			    },
-			    "silver_catastropure_fecha_extraccion_trimestre_has_silver_catastropure_fecha_extraccion_me": {
+			    "catastro_docente_año_obtención_titulo_me_has_catastro_docente_año_obtención_titulo_día": {
 			      "Binding": {
-			        "ConceptualEntity": "silver_catastropure"
+			        "ConceptualEntity": "catastro_docentes"
 			      },
 			      "State": "Generated",
 			      "Roles": {
-			        "silver_catastropure.fecha_extraccion.trimestre": {
+			        "catastro_docente.año_obtención_titulo.me": {
 			          "Target": {
-			            "Entity": "silver_catastropure.fecha_extraccion.trimestre"
+			            "Entity": "catastro_docente.año_obtención_titulo.me"
 			          }
 			        },
-			        "silver_catastropure.fecha_extraccion.me": {
+			        "catastro_docente.año_obtención_titulo.día": {
 			          "Target": {
-			            "Entity": "silver_catastropure.fecha_extraccion.me"
+			            "Entity": "catastro_docente.año_obtención_titulo.día"
 			          }
 			        }
 			      },
@@ -9219,33 +12447,33 @@ cultureInfo es-ES
 			        {
 			          "Attribute": {
 			            "Subject": {
-			              "Role": "silver_catastropure.fecha_extraccion.trimestre"
+			              "Role": "catastro_docente.año_obtención_titulo.me"
 			            },
 			            "Object": {
-			              "Role": "silver_catastropure.fecha_extraccion.me"
+			              "Role": "catastro_docente.año_obtención_titulo.día"
 			            }
 			          },
 			          "State": "Generated",
 			          "Weight": 0.99,
-			          "ID": "trimestres_have_me2"
+			          "ID": "me_have_días7"
 			        },
 			        {
 			          "Attribute": {
 			            "Subject": {
-			              "Role": "silver_catastropure.fecha_extraccion.me"
+			              "Role": "catastro_docente.año_obtención_titulo.día"
 			            },
 			            "Object": {
-			              "Role": "silver_catastropure.fecha_extraccion.trimestre"
+			              "Role": "catastro_docente.año_obtención_titulo.me"
 			            }
 			          },
 			          "State": "Generated",
 			          "Weight": 0.99,
-			          "ID": "me_have_trimestres2"
+			          "ID": "días_have_me7"
 			        },
 			        {
 			          "Preposition": {
 			            "Subject": {
-			              "Role": "silver_catastropure.fecha_extraccion.me"
+			              "Role": "catastro_docente.año_obtención_titulo.día"
 			            },
 			            "Prepositions": [
 			              {
@@ -9255,210 +12483,12 @@ cultureInfo es-ES
 			              }
 			            ],
 			            "Object": {
-			              "Role": "silver_catastropure.fecha_extraccion.trimestre"
+			              "Role": "catastro_docente.año_obtención_titulo.me"
 			            }
 			          },
 			          "State": "Generated",
 			          "Weight": 0.99,
-			          "ID": "me_are_in_trimestres2"
-			        }
-			      ]
-			    },
-			    "silver_catastropure_fecha_extraccion_me_has_silver_catastropure_fecha_extraccion_día": {
-			      "Binding": {
-			        "ConceptualEntity": "silver_catastropure"
-			      },
-			      "State": "Generated",
-			      "Roles": {
-			        "silver_catastropure.fecha_extraccion.me": {
-			          "Target": {
-			            "Entity": "silver_catastropure.fecha_extraccion.me"
-			          }
-			        },
-			        "silver_catastropure.fecha_extraccion.día": {
-			          "Target": {
-			            "Entity": "silver_catastropure.fecha_extraccion.día"
-			          }
-			        }
-			      },
-			      "Phrasings": [
-			        {
-			          "Attribute": {
-			            "Subject": {
-			              "Role": "silver_catastropure.fecha_extraccion.me"
-			            },
-			            "Object": {
-			              "Role": "silver_catastropure.fecha_extraccion.día"
-			            }
-			          },
-			          "State": "Generated",
-			          "Weight": 0.99,
-			          "ID": "me_have_días2"
-			        },
-			        {
-			          "Attribute": {
-			            "Subject": {
-			              "Role": "silver_catastropure.fecha_extraccion.día"
-			            },
-			            "Object": {
-			              "Role": "silver_catastropure.fecha_extraccion.me"
-			            }
-			          },
-			          "State": "Generated",
-			          "Weight": 0.99,
-			          "ID": "días_have_me2"
-			        },
-			        {
-			          "Preposition": {
-			            "Subject": {
-			              "Role": "silver_catastropure.fecha_extraccion.día"
-			            },
-			            "Prepositions": [
-			              {
-			                "in": {
-			                  "State": "Generated"
-			                }
-			              }
-			            ],
-			            "Object": {
-			              "Role": "silver_catastropure.fecha_extraccion.me"
-			            }
-			          },
-			          "State": "Generated",
-			          "Weight": 0.99,
-			          "ID": "días_are_in_me2"
-			        }
-			      ]
-			    },
-			    "silver_catastropure_Unidad_abreviada_jerarquía_has_unidad_abreviada": {
-			      "Binding": {
-			        "ConceptualEntity": "silver_catastropure"
-			      },
-			      "State": "Generated",
-			      "Roles": {
-			        "silver_catastropure.Unidad_abreviada_jerarquía": {
-			          "Target": {
-			            "Entity": "silver_catastropure.Unidad_abreviada_jerarquía"
-			          }
-			        },
-			        "silver_catastropure.Unidad_abreviada_jerarquía.unidad_abreviada": {
-			          "Target": {
-			            "Entity": "silver_catastropure.Unidad_abreviada_jerarquía.unidad_abreviada"
-			          }
-			        }
-			      },
-			      "Phrasings": [
-			        {
-			          "Attribute": {
-			            "Subject": {
-			              "Role": "silver_catastropure.Unidad_abreviada_jerarquía"
-			            },
-			            "Object": {
-			              "Role": "silver_catastropure.Unidad_abreviada_jerarquía.unidad_abreviada"
-			            }
-			          },
-			          "State": "Generated",
-			          "Weight": 0.99,
-			          "ID": "Unidad_abreviada_jerarquías_have_unidad_abreviadas"
-			        }
-			      ]
-			    },
-			    "silver_catastropure_Unidad_abreviada_jerarquía_has_grupo_investigacion": {
-			      "Binding": {
-			        "ConceptualEntity": "silver_catastropure"
-			      },
-			      "State": "Generated",
-			      "Roles": {
-			        "silver_catastropure.Unidad_abreviada_jerarquía": {
-			          "Target": {
-			            "Entity": "silver_catastropure.Unidad_abreviada_jerarquía"
-			          }
-			        },
-			        "silver_catastropure.Unidad_abreviada_jerarquía.grupo_investigacion": {
-			          "Target": {
-			            "Entity": "silver_catastropure.Unidad_abreviada_jerarquía.grupo_investigacion"
-			          }
-			        }
-			      },
-			      "Phrasings": [
-			        {
-			          "Attribute": {
-			            "Subject": {
-			              "Role": "silver_catastropure.Unidad_abreviada_jerarquía"
-			            },
-			            "Object": {
-			              "Role": "silver_catastropure.Unidad_abreviada_jerarquía.grupo_investigacion"
-			            }
-			          },
-			          "State": "Generated",
-			          "Weight": 0.99,
-			          "ID": "Unidad_abreviada_jerarquías_have_grupo_investigacions"
-			        }
-			      ]
-			    },
-			    "silver_catastropure_Unidad_abreviada_jerarquía_unidad_abreviada_has_silver_catastropure_Unidad_abreviada_jerarquía_grupo_investigacion": {
-			      "Binding": {
-			        "ConceptualEntity": "silver_catastropure"
-			      },
-			      "State": "Generated",
-			      "Roles": {
-			        "silver_catastropure.Unidad_abreviada_jerarquía.unidad_abreviada": {
-			          "Target": {
-			            "Entity": "silver_catastropure.Unidad_abreviada_jerarquía.unidad_abreviada"
-			          }
-			        },
-			        "silver_catastropure.Unidad_abreviada_jerarquía.grupo_investigacion": {
-			          "Target": {
-			            "Entity": "silver_catastropure.Unidad_abreviada_jerarquía.grupo_investigacion"
-			          }
-			        }
-			      },
-			      "Phrasings": [
-			        {
-			          "Attribute": {
-			            "Subject": {
-			              "Role": "silver_catastropure.Unidad_abreviada_jerarquía.unidad_abreviada"
-			            },
-			            "Object": {
-			              "Role": "silver_catastropure.Unidad_abreviada_jerarquía.grupo_investigacion"
-			            }
-			          },
-			          "State": "Generated",
-			          "Weight": 0.99,
-			          "ID": "unidad_abreviadas_have_grupo_investigacions"
-			        },
-			        {
-			          "Attribute": {
-			            "Subject": {
-			              "Role": "silver_catastropure.Unidad_abreviada_jerarquía.grupo_investigacion"
-			            },
-			            "Object": {
-			              "Role": "silver_catastropure.Unidad_abreviada_jerarquía.unidad_abreviada"
-			            }
-			          },
-			          "State": "Generated",
-			          "Weight": 0.99,
-			          "ID": "grupo_investigacions_have_unidad_abreviadas"
-			        },
-			        {
-			          "Preposition": {
-			            "Subject": {
-			              "Role": "silver_catastropure.Unidad_abreviada_jerarquía.grupo_investigacion"
-			            },
-			            "Prepositions": [
-			              {
-			                "in": {
-			                  "State": "Generated"
-			                }
-			              }
-			            ],
-			            "Object": {
-			              "Role": "silver_catastropure.Unidad_abreviada_jerarquía.unidad_abreviada"
-			            }
-			          },
-			          "State": "Generated",
-			          "Weight": 0.99,
-			          "ID": "grupo_investigacions_are_in_unidad_abreviadas"
+			          "ID": "días_are_in_me7"
 			        }
 			      ]
 			    }

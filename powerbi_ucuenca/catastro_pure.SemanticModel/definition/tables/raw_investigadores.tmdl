@@ -74,7 +74,7 @@ table raw_investigadores
 				  #"Tipo de columna cambiado" = Table.TransformColumnTypes(#"Encabezados promovidos", {{"investigador", type text}, {"facultad", type text}, {"departamento", type text}, {"grupos_investigacion", type text}, {"pagina", Int64.Type}, {"url_perfil", type text}, {"fecha_extraccion", type datetime}}, "es"),
 				    #"Valor reemplazado" = Table.ReplaceValue(#"Tipo de columna cambiado",", PhD","",Replacer.ReplaceText,{"investigador"})
 				in
-				  #"Valor reemplazado"
+				    #"Valor reemplazado"
 
 	annotation PBI_NavigationStepName = Navegación
 
