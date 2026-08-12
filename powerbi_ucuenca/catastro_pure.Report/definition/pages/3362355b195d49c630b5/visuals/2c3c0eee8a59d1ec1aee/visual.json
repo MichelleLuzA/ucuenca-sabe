@@ -1,13 +1,13 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.10.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
   "name": "2c3c0eee8a59d1ec1aee",
   "position": {
-    "x": 1222,
-    "y": 24,
-    "z": 5000,
-    "height": 128,
-    "width": 226,
-    "tabOrder": 5000
+    "x": 914,
+    "y": 92,
+    "z": 4000,
+    "height": 132,
+    "width": 196,
+    "tabOrder": 4000
   },
   "visual": {
     "visualType": "cardVisual",
@@ -17,16 +17,21 @@
           "projections": [
             {
               "field": {
-                "Measure": {
+                "Aggregation": {
                   "Expression": {
-                    "SourceRef": {
-                      "Entity": "silver_catastropure"
+                    "Column": {
+                      "Expression": {
+                        "SourceRef": {
+                          "Entity": "catastro_docentes"
+                        }
+                      },
+                      "Property": "EDAD"
                     }
                   },
-                  "Property": "Años_Titularidad"
+                  "Function": 1
                 }
               },
-              "queryRef": "silver_catastropure.Años_Titularidad",
+              "queryRef": "Sum(catastro_docentes.EDAD)",
               "nativeQueryRef": "Años",
               "displayName": "Años"
             }
@@ -37,13 +42,18 @@
         "sort": [
           {
             "field": {
-              "Measure": {
+              "Aggregation": {
                 "Expression": {
-                  "SourceRef": {
-                    "Entity": "silver_catastropure"
+                  "Column": {
+                    "Expression": {
+                      "SourceRef": {
+                        "Entity": "catastro_docentes"
+                      }
+                    },
+                    "Property": "anios_titularidad"
                   }
                 },
-                "Property": "Años_Titularidad"
+                "Function": 1
               }
             },
             "direction": "Descending"
@@ -51,6 +61,24 @@
         ],
         "isDefaultSort": true
       }
+    },
+    "objects": {
+      "label": [
+        {
+          "properties": {
+            "show": {
+              "expr": {
+                "Literal": {
+                  "Value": "true"
+                }
+              }
+            }
+          },
+          "selector": {
+            "id": "default"
+          }
+        }
+      ]
     },
     "visualContainerObjects": {
       "title": [
@@ -66,7 +94,7 @@
             "text": {
               "expr": {
                 "Literal": {
-                  "Value": "'Hasta titularidad'"
+                  "Value": "'Edad promedio'"
                 }
               }
             }
@@ -75,23 +103,5 @@
       ]
     },
     "drillFilterOtherVisuals": true
-  },
-  "filterConfig": {
-    "filters": [
-      {
-        "name": "c26c2bfc4260d6abe25a",
-        "field": {
-          "Measure": {
-            "Expression": {
-              "SourceRef": {
-                "Entity": "silver_catastropure"
-              }
-            },
-            "Property": "Años_Titularidad"
-          }
-        },
-        "type": "Advanced"
-      }
-    ]
   }
 }

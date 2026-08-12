@@ -1,12 +1,12 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.10.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.11.0/schema.json",
   "name": "960b9cdcd7e02798d701",
   "position": {
-    "x": 10,
-    "y": 975,
+    "x": 0,
+    "y": 1505,
     "z": 2000,
-    "height": 25,
-    "width": 940,
+    "height": 45,
+    "width": 1620,
     "tabOrder": 2000
   },
   "visual": {
@@ -19,7 +19,7 @@
               {
                 "textRuns": [
                   {
-                    "value": "Fuente: Pure, Scopus & Elsevier Fingerprint Engine™ │ Vicerrectorado de Investigación                                            Elaborado por: DPE - Michelle Luzuriaga"
+                    "value": "Fuente: Gestión de Talento Humano y Analñitica de datos                                                                                                                                                                                                                                                Elaborado por: DPE - Michelle Luzuriaga"
                   }
                 ]
               }

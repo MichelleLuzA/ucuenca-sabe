@@ -58,6 +58,63 @@ table autoridades_admin
 
 		annotation SummarizationSetBy = Automatic
 
+	column FACULTAD_KEY
+		dataType: string
+		lineageTag: e02121e4-947e-4dc6-bebe-8dd8c1258153
+		summarizeBy: none
+		sourceColumn: FACULTAD_KEY
+
+		annotation SummarizationSetBy = Automatic
+
+	column ANTIGUEDAD =
+			
+			LOOKUPVALUE(
+			    catastro_docentes[Antiguedad],
+			    catastro_docentes[investigador],
+			    autoridades_admin[Key_nombre]
+			)
+		formatString: 0
+		lineageTag: fa9d1ef0-83ea-4e58-bfbe-378550125fad
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'TIPO TITULO' =
+			
+			LOOKUPVALUE(
+			    catastro_docentes[TIPO TÍTULO],
+			    catastro_docentes[Key_investigador],
+			    autoridades_admin[Key_nombre]
+			)
+		lineageTag: d46af8ea-f2b8-4ebb-8525-e83bafe0e6a1
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'NIVEL TITULO' =
+			
+			LOOKUPVALUE(
+			    catastro_docentes[NIVEL TÍTULO],
+			    catastro_docentes[Key_investigador],
+			    autoridades_admin[Key_nombre]
+			)
+		lineageTag: 49cb727c-5576-4313-85dd-a5338c79c463
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'NOMBRE TITULO' =
+			
+			LOOKUPVALUE(
+			    catastro_docentes[NOMBRE TÍTULO],
+			    catastro_docentes[Key_investigador],
+			    autoridades_admin[Key_nombre]
+			)
+		lineageTag: db6ef9c8-b5dc-41ec-83b9-3c9316c8805d
+		summarizeBy: none
+
+		annotation SummarizationSetBy = Automatic
+
 	partition autoridades_admin = m
 		mode: import
 		source =
@@ -97,9 +154,35 @@ table autoridades_admin
 				        "  ", " "
 				    )
 				)),
-				    #"Filas filtradas" = Table.SelectRows(#"Personalizada agregada", each ([Key_nombre] <> null))
+				    #"Filas filtradas4" = Table.SelectRows(#"Personalizada agregada", each true),
+				    #"Filas filtradas" = Table.SelectRows(#"Filas filtradas4", each ([Key_nombre] <> null)),
+				    #"Valor reemplazado" = Table.ReplaceValue(#"Filas filtradas","FACULTAD JURISPRUDENCIA Y CIENCIAS POLITICAS Y SOCIALES","FACULTAD DE JURISPRUDENCIA Y CIENCIAS POLITICAS Y SOCIALES",Replacer.ReplaceText,{"FACULTAD / INSTITUTO"}),
+				    #"Valor reemplazado1" = Table.ReplaceValue(#"Valor reemplazado",null,"FACULTAD DE CIENCIAS DE LA HOSPITALIDAD",Replacer.ReplaceValue,{"FACULTAD / INSTITUTO"}),
+				    #"Filas filtradas1" = Table.SelectRows(#"Valor reemplazado1", each true),
+				    #"Valor reemplazado2" = Table.ReplaceValue(#"Filas filtradas1","FACULTAD JURISPRUDENCIA Y CIENCIAS POLITICAS Y SOCIALES","FACULTAD DE JURISPRUDENCIA Y CIENCIAS POLITICAS Y SOCIALES",Replacer.ReplaceText,{"FACULTAD / INSTITUTO"}),
+				    #"Valor reemplazado3" = Table.ReplaceValue(#"Valor reemplazado2","FACULTAD JURISPRUDENCIA Y CIENCIAS POLITICAS Y SOCIALES","FACULTAD DE JURISPRUDENCIA Y CIENCIAS POLITICAS Y SOCIALES",Replacer.ReplaceText,{"FACULTAD / INSTITUTO"}),
+				    #"Valor reemplazado4" = Table.ReplaceValue(#"Valor reemplazado3","FACULTAD JURISPRUDENCIA Y CIENCIAS POLÍTICAS Y SOCIALES","FACULTAD DE JURISPRUDENCIA Y CIENCIAS POLITICAS Y SOCIALES",Replacer.ReplaceText,{"FACULTAD / INSTITUTO"}),
+				    #"Filas filtradas2" = Table.SelectRows(#"Valor reemplazado4", each true),
+				    #"Valor reemplazado5" = Table.ReplaceValue(#"Filas filtradas2","UNIDAD ACADÉMICA DE FORMACIÓN TÉCNICA Y TECNOLÓGICA SALVADOR ALLENDE","UCUENCA TEC",Replacer.ReplaceText,{"FACULTAD / INSTITUTO"}),
+				    #"Personalizada agregada1" = Table.AddColumn(#"Valor reemplazado5", "FACULTAD_KEY", each Text.Upper(
+				    Text.Trim(
+				        Text.Replace(
+				        Text.Replace(
+				        Text.Replace(
+				        Text.Replace(
+				        Text.Replace(
+				        Text.Replace([#"FACULTAD / INSTITUTO"],
+				        "Á","A"),
+				        "É","E"),
+				        "Í","I"),
+				        "Ó","O"),
+				        "Ú","U"),
+				        "Ñ","N")
+				    )
+				)),
+				    #"Filas filtradas3" = Table.SelectRows(#"Personalizada agregada1", each true)
 				in
-				  #"Filas filtradas"
+				    #"Filas filtradas3"
 
 	annotation PBI_NavigationStepName = Navegación
 

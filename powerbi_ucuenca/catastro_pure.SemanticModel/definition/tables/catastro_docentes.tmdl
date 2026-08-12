@@ -1,6 +1,26 @@
 table catastro_docentes
 	lineageTag: a86453f1-9c90-4d0a-b5e5-147e5b1e2597
 
+	measure 'Total Docentes' = DISTINCTCOUNT('catastro_docentes'[investigador])
+		formatString: 0
+		lineageTag: d8de1b5a-7b03-468d-b995-6b7f2444439f
+
+	measure titulares =
+			
+			CALCULATE(
+			    [Total Docentes],
+			    catastro_docentes[TIPO_PERSONAL] = "TITULAR"
+			)
+		formatString: 0
+		lineageTag: 32354682-ed99-475a-a49d-21b43216db4a
+
+	measure Pct_TITUKARES =
+			
+			DIVIDE([titulares], [Total Docentes], 0)
+		lineageTag: 6c4210ba-5b06-4ea5-ad25-d374549fc21e
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
 	column APELLIDOS
 		dataType: string
 		lineageTag: 4802eaad-51c9-4dd4-aee8-99bdd4e239d0
@@ -311,32 +331,40 @@ table catastro_docentes
 
 		annotation SummarizationSetBy = Automatic
 
-	column Key_nombre
-		dataType: string
-		lineageTag: d16a000c-2636-4ba2-94f7-8145761fe81c
-		summarizeBy: none
-		sourceColumn: Key_nombre
-
-		annotation SummarizationSetBy = Automatic
-
 	column Antiguedad = DATEDIFF([FECHA_INGRESO], TODAY(), YEAR)
 		formatString: 0
 		lineageTag: 7c564294-fc75-4749-9942-9198462b564c
-		summarizeBy: none
+		summarizeBy: sum
 
 		annotation SummarizationSetBy = Automatic
 
 	column anios_titularidad = DATEDIFF([FECHA_TITULARIDAD], TODAY(), YEAR)
 		formatString: 0
 		lineageTag: 9216b68e-d9bc-4196-af39-eb669d671199
-		summarizeBy: none
+		summarizeBy: sum
 
 		annotation SummarizationSetBy = Automatic
 
 	column EDAD = DATEDIFF([FECHA_NACIMIENTO], TODAY(), YEAR)
 		formatString: 0
 		lineageTag: 73419077-6926-4ac0-ad83-446177579f40
+		summarizeBy: sum
+
+		annotation SummarizationSetBy = Automatic
+
+	column Key_investigador
+		dataType: string
+		lineageTag: e988780e-67a1-403a-945f-8affc1012350
 		summarizeBy: none
+		sourceColumn: Key_investigador
+
+		annotation SummarizationSetBy = Automatic
+
+	column facultad_key
+		dataType: string
+		lineageTag: acbc9596-b990-48f0-ae9d-d80ef9be8c7b
+		summarizeBy: none
+		sourceColumn: facultad_key
 
 		annotation SummarizationSetBy = Automatic
 
@@ -379,9 +407,72 @@ table catastro_docentes
 				        ),
 				        "  ", " "
 				    )
+				)),
+				    #"Personalizada agregada2" = Table.AddColumn(#"Personalizada agregada1", "facultad_key", each Text.Upper(
+				    Text.Trim(
+				        Text.Replace(
+				        Text.Replace(
+				        Text.Replace(
+				        Text.Replace(
+				        Text.Replace(
+				        Text.Replace([UNIDAD ACADÉMICA_1],
+				        "Á","A"),
+				        "É","E"),
+				        "Í","I"),
+				        "Ó","O"),
+				        "Ú","U"),
+				        "Ñ","N")
+				    )
+				)),
+				    #"Tipo cambiado" = Table.TransformColumnTypes(#"Personalizada agregada2",{{"AÑO OBTENCIÓN TITULO", type date}, {"FECHA_NACIMIENTO", type date}, {"FECHA_INGRESO", type date}}),
+				    #"Personalizada agregada3" = Table.AddColumn(#"Texto limpio1", "Key_investigador", each Text.Upper(
+				    Text.Replace(
+				        Text.Replace(
+				            Text.Replace(
+				                Text.Replace(
+				                    Text.Replace(
+				                        Text.Replace(
+				                            Text.Replace(
+				                                Text.Replace(
+				                                    Text.Replace(
+				                                        Text.Trim(Text.Clean([investigador])),
+				                                        "Á", "A"
+				                                    ),
+				                                    "É", "E"
+				                                ),
+				                                "Í", "I"
+				                            ),
+				                            "Ó", "O"
+				                        ),
+				                        "Ú", "U"
+				                    ),
+				                    "Ü", "U"
+				                ),
+				                "Ñ", "N"
+				            ),
+				            ",", ""
+				        ),
+				        "  ", " "
+				    )
+				)),
+				    #"Personalizada agregada4" = Table.AddColumn(#"Personalizada agregada3", "facultad_key", each Text.Upper(
+				    Text.Trim(
+				        Text.Replace(
+				        Text.Replace(
+				        Text.Replace(
+				        Text.Replace(
+				        Text.Replace(
+				        Text.Replace([UNIDAD ACADÉMICA_1],
+				        "Á","A"),
+				        "É","E"),
+				        "Í","I"),
+				        "Ó","O"),
+				        "Ú","U"),
+				        "Ñ","N")
+				    )
 				))
 				in
-				    #"Personalizada agregada1"
+				    #"Personalizada agregada4"
 
 	annotation PBI_NavigationStepName = Navegación
 
