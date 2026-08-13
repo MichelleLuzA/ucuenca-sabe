@@ -1,15 +1,22 @@
-# === Escudo de Seguridad Medallion ===
-data/
-data/bronze/
-data/silver/
+# === Escudo de Seguridad y Credenciales (CRÍTICO) ===
+.env
+.env.*
+!.env.example
+*.json
+!config/*.json
 
-# === Bloqueo de archivos de datos por extensión ===
+# === Almacenamiento de Datos (Bloqueo total) ===
+data/
+*.zip
+*.tar.gz
+
+# === Formatos de Archivos Sensibles / Basura ===
 *.xlsx
 *.csv
 *.parquet
 *.sav
 
-# === Archivos del Sistema e IDEs ===
+# === Archivos del Sistema, Cache e IDEs ===
 .ipynb_checkpoints/
 __pycache__/
 *.pyc
