@@ -9,13 +9,12 @@ paths:
   gold: "data/gold"
 
 sources:
-  # Fuentes externas
   externas:
     # (puedes dejar vacío o agregar otras)
   internas:
     # ...
   investigacion:
     # ...
-  # Agregamos enemdu aquí
+  # Agregamos enemdu aquí (dentro de sources, con 2 espacios de indentación)
   enemdu:
     kaggle_dataset: "kmichelle/enemdu-ecuador-microdatos-anuales-personas"
