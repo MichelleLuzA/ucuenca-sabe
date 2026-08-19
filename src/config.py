@@ -1,114 +1,95 @@
-# ==========================================
-# src/config.py - CONFIGURACIÓN CENTRALIZADA
-# ==========================================
 """
-Configuración centralizada del proyecto ucuenca-sabe.
-Todas las rutas y constantes se definen AQUÍ.
-Los notebooks importan desde aquí.
+Módulo de Configuración Central y Gestión Dinámica de Rutas.
+Resuelve rutas absolutas, administra parámetros globales y
+garantiza la creación automática de directorios.
 """
 
 from pathlib import Path
+import yaml
+from dotenv import load_dotenv
 import os
 
-class Config:
-    """Configuración global del proyecto"""
+# Cargar variables de entorno
+load_dotenv()
+# Determinar la raíz del proyecto de forma robusta
+def get_project_root():
+    """Encuentra la raíz del proyecto buscando una carpeta 'config' o '.git'."""
+    current_path = Path(__file__).resolve().parent
     
-    # ==========================================
-    # RUTAS BASE
-    # ==========================================
-    @staticmethod
-    def get_project_root():
-        """Encuentra la raíz del proyecto automáticamente"""
-        current = Path.cwd()
-        while current != current.parent:
-            if (current / 'data').exists() and (current / 'src').exists():
-                return current
-            current = current.parent
-        raise FileNotFoundError("❌ No se encontró la raíz del proyecto")
+    # Buscar hacia arriba hasta encontrar la carpeta 'config' o '.git'
+    for _ in range(5):  # Máximo 5 niveles hacia arriba
+        if (current_path / "config").exists() or (current_path / ".git").exists():
+            return current_path
+        current_path = current_path.parent
     
-    # Raíz del proyecto
-    PROJECT_ROOT = Path(__file__).resolve().parent.parent  # Sube desde src/ a raíz
-    
-    # ==========================================
-    # CAPAS DEL LAKEHOUSE
-    # ==========================================
-    DATA_DIR = PROJECT_ROOT / 'data'
-    BRONZE_DIR = DATA_DIR / 'bronze'
-    BRONZE_INTERNAS = BRONZE_DIR / 'internas'
-    BRONZE_EXTERNAS = BRONZE_DIR / 'externas'
-    BRONZE_INVESTIGACION = BRONZE_DIR / 'investigacion'
-    SILVER_DIR = DATA_DIR / 'silver'
-    GOLD_DIR = DATA_DIR / 'gold'
-    
-    # ==========================================
-    # ARCHIVOS FUENTE (BRONZE)
-    # ==========================================
-    GTH_FILE = BRONZE_INTERNAS / "MATRIZ_ENVIADA_2.xlsx"
-    ANALITICA_FILE = BRONZE_INTERNAS / "docentes_titulo_unesco.xlsx"
-    DSPACE_FILE = BRONZE_INTERNAS / "BIBLIOTECA_DSPACE.xlsx"
-    INVESTIGACION_FILE = BRONZE_INVESTIGACION / "investigadores_ucuenca.xlsx"
-    ORGANIZACIONES_BRONZE = BRONZE_INVESTIGACION / "organizaciones_raw.json"
-    INVESTIGADORES_BRONZE = BRONZE_INVESTIGACION / "investigadores_raw.csv"
-    
-    # ==========================================
-    # ARCHIVOS DE SALIDA SANEADOS (SILVER)
-    # ==========================================
-    CATRASTRO_DOCENTES = SILVER_DIR / "catastro_docentes.parquet"
-    # 2. Las tres vertientes independientes de la Biblioteca
-    TESIS_SILVER = SILVER_DIR / "tesis_silver.parquet"
-    ARTICULOS_SILVER = SILVER_DIR / "articulos_silver.parquet"
-    PUBLICACIONES_SILVER = SILVER_DIR / "publicaciones_silver.parquet"
-    INVESTIGADORES_SILVER = SILVER_DIR / "investigadores.parquet"
-    
-    # ==========================================
-    # ARCHIVOS GOLD
-    # ==========================================
-    PRODUCCION_DSPACE = GOLD_DIR / "experto_produccion_consolidado.parquet"
-    KPI_RECTORADO = GOLD_DIR / "kpi_rectorado.csv"
-    
-    # ==========================================
-    # CONSTANTES DEL NEGOCIO
-    # ==========================================
-    COL_CEDULA_GTH = "CEDULA"
-    COL_CEDULA_ANALITICA = "NUMERO_DOCUMENTO"
-    COL_CEDULA_NORM = "CEDULA_NORM"
-    
-    AÑO_CORTE_TESIS = 2020  # Solo tesis desde este año
-    FUZZY_THRESHOLD = 85    # Umbral para Fuzzy Matching
-    
-    # ==========================================
-    # HOJAS DEL EXCEL DE DSPACE
-    # ==========================================
-    DSPACE_SHEETS = {
-        'tesis': 'tesis',
-        'articulos': 'art_docentes',
-        'publicaciones': 'publicaciones'
-    }
-    
-    # ==========================================
-    # MÉTODOS ÚTILES
-    # ==========================================
-    @classmethod
-    def ensure_directories(cls):
-        """Crea todos los directorios necesarios"""
-        directories = [
-            cls.BRONZE_INTERNAS,
-            cls.BRONZE_EXTERNAS,
-            cls.SILVER_DIR,
-            cls.GOLD_DIR
+    # Fallback: asumir que estamos 2 niveles arriba de src
+    return Path(__file__).resolve().parent.parent
+# Determinar la raíz del proyecto de forma determinista (sube 1 nivel desde src/)
+PROJECT_ROOT = get_project_root()
+CONFIG_PATH = PROJECT_ROOT / "config" / "config.yaml"
+
+def _load_yaml_config(path: Path) -> dict:
+    if not path.exists():
+        # Intentar cargar desde diferentes ubicaciones
+        alt_paths = [
+            Path.cwd() / "config" / "config.yaml",
+            Path.cwd().parent / "config" / "config.yaml",
+            Path(__file__).parent.parent / "config" / "config.yaml"
         ]
-        for directory in directories:
-            directory.mkdir(parents=True, exist_ok=True)
-        print("✅ Directorios del proyecto verificados")
-    
-    @classmethod
-    def verify_bronze_files(cls):
-        """Verifica que los archivos fuente existan"""
-        files = {
-            'GTH': cls.GTH_FILE,
-            'Analítica': cls.ANALITICA_FILE,
-            'DSpace': cls.DSPACE_FILE
-        }
-        for name, filepath in files.items():
-            status = "✅" if filepath.exists() else "❌"
-            print(f"{status} {name}: {filepath}")
+        
+        for alt in alt_paths:
+            if alt.exists():
+                path = alt   
+                break     
+    else:
+        raise FileNotFoundError(f"❌ Archivo de configuración no encontrado en: {path}")
+    with open(path, "r", encoding="utf-8") as f:
+        return yaml.safe_load(f)
+
+CONFIG = _load_yaml_config(CONFIG_PATH)
+
+# Rutas Base
+DATA_DIR = PROJECT_ROOT / CONFIG["paths"]["data_root"]
+BRONZE_DIR = PROJECT_ROOT / CONFIG["paths"]["bronze"]
+SILVER_DIR = PROJECT_ROOT / CONFIG["paths"]["silver"]
+GOLD_DIR = PROJECT_ROOT / CONFIG["paths"]["gold"]
+
+# Subcarpetas Base
+BRONZE_INTERNAS_DIR = BRONZE_DIR / "internas"
+BRONZE_EXTERNAS_DIR = BRONZE_DIR / "externas"
+BRONZE_INVESTIGACION_DIR = BRONZE_DIR / "investigacion"
+
+def ensure_base_directories():
+    """Garantiza la existencia de las capas base del Lakehouse."""
+    base_folders = [
+        DATA_DIR,
+        BRONZE_DIR,
+        BRONZE_INTERNAS_DIR,
+        BRONZE_EXTERNAS_DIR,
+        BRONZE_INVESTIGACION_DIR,
+        SILVER_DIR,
+        GOLD_DIR
+    ]
+    for folder in base_folders:
+        folder.mkdir(parents=True, exist_ok=True)
+
+def get_external_bronze_dir(source_name: str) -> Path:
+    """
+    Construye y crea dinámicamente la carpeta para cualquier fuente externa.
+    Uso: get_external_bronze_dir('enemdu') -> data/bronze/externas/enemdu
+    """
+    target_dir = BRONZE_EXTERNAS_DIR / source_name.lower().strip()
+    target_dir.mkdir(parents=True, exist_ok=True)
+    return target_dir
+
+def get_domain_silver_dir(domain_name: str) -> Path:
+    """
+    Construye y crea dinámicamente la carpeta de la capa Silver para un dominio.
+    Uso: get_domain_silver_dir('enemdu') -> data/silver/enemdu
+    """
+    target_dir = SILVER_DIR / domain_name.lower().strip()
+    target_dir.mkdir(parents=True, exist_ok=True)
+    return target_dir
+
+# Ejecutar verificación básica al importar el módulo
+ensure_base_directories()
