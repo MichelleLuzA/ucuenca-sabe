@@ -2,19 +2,20 @@ project:
   name: "ucuenca-sabe"
   version: "1.0.0"
 
-# Rutas raíz (Relativas a la raíz del proyecto)
 paths:
-  # Capas base
   data_root: "data"
   bronze: "data/bronze"
   silver: "data/silver"
   gold: "data/gold"
-  
-  # Directorios específicos de fuentes de datos (Se crearán automáticamente)
-  enemdu_bronze: "data/bronze/externas/enemdu"
-  internas_bronze: "data/bronze/internas"
-  investigacion_bronze: "data/bronze/investigacion"
-  gold_empleabilidad: "data/gold/eje_empleabilidad"
 
-enemdu:
-  kaggle_dataset: "kmichelle/enemdu-ecuador-microdatos-anuales-personas"
+sources:
+  # Fuentes externas
+  externas:
+    # (puedes dejar vacío o agregar otras)
+  internas:
+    # ...
+  investigacion:
+    # ...
+  # Agregamos enemdu aquí
+  enemdu:
+    kaggle_dataset: "kmichelle/enemdu-ecuador-microdatos-anuales-personas"
