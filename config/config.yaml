@@ -2,6 +2,7 @@ project:
   name: "ucuenca-sabe"
   version: "1.0.0"
 
+# Rutas raíz (Relativas a la raíz del proyecto)
 paths:
   # Capas base
   data_root: "data"
