@@ -36,13 +36,12 @@ def _load_yaml_config(path: Path) -> dict:
             Path.cwd().parent / "config" / "config.yaml",
             Path(__file__).parent.parent / "config" / "config.yaml"
         ]
-        
         for alt in alt_paths:
             if alt.exists():
-                path = alt   
-                break     
-    else:
-        raise FileNotFoundError(f"❌ Archivo de configuración no encontrado en: {path}")
+                path = alt
+                break
+        else:
+            raise FileNotFoundError(f"❌ Archivo de configuración no encontrado en: {path}")
     with open(path, "r", encoding="utf-8") as f:
         return yaml.safe_load(f)
 
