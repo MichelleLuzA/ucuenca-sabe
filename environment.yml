@@ -34,4 +34,4 @@ dependencies:
     - python-Levenshtein==0.25.0  # Asegura que la versión de python-Levenshtein sea compatible con thefuzz
     - playwright==1.40.0  # Para scraping de datos adicionales si es necesario
     - openai==1.0.0  # Para integración con modelos de lenguaje si
-    - kaggle==1.5.16  # Para descargar datasets de Kaggle
+    - kaggle>=2.2.4  # >=2.x requerido: soporta autenticación por KAGGLE_API_TOKEN (access token). La 1.5.16 solo lee KAGGLE_USERNAME/KAGGLE_KEY o kaggle.json y falla con tu .env actual.
