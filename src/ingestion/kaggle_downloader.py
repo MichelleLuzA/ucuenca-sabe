@@ -51,10 +51,7 @@ def download_and_organize_enemdu() -> dict:
                 "Asegúrate de tener KAGGLE_API_TOKEN definido."
             )
         
-        # 4. Configurar el token para la librería de Kaggle
-        # La librería espera que el token esté en una variable de entorno específica
-        os.environ["KAGGLE_API_TOKEN"] = kaggle_api_token        
-        # 5. Autenticar con Kaggle
+        # 4. Autenticar con Kaggle
         try:
             api = KaggleApi()
             api.authenticate()
