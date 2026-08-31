@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Observatorio de Empleabilidad | Universidad de Cuenca</title>
+  
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <!-- Chart.js para los gráficos del MVP -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            ucuenca: {
+              navy: '#0B2341',       /* Azul Profundo UCuenca */
+              dark: '#061324',       /* Fondo oscuro base */
+              red: '#D3272C',        /* Rojo Acento Institucional */
+              accent: '#1E4C82',     /* Azul Secundario */
+              light: '#F8FAFC',      /* Fondo Claro para Dashboard */
+              slate: '#8A9BB0'
+            }
+          },
+          fontFamily: {
+            montserrat: ['Montserrat', 'sans-serif'],
+            inter: ['Inter', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #061324;
+    }
+    .font-heading {
+      font-family: 'Montserrat', sans-serif;
+    }
+    .curve-mask {
+      clip-path: ellipse(95% 100% at 0% 50%);
+    }
+    @media (max-width: 1024px) {
+      .curve-mask {
+        clip-path: none;
+      }
+    }
+    .bg-gradient-ucuenca {
+      background: linear-gradient(135deg, #061324 0%, #0B2341 55%, #153866 100%);
+    }
+    .glass-card {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+    }
+  </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-2 sm:p-4 lg:p-8 text-slate-100">
+
+  <!-- ==================== SECCIÓN 1: LANDING PAGE (OSCURO) ==================== -->
+  <main id="landing-view" class="w-full max-w-[1400px] min-h-[820px] bg-ucuenca-dark rounded-3xl shadow-2xl overflow-hidden relative border border-slate-800 flex flex-col justify-between transition-all duration-500">
+    
+    <header class="w-full px-8 py-4 flex items-center justify-between z-30 bg-ucuenca-dark/80 backdrop-blur border-b border-slate-800/80">
+      <div class="flex items-center gap-4">
+        <div class="flex items-center gap-2">
+          <span class="font-heading font-black text-2xl tracking-wider text-white">UCUENCA</span>
+          <span class="h-6 w-[2px] bg-ucuenca-red inline-block"></span>
+        </div>
+        <div class="text-xs uppercase tracking-widest text-slate-300 font-medium hidden sm:block">
+          Dirección de Proyectos Estratégicos | <span class="text-slate-400">Observatorio Institucional</span>
+        </div>
+      </div>
+      
+      <div class="flex items-center gap-2 bg-slate-900/90 border border-slate-700/60 px-3.5 py-1.5 rounded-full text-xs font-medium">
+        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+        <span class="text-slate-300">Datos Sincronizados: <strong>Agosto 2026</strong></span>
+      </div>
+    </header>
+
+    <div class="relative w-full flex-1 flex flex-col lg:flex-row overflow-hidden">
+      
+      <div class="w-full lg:w-[46%] bg-gradient-ucuenca p-8 lg:p-12 flex flex-col justify-between z-20 curve-mask border-r border-white/5 shadow-2xl">
+        
+        <div class="space-y-4 pt-2">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-ucuenca-red/20 border border-ucuenca-red/40 text-rose-300 text-xs font-semibold uppercase tracking-wider">
+            <i data-lucide="line-chart" class="w-3.5 h-3.5 text-ucuenca-red"></i> Sistema de Inteligencia Laboral
+          </div>
+          
+          <h1 class="font-heading text-3xl lg:text-4xl xl:text-5xl font-extrabold text-white leading-tight">
+            Inteligencia de <br>
+            <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-200 via-white to-blue-300">Empleabilidad</span> <br>
+            <span class="text-ucuenca-red">&</span> Mercado Laboral
+          </h1>
+          
+          <p class="text-slate-300 text-sm lg:text-base font-normal leading-relaxed max-w-md">
+            Decisiones académicas y estratégicas fundamentadas en analítica avanzada, seguimiento alumni y dinámica ocupacional del Ecuador.
+          </p>
+        </div>
+
+        <div class="space-y-3 my-6">
+          <p class="text-xs uppercase font-semibold tracking-wider text-slate-400 mb-2">Selecciona un módulo analítico:</p>
+          
+          <button onclick="openDashboard('alumni')" class="module-btn group w-full flex items-center justify-between p-3.5 rounded-xl glass-card hover:bg-ucuenca-accent/50 transition-all duration-300 text-left border-l-4 border-l-ucuenca-red hover:translate-x-1.5">
+            <div class="flex items-center gap-3.5">
+              <div class="p-2 rounded-lg bg-white/10 group-hover:bg-ucuenca-red text-white transition-colors">
+                <i data-lucide="graduation-cap" class="w-5 h-5"></i>
+              </div>
+              <div>
+                <h4 class="font-heading text-sm font-bold text-white group-hover:text-blue-200">Red Alumni UCuenca</h4>
+                <p class="text-xs text-slate-300">Inserción laboral, trayectorias y salarios de graduados</p>
+              </div>
+            </div>
+            <i data-lucide="chevron-right" class="w-5 h-5 text-slate-400 group-hover:text-white group-hover:translate-x-1 transition-all"></i>
+          </button>
+
+          <button onclick="openDashboard('enemdu')" class="module-btn group w-full flex items-center justify-between p-3.5 rounded-xl glass-card hover:bg-ucuenca-accent/50 transition-all duration-300 text-left border-l-4 border-l-blue-400 hover:translate-x-1.5">
+            <div class="flex items-center gap-3.5">
+              <div class="p-2 rounded-lg bg-white/10 group-hover:bg-blue-500 text-white transition-colors">
+                <i data-lucide="bar-chart-3" class="w-5 h-5"></i>
+              </div>
+              <div>
+                <h4 class="font-heading text-sm font-bold text-white group-hover:text-blue-200">Mercado Laboral ENEMDU</h4>
+                <p class="text-xs text-slate-300">Empleo adecuado, brechas de género y tasas sectoriales</p>
+              </div>
+            </div>
+            <i data-lucide="chevron-right" class="w-5 h-5 text-slate-400 group-hover:text-white group-hover:translate-x-1 transition-all"></i>
+          </button>
+
+          <button onclick="openDashboard('match')" class="module-btn group w-full flex items-center justify-between p-3.5 rounded-xl glass-card hover:bg-ucuenca-accent/50 transition-all duration-300 text-left border-l-4 border-l-emerald-400 hover:translate-x-1.5">
+            <div class="flex items-center gap-3.5">
+              <div class="p-2 rounded-lg bg-white/10 group-hover:bg-emerald-600 text-white transition-colors">
+                <i data-lucide="git-compare" class="w-5 h-5"></i>
+              </div>
+              <div>
+                <h4 class="font-heading text-sm font-bold text-white group-hover:text-blue-200">Ajuste Ocupación - Formación</h4>
+                <p class="text-xs text-slate-300">Sobrecualificación, afinidad de competencias y pertinencia</p>
+              </div>
+            </div>
+            <i data-lucide="chevron-right" class="w-5 h-5 text-slate-400 group-hover:text-white group-hover:translate-x-1 transition-all"></i>
+          </button>
+
+          <button onclick="openDashboard('realtime')" class="module-btn group w-full flex items-center justify-between p-3.5 rounded-xl glass-card hover:bg-ucuenca-accent/50 transition-all duration-300 text-left border-l-4 border-l-amber-400 hover:translate-x-1.5">
+            <div class="flex items-center gap-3.5">
+              <div class="p-2 rounded-lg bg-white/10 group-hover:bg-amber-600 text-white transition-colors">
+                <i data-lucide="zap" class="w-5 h-5"></i>
+              </div>
+              <div>
+                <h4 class="font-heading text-sm font-bold text-white group-hover:text-blue-200">Demanda en Tiempo Real</h4>
+                <p class="text-xs text-slate-300">Vacantes activas, skills emergentes y scraping laboral</p>
+              </div>
+            </div>
+            <i data-lucide="chevron-right" class="w-5 h-5 text-slate-400 group-hover:text-white group-hover:translate-x-1 transition-all"></i>
+          </button>
+        </div>
+
+        <div class="text-[11px] text-slate-400 pt-2 flex items-center justify-between border-t border-white/10">
+          <span>Universidad de Cuenca © 2026</span>
+          <span class="text-slate-400">Rigor Académico & Innovación</span>
+        </div>
+      </div>
+
+      <div class="w-full lg:w-[54%] relative flex flex-col justify-end p-8 lg:p-12 overflow-hidden bg-slate-900">
+        
+        <div class="absolute inset-0 z-0">
+          <img 
+            src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=1600&auto=format&fit=crop" 
+            alt="Graduados e Investigadores UCuenca" 
+            class="w-full h-full object-cover object-center opacity-25 filter grayscale contrast-125"
+          />
+          <div class="absolute inset-0 bg-gradient-to-t from-ucuenca-dark via-ucuenca-dark/80 to-transparent"></div>
+          <div class="absolute inset-0 bg-ucuenca-navy/40 mix-blend-multiply"></div>
+        </div>
+
+        <svg class="absolute bottom-16 right-0 w-full h-48 opacity-30 pointer-events-none z-0" viewBox="0 0 500 150" preserveAspectRatio="none">
+          <path d="M0,100 C150,150 250,20 500,80 L500,150 L0,150 Z" fill="rgba(30, 76, 130, 0.4)"></path>
+          <path d="M0,120 C180,40 320,140 500,40 L500,150 L0,150 Z" fill="rgba(211, 39, 44, 0.2)"></path>
+          <polyline fill="none" stroke="#60A5FA" stroke-width="2" stroke-dasharray="4" points="0,90 120,60 220,110 340,30 500,60" />
+        </svg>
+
+        <div class="relative z-10 glass-card p-5 rounded-2xl border border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4 bg-gradient-to-r from-ucuenca-navy/90 to-slate-900/90">
+          <div class="flex items-center gap-3.5">
+            <div class="w-10 h-10 rounded-xl bg-ucuenca-red flex items-center justify-center text-white shadow-lg shadow-red-900/40">
+              <i data-lucide="layout-dashboard" class="w-5 h-5"></i>
+            </div>
+            <div>
+              <h5 class="text-sm font-bold text-white font-heading">Reporte Ejecutivo Integral</h5>
+              <p class="text-xs text-slate-300">Resumen consolidado para Rectorado y Consejo Universitario</p>
+            </div>
+          </div>
+          <button onclick="openDashboard('general')" class="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-white text-ucuenca-navy hover:bg-slate-100 font-bold text-xs uppercase tracking-wider transition-all duration-200 shadow-md hover:shadow-lg flex items-center justify-center gap-2">
+            <span>Explorar Tablero</span>
+            <i data-lucide="arrow-right" class="w-4 h-4"></i>
+          </button>
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+  <!-- ==================== SECCIÓN 2: VISTA DASHBOARD (GRIS CLARO) ==================== -->
+  <main id="dashboard-view" class="hidden w-full max-w-[1400px] min-h-[820px] bg-slate-100 text-slate-800 rounded-3xl shadow-2xl border border-slate-300 flex flex-col justify-between overflow-hidden">
+    
+    <!-- Header del Dashboard -->
+    <header class="w-full px-6 py-4 flex items-center justify-between z-30 bg-white border-b border-slate-200 shadow-sm">
+      <div class="flex items-center gap-4">
+        <button onclick="showLanding()" class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition-colors border border-slate-300">
+          <i data-lucide="arrow-left" class="w-4 h-4 text-ucuenca-red"></i>
+          <span>Volver al Inicio</span>
+        </button>
+        <span class="h-5 w-[1px] bg-slate-300"></span>
+        <div class="flex items-center gap-2">
+          <span class="font-heading font-black text-lg tracking-wider text-ucuenca-navy">UCUENCA</span>
+          <span class="text-slate-400">|</span>
+          <h2 id="dashboard-title" class="font-heading font-bold text-base text-slate-800">Módulo Analítico</h2>
+        </div>
+      </div>
+
+      <!-- Selector rápido de módulos -->
+      <div class="flex items-center gap-2">
+        <label for="module-selector" class="text-xs text-slate-500 font-medium hidden sm:block">Cambiar Módulo:</label>
+        <select id="module-selector" onchange="switchModule(this.value)" class="bg-slate-50 border border-slate-300 text-slate-700 text-xs font-medium rounded-lg px-3 py-1.5 focus:outline-none focus:border-ucuenca-accent shadow-sm">
+          <option value="alumni">Red Alumni UCuenca</option>
+          <option value="enemdu">Mercado Laboral ENEMDU</option>
+          <option value="match">Ajuste Ocupación - Formación</option>
+          <option value="realtime">Demanda en Tiempo Real</option>
+          <option value="general">Reporte Ejecutivo</option>
+        </select>
+      </div>
+    </header>
+
+    <!-- Contenido Principal del Dashboard -->
+    <div class="p-6 lg:p-8 space-y-6 overflow-y-auto max-h-[740px] bg-slate-100">
+      
+      <!-- Barra de Filtros -->
+      <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-wrap items-center justify-between gap-4">
+        <div class="flex items-center gap-2 text-xs text-slate-600 font-semibold uppercase tracking-wider">
+          <i data-lucide="filter" class="w-4 h-4 text-ucuenca-red"></i> Filtros de Consulta:
+        </div>
+        <div class="flex flex-wrap items-center gap-3">
+          <select class="bg-slate-50 border border-slate-300 text-slate-700 text-xs font-medium rounded-lg px-3 py-1.5 focus:outline-none focus:border-ucuenca-accent">
+            <option>Todas las Facultades</option>
+            <option>Ingeniería</option>
+            <option>Jurisprudencia</option>
+            <option>Ciencias Médicas</option>
+            <option>Filosofía</option>
+          </select>
+          <select class="bg-slate-50 border border-slate-300 text-slate-700 text-xs font-medium rounded-lg px-3 py-1.5 focus:outline-none focus:border-ucuenca-accent">
+            <option>Cohorte: 2022 - 2025</option>
+            <option>Cohorte: 2018 - 2021</option>
+          </select>
+          <button class="bg-ucuenca-navy hover:bg-slate-800 text-white text-xs font-semibold px-4 py-1.5 rounded-lg transition-colors flex items-center gap-1.5 shadow-sm">
+            <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i> Actualizar
+          </button>
+        </div>
+      </div>
+
+      <!-- Tarjetas KPI -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+          <p class="text-xs text-slate-500 font-medium">Indicador Clave 1</p>
+          <h3 id="kpi-1" class="text-2xl font-black text-ucuenca-navy font-heading mt-1">84.2%</h3>
+          <span class="text-[11px] text-emerald-600 font-semibold flex items-center gap-1 mt-1">
+            <i data-lucide="trending-up" class="w-3 h-3"></i> +3.1% vs período anterior
+          </span>
+        </div>
+        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+          <p class="text-xs text-slate-500 font-medium">Indicador Clave 2</p>
+          <h3 id="kpi-2" class="text-2xl font-black text-ucuenca-navy font-heading mt-1">$ 920,00</h3>
+          <span class="text-[11px] text-slate-500 flex items-center gap-1 mt-1">Ingreso promedio sectorial</span>
+        </div>
+        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+          <p class="text-xs text-slate-500 font-medium">Indicador Clave 3</p>
+          <h3 id="kpi-3" class="text-2xl font-black text-ucuenca-navy font-heading mt-1">78.5%</h3>
+          <span class="text-[11px] text-ucuenca-accent font-semibold flex items-center gap-1 mt-1">Afinidad con título</span>
+        </div>
+        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+          <p class="text-xs text-slate-500 font-medium">Muestra Registrada</p>
+          <h3 id="kpi-4" class="text-2xl font-black text-ucuenca-navy font-heading mt-1">12,450</h3>
+          <span class="text-[11px] text-slate-500 flex items-center gap-1 mt-1">Registros activos</span>
+        </div>
+      </div>
+
+      <!-- Gráficos Principales -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <!-- Contenedor del Gráfico Principal -->
+        <div class="lg:col-span-2 bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between">
+          <div class="flex items-center justify-between mb-4">
+            <h4 class="text-sm font-bold text-slate-800 font-heading" id="chart-main-title">Evolución Ocupacional</h4>
+            <span class="text-xs text-slate-400 font-medium">Visualización interactiva</span>
+          </div>
+          <div class="w-full h-[280px]">
+            <canvas id="mainChart"></canvas>
+          </div>
+        </div>
+
+        <!-- Contenedor de Distribución -->
+        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm flex flex-col justify-between">
+          <div class="flex items-center justify-between mb-4">
+            <h4 class="text-sm font-bold text-slate-800 font-heading" id="chart-secondary-title">Distribución Sectorial</h4>
+          </div>
+          <div class="w-full h-[280px] flex items-center justify-center">
+            <canvas id="secondaryChart"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tabla de Datos Detallada -->
+      <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden p-4">
+        <h4 class="text-sm font-bold text-slate-800 font-heading mb-3">Detalle por Programa de Estudio</h4>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left text-xs text-slate-600">
+            <thead class="bg-slate-100 text-slate-700 uppercase font-semibold border-b border-slate-200">
+              <tr>
+                <th class="p-3">Carrera / Programa</th>
+                <th class="p-3">Graduados</th>
+                <th class="p-3">Tasa Ocupación</th>
+                <th class="p-3">Afinidad Laboral</th>
+                <th class="p-3">Estado</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-slate-100">
+              <tr class="hover:bg-slate-50 transition-colors">
+                <td class="p-3 font-semibold text-slate-800">Ingeniería Computación</td>
+                <td class="p-3">340</td>
+                <td class="p-3 text-emerald-600 font-bold">92.4%</td>
+                <td class="p-3">89.0%</td>
+                <td class="p-3"><span class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-700 font-medium border border-emerald-200">Alta Demanda</span></td>
+              </tr>
+              <tr class="hover:bg-slate-50 transition-colors">
+                <td class="p-3 font-semibold text-slate-800">Administración de Empresas</td>
+                <td class="p-3">512</td>
+                <td class="p-3 text-emerald-600 font-bold">85.1%</td>
+                <td class="p-3">76.4%</td>
+                <td class="p-3"><span class="px-2 py-0.5 rounded bg-blue-100 text-blue-700 font-medium border border-blue-200">Estable</span></td>
+              </tr>
+              <tr class="hover:bg-slate-50 transition-colors">
+                <td class="p-3 font-semibold text-slate-800">Medicina General</td>
+                <td class="p-3">280</td>
+                <td class="p-3 text-emerald-600 font-bold">96.8%</td>
+                <td class="p-3">94.2%</td>
+                <td class="p-3"><span class="px-2 py-0.5 rounded bg-emerald-100 text-emerald-700 font-medium border border-emerald-200">Alta Demanda</span></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <script>
+    lucide.createIcons();
+
+    let chartInstanceMain = null;
+    let chartInstanceSecondary = null;
+
+    // Datos dinámicos
+    const moduleData = {
+      alumni: {
+        title: "Red Alumni UCuenca - Inserción Laboral",
+        kpi1: "86.4%", kpi2: "$ 980,00", kpi3: "81.2%", kpi4: "14,200",
+        mainTitle: "Trayectoria de Empleabilidad (Cohortes 2020-2025)",
+        secondaryTitle: "Tipo de Empleador",
+        labels: ['2020', '2021', '2022', '2023', '2024', '2025'],
+        dataset1: [75, 78, 80, 83, 85, 86.4],
+        secLabels: ['Privado', 'Público', 'Emprendimiento', 'ONGs'],
+        secData: [55, 30, 10, 5]
+      },
+      enemdu: {
+        title: "Mercado Laboral ENEMDU - Contexto Nacional",
+        kpi1: "35.2%", kpi2: "$ 450,00", kpi3: "52.0%", kpi4: "45,800",
+        mainTitle: "Tasa de Empleo Adecuado vs Informalidad",
+        secondaryTitle: "Distribución por Sector Económico",
+        labels: ['Trim I', 'Trim II', 'Trim III', 'Trim IV'],
+        dataset1: [32, 33.5, 34.1, 35.2],
+        secLabels: ['Servicios', 'Comercio', 'Agricultura', 'Industria'],
+        secData: [40, 25, 20, 15]
+      },
+      match: {
+        title: "Ajuste Ocupación - Formación Académica",
+        kpi1: "78.2%", kpi2: "14.5%", kpi3: "85.0%", kpi4: "9,600",
+        mainTitle: "Índice de Afinidad de Competencias por Área",
+        secondaryTitle: "Nivel de Sobrecualificación",
+        labels: ['Ingeniería', 'Salud', 'Sociales', 'Administración', 'Artes'],
+        dataset1: [88, 94, 72, 79, 65],
+        secLabels: ['Ajuste Óptimo', 'Sobrecualificado', 'Subcualificado'],
+        secData: [78, 15, 7]
+      },
+      realtime: {
+        title: "Demanda Laboral en Tiempo Real (Scraping & Vacantes)",
+        kpi1: "1,420", kpi2: "Soft Skills", kpi3: "Python / Data", kpi4: "345",
+        mainTitle: "Volumen de Vacantes Publicadas (Últimos 30 días)",
+        secondaryTitle: "Modalidad de Trabajo Demandada",
+        labels: ['Sem 1', 'Sem 2', 'Sem 3', 'Sem 4'],
+        dataset1: [280, 340, 410, 390],
+        secLabels: ['Presencial', 'Híbrido', 'Remoto'],
+        secData: [50, 35, 15]
+      },
+      general: {
+        title: "Reporte Ejecutivo Consolidado - Consejo Universitario",
+        kpi1: "84.6%", kpi2: "$ 890,00", kpi3: "78.2%", kpi4: "60,000+",
+        mainTitle: "Resumen Consolidado de Desempeño Institucional",
+        secondaryTitle: "Distribución Global de Alumni",
+        labels: ['2021', '2022', '2023', '2024', '2025'],
+        dataset1: [78, 80, 81, 83, 84.6],
+        secLabels: ['Empleados', 'Estudios Posgrado', 'En Búsqueda'],
+        secData: [84, 10, 6]
+      }
+    };
+
+    function openDashboard(moduleKey) {
+      document.getElementById('landing-view').classList.add('hidden');
+      document.getElementById('dashboard-view').classList.remove('hidden');
+      document.getElementById('module-selector').value = moduleKey;
+      renderDashboardContent(moduleKey);
+    }
+
+    function showLanding() {
+      document.getElementById('dashboard-view').classList.add('hidden');
+      document.getElementById('landing-view').classList.remove('hidden');
+    }
+
+    function switchModule(moduleKey) {
+      renderDashboardContent(moduleKey);
+    }
+
+    function renderDashboardContent(key) {
+      const data = moduleData[key] || moduleData.general;
+
+      document.getElementById('dashboard-title').innerText = data.title;
+      document.getElementById('kpi-1').innerText = data.kpi1;
+      document.getElementById('kpi-2').innerText = data.kpi2;
+      document.getElementById('kpi-3').innerText = data.kpi3;
+      document.getElementById('kpi-4').innerText = data.kpi4;
+      document.getElementById('chart-main-title').innerText = data.mainTitle;
+      document.getElementById('chart-secondary-title').innerText = data.secondaryTitle;
+
+      if (chartInstanceMain) chartInstanceMain.destroy();
+      if (chartInstanceSecondary) chartInstanceSecondary.destroy();
+
+      // Gráfico Principal (Estilo ajustado para fondo claro)
+      const ctxMain = document.getElementById('mainChart').getContext('2d');
+      chartInstanceMain = new Chart(ctxMain, {
+        type: 'line',
+        data: {
+          labels: data.labels,
+          datasets: [{
+            label: 'Métrica Principal (%)',
+            data: data.dataset1,
+            borderColor: '#D3272C',
+            backgroundColor: 'rgba(211, 39, 44, 0.08)',
+            fill: true,
+            tension: 0.3,
+            borderWidth: 3,
+            pointBackgroundColor: '#0B2341'
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { display: false } },
+          scales: {
+            x: { ticks: { color: '#64748B' }, grid: { color: '#E2E8F0' } },
+            y: { ticks: { color: '#64748B' }, grid: { color: '#E2E8F0' } }
+          }
+        }
+      });
+
+      // Gráfico Secundario (Estilo ajustado para fondo claro)
+      const ctxSec = document.getElementById('secondaryChart').getContext('2d');
+      chartInstanceSecondary = new Chart(ctxSec, {
+        type: 'doughnut',
+        data: {
+          labels: data.secLabels,
+          datasets: [{
+            data: data.secData,
+            backgroundColor: ['#0B2341', '#D3272C', '#10B981', '#F59E0B']
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          plugins: { legend: { labels: { color: '#334155', font: { size: 11 } } } }
+        }
+      });
+    }
+  </script>
+</body>
+</html>
