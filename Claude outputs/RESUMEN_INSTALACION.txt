@@ -1,0 +1,193 @@
+════════════════════════════════════════════════════════════════════════════════
+🚀 RESUMEN INSTALACIÓN — DASHBOARD EMPLEABILIDAD ENEMDU + SOBRECALIFICACIÓN
+════════════════════════════════════════════════════════════════════════════════
+
+📍 TUS ARCHIVOS LISTOS (3 archivos)
+════════════════════════════════════════════════════════════════════════════════
+
+1️⃣  SCRIPT PYTHON (Transformación datos)
+    Archivo: generate_dashboard_data.py
+    Destino: C:\Users\michu\mis-proyectos\ucuenca-sabe\visualizacion\scripts\
+    Tamaño:  ~15 KB
+    Función: Lee Gold Parquet → Genera data.json
+
+2️⃣  HTML ACTUALIZADO (Frontend del dashboard)
+    Archivo: MVP_dashboard_empleabilidad_UPDATED.html
+    Destino: C:\Users\michu\mis-proyectos\ucuenca-sabe\visualizacion\
+             (Renombrar a: MVP_dashboard_empleabilidad.html)
+    Tamaño:  ~26 KB
+    Función: Carga data.json → Visualiza 2 módulos
+
+3️⃣  DOCUMENTACIÓN (2 archivos)
+    - INSTALACION_DASHBOARD.md     → Guía paso a paso (TE INDICA QUÉ COPIAR DÓNDE)
+    - DASHBOARD_ARCHITECTURE.md    → Arquitectura técnica (para referencia futura)
+
+════════════════════════════════════════════════════════════════════════════════
+🗂️  ESTRUCTURA FINAL (DESPUÉS DE INSTALAR)
+════════════════════════════════════════════════════════════════════════════════
+
+ucuenca-sabe/
+├── data/
+│   └── gold/enemdu/                     ← EXISTE (del notebook)
+│       ├── kpi_anual.parquet
+│       ├── empleabilidad_provincia.parquet
+│       ├── empleabilidad_sexo_edad.parquet
+│       ├── graduados_rama_actividad.parquet
+│       ├── sobrecalificacion_ocupacion.parquet
+│       └── ... (otras tablas)
+│
+├── visualizacion/
+│   ├── scripts/                         ← CREAR (si no existe)
+│   │   └── generate_dashboard_data.py   ← COPIAR ARCHIVO 1️⃣
+│   │
+│   ├── static/                          ← CREAR (si no existe)
+│   │   └── data.json                    ← GENERADO POR EL SCRIPT (no crear manual)
+│   │
+│   └── MVP_dashboard_empleabilidad.html ← COPIAR ARCHIVO 2️⃣ (actualizado)
+│
+└── docs/
+    ├── INSTALACION_DASHBOARD.md         ← COPIAR ARCHIVO 3️⃣A (referencia)
+    └── DASHBOARD_ARCHITECTURE.md        ← COPIAR ARCHIVO 3️⃣B (técnico)
+
+════════════════════════════════════════════════════════════════════════════════
+⚡ PASOS RÁPIDOS DE INSTALACIÓN
+════════════════════════════════════════════════════════════════════════════════
+
+1. Crea carpetas (si no existen):
+   mkdir C:\Users\michu\mis-proyectos\ucuenca-sabe\visualizacion\scripts
+   mkdir C:\Users\michu\mis-proyectos\ucuenca-sabe\visualizacion\static
+
+2. Copia generate_dashboard_data.py a:
+   C:\Users\michu\mis-proyectos\ucuenca-sabe\visualizacion\scripts\
+
+3. Ejecuta desde línea de comandos:
+   cd C:\Users\michu\mis-proyectos\ucuenca-sabe\visualizacion\scripts\
+   python generate_dashboard_data.py
+
+4. VERIFICA que se creó:
+   C:\Users\michu\mis-proyectos\ucuenca-sabe\visualizacion\static\data.json
+
+5. Reemplaza el HTML:
+   - Renombra el viejo como: MVP_dashboard_empleabilidad.backup.html
+   - Copia MVP_dashboard_empleabilidad_UPDATED.html como:
+     MVP_dashboard_empleabilidad.html
+
+6. Abre el HTML en navegador:
+   C:\Users\michu\mis-proyectos\ucuenca-sabe\visualizacion\MVP_dashboard_empleabilidad.html
+
+════════════════════════════════════════════════════════════════════════════════
+📊 QUÉ VERÁS EN EL DASHBOARD
+════════════════════════════════════════════════════════════════════════════════
+
+LANDING PAGE (Oscuro):
+  ├── Logo UCuenca
+  ├── Botón: "Mercado Laboral ENEMDU"
+  └── Botón: "Sobrecalificación"
+
+MÓDULO 1: MERCADO LABORAL ENEMDU
+  ├── KPIs: Desempleo, Empleo Adecuado, Ingreso, Muestra
+  ├── Gráfico Línea: Evolución 2021-2025
+  ├── Gráfico Barras: Top provincias por desempleo
+  ├── Tabla: Detalle por provincia
+  └── Filtros: Año, Provincia, Actualizar
+
+MÓDULO 2: SOBRECALIFICACIÓN
+  ├── KPI: Tasa sobrecalificación (% graduados en ocupaciones no acordes)
+  ├── Gráfico Línea: Evolución tasa 2021-2025
+  ├── Gráfico Barras: Top ocupaciones (CIUO-08) con mismatch
+  └── Tabla: Detalle por ocupación
+
+════════════════════════════════════════════════════════════════════════════════
+✅ VALIDACIÓN
+════════════════════════════════════════════════════════════════════════════════
+
+Después de instalar, verifica:
+
+[ ] ¿Aparece la landing page?
+    → Script ejecutado correctamente
+
+[ ] ¿Se cargan los datos (ves números en los KPIs)?
+    → data.json fue generado correctamente
+
+[ ] ¿Abres Developer Tools (F12) y ves errores?
+    → Revisa que static/data.json exista en la ruta relativa
+
+[ ] ¿Los gráficos se dibujan?
+    → Plotly.js cargó correctamente desde CDN
+
+════════════════════════════════════════════════════════════════════════════════
+🔄 ACTUALIZAR DATOS EN EL FUTURO
+════════════════════════════════════════════════════════════════════════════════
+
+Cada mes o cuando haya nuevos datos ENEMDU:
+
+1. Ejecuta el notebook: 01_download_kaggle_enemdu.ipynb
+   → Regenera data/gold/enemdu/*.parquet
+
+2. Corre el script:
+   python C:\Users\michu\mis-proyectos\ucuenca-sabe\visualizacion\scripts\generate_dashboard_data.py
+
+3. Abre el HTML en navegador:
+   → ¡Verá datos frescos automáticamente!
+
+════════════════════════════════════════════════════════════════════════════════
+📖 DOCUMENTACIÓN
+════════════════════════════════════════════════════════════════════════════════
+
+Lee INSTALACION_DASHBOARD.md para:
+  • Pasos paso a paso detallados
+  • Troubleshooting (errores comunes)
+  • Cómo personalizar colores
+  • Cómo agregar nuevos módulos
+
+Lee DASHBOARD_ARCHITECTURE.md para:
+  • Flujo de datos completo
+  • Estructura del JSON
+  • Componentes frontend
+  • Roadmap futuro
+
+════════════════════════════════════════════════════════════════════════════════
+💡 PUNTOS CLAVE
+════════════════════════════════════════════════════════════════════════════════
+
+✅ SIN POWERBI
+   → Es código versionable, auditible, reproducible
+
+✅ SIN PERDER DATOS
+   → Todas las filas y columnas de Gold están en el JSON
+
+✅ FILTROS DINÁMICOS
+   → Lee automáticamente años/provincias de los datos
+
+✅ SOSTENIBLE
+   → Documentado, escalable, fácil de mantener
+
+✅ REPRODUCIBLE
+   → Mismo código + mismo input = mismo output
+
+════════════════════════════════════════════════════════════════════════════════
+📞 NEED HELP?
+════════════════════════════════════════════════════════════════════════════════
+
+Error: "ModuleNotFoundError: No module named 'pyarrow'"
+→ pip install pyarrow
+
+Error: "FileNotFoundError: .../data.json"
+→ Verifica que generate_dashboard_data.py se ejecutó correctamente
+
+Error: "CORS" en consola
+→ Abre el HTML localmente (doble click), no en servidor web
+
+Gráficos no aparecen
+→ F12 Console → busca errores → verifica CDN de Plotly
+
+════════════════════════════════════════════════════════════════════════════════
+¡LISTO PARA PRODUCCIÓN! 🚀
+════════════════════════════════════════════════════════════════════════════════
+
+Versión: 1.0
+Fecha: 2026-09-04
+Estado: Producción
+Responsable: UCuenca-SABE
+
+Próximo: Agregar módulos adicionales (Alumni, Demanda Real-time, etc.)

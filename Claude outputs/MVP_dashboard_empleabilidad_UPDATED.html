@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Observatorio de Empleabilidad | Universidad de Cuenca</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            ucuenca: {
+              navy: '#0B2341',
+              dark: '#061324',
+              red: '#D3272C',
+              accent: '#1E4C82',
+              light: '#F8FAFC',
+              slate: '#8A9BB0'
+            }
+          },
+          fontFamily: {
+            montserrat: ['Montserrat', 'sans-serif'],
+            inter: ['Inter', 'sans-serif']
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    body { font-family: 'Inter', sans-serif; background-color: #061324; }
+    .font-heading { font-family: 'Montserrat', sans-serif; }
+    .curve-mask { clip-path: ellipse(95% 100% at 0% 50%); }
+    @media (max-width: 1024px) { .curve-mask { clip-path: none; } }
+    .bg-gradient-ucuenca { background: linear-gradient(135deg, #061324 0%, #0B2341 55%, #153866 100%); }
+    .glass-card { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(12px); border: 1px solid rgba(255, 255, 255, 0.12); }
+  </style>
+</head>
+<body class="min-h-screen flex items-center justify-center p-2 sm:p-4 lg:p-8 text-slate-100">
+
+  <main id="landing-view" class="w-full max-w-[1400px] min-h-[820px] bg-ucuenca-dark rounded-3xl shadow-2xl overflow-hidden relative border border-slate-800 flex flex-col justify-between transition-all duration-500">
+
+    <header class="w-full px-8 py-4 flex items-center justify-between z-30 bg-ucuenca-dark/80 backdrop-blur border-b border-slate-800/80">
+      <div class="flex items-center gap-4">
+        <div class="flex items-center gap-2">
+          <span class="font-heading font-black text-2xl tracking-wider text-white">UCUENCA</span>
+          <span class="h-6 w-[2px] bg-ucuenca-red inline-block"></span>
+        </div>
+        <div class="text-xs uppercase tracking-widest text-slate-300 font-medium hidden sm:block">
+          Dirección de Proyectos Estratégicos | <span class="text-slate-400">Observatorio Institucional</span>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2 bg-slate-900/90 border border-slate-700/60 px-3.5 py-1.5 rounded-full text-xs font-medium">
+        <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+        <span class="text-slate-300">Datos: <strong id="sync-date">Cargando...</strong></span>
+      </div>
+    </header>
+
+    <div class="relative w-full flex-1 flex flex-col lg:flex-row overflow-hidden">
+
+      <div class="w-full lg:w-[46%] bg-gradient-ucuenca p-8 lg:p-12 flex flex-col justify-between z-20 curve-mask border-r border-white/5 shadow-2xl">
+
+        <div class="space-y-4 pt-2">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-md bg-ucuenca-red/20 border border-ucuenca-red/40 text-rose-300 text-xs font-semibold uppercase tracking-wider">
+            <i data-lucide="line-chart" class="w-3.5 h-3.5 text-ucuenca-red"></i> Sistema de Inteligencia Laboral
+          </div>
+
+          <h1 class="font-heading text-3xl lg:text-4xl xl:text-5xl font-extrabold text-white leading-tight">
+            Inteligencia de <br>
+            <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-200 via-white to-blue-300">Empleabilidad</span> <br>
+            <span class="text-ucuenca-red">&</span> Mercado Laboral
+          </h1>
+
+          <p class="text-slate-300 text-sm lg:text-base font-normal leading-relaxed max-w-md">
+            Datos ENEMDU 2021-2025: empleo, sobrecalificación, brechas sectoriales y territoriales.
+          </p>
+        </div>
+
+        <div class="space-y-3 my-6">
+          <p class="text-xs uppercase font-semibold tracking-wider text-slate-400 mb-2">Selecciona un módulo analítico:</p>
+
+          <button onclick="openDashboard('enemdu')" class="module-btn group w-full flex items-center justify-between p-3.5 rounded-xl glass-card hover:bg-ucuenca-accent/50 transition-all duration-300 text-left border-l-4 border-l-blue-400 hover:translate-x-1.5">
+            <div class="flex items-center gap-3.5">
+              <div class="p-2 rounded-lg bg-white/10 group-hover:bg-blue-500 text-white transition-colors">
+                <i data-lucide="bar-chart-3" class="w-5 h-5"></i>
+              </div>
+              <div>
+                <h4 class="font-heading text-sm font-bold text-white group-hover:text-blue-200">Mercado Laboral ENEMDU</h4>
+                <p class="text-xs text-slate-300">Empleo adecuado, desempleo, brechas sectoriales</p>
+              </div>
+            </div>
+            <i data-lucide="chevron-right" class="w-5 h-5 text-slate-400 group-hover:text-white group-hover:translate-x-1 transition-all"></i>
+          </button>
+
+          <button onclick="openDashboard('sobrecalificacion')" class="module-btn group w-full flex items-center justify-between p-3.5 rounded-xl glass-card hover:bg-ucuenca-accent/50 transition-all duration-300 text-left border-l-4 border-l-emerald-400 hover:translate-x-1.5">
+            <div class="flex items-center gap-3.5">
+              <div class="p-2 rounded-lg bg-white/10 group-hover:bg-emerald-600 text-white transition-colors">
+                <i data-lucide="alert-triangle" class="w-5 h-5"></i>
+              </div>
+              <div>
+                <h4 class="font-heading text-sm font-bold text-white group-hover:text-blue-200">Sobrecalificación</h4>
+                <p class="text-xs text-slate-300">Mismatch educativo, ocupaciones no acordes</p>
+              </div>
+            </div>
+            <i data-lucide="chevron-right" class="w-5 h-5 text-slate-400 group-hover:text-white group-hover:translate-x-1 transition-all"></i>
+          </button>
+        </div>
+
+        <div class="text-[11px] text-slate-400 pt-2 flex items-center justify-between border-t border-white/10">
+          <span>Universidad de Cuenca © 2026</span>
+          <span class="text-slate-400">Datos actualizados desde Gold</span>
+        </div>
+      </div>
+
+      <div class="w-full lg:w-[54%] relative flex flex-col justify-end p-8 lg:p-12 overflow-hidden bg-slate-900">
+
+        <div class="absolute inset-0 z-0">
+          <img
+            src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?q=80&w=1600&auto=format&fit=crop"
+            alt="Graduados UCuenca"
+            class="w-full h-full object-cover object-center opacity-25 filter grayscale contrast-125"
+          />
+          <div class="absolute inset-0 bg-gradient-to-t from-ucuenca-dark via-ucuenca-dark/80 to-transparent"></div>
+          <div class="absolute inset-0 bg-ucuenca-navy/40 mix-blend-multiply"></div>
+        </div>
+
+        <div class="relative z-10 glass-card p-5 rounded-2xl border border-white/10 flex flex-col sm:flex-row items-center justify-between gap-4 bg-gradient-to-r from-ucuenca-navy/90 to-slate-900/90">
+          <div class="flex items-center gap-3.5">
+            <div class="w-10 h-10 rounded-xl bg-ucuenca-red flex items-center justify-center text-white shadow-lg shadow-red-900/40">
+              <i data-lucide="database" class="w-5 h-5"></i>
+            </div>
+            <div>
+              <h5 class="text-sm font-bold text-white font-heading">Datos en Vivo desde Gold</h5>
+              <p class="text-xs text-slate-300">Actualización automática desde ENEMDU INEC</p>
+            </div>
+          </div>
+          <button onclick="openDashboard('enemdu')" class="w-full sm:w-auto px-5 py-2.5 rounded-xl bg-white text-ucuenca-navy hover:bg-slate-100 font-bold text-xs uppercase tracking-wider transition-all duration-200 shadow-md hover:shadow-lg flex items-center justify-center gap-2">
+            <span>Explorar Tablero</span>
+            <i data-lucide="arrow-right" class="w-4 h-4"></i>
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- DASHBOARD VIEW -->
+  <main id="dashboard-view" class="hidden w-full max-w-[1400px] min-h-[820px] bg-slate-100 text-slate-800 rounded-3xl shadow-2xl border border-slate-300 flex flex-col justify-between overflow-hidden">
+
+    <header class="w-full px-6 py-4 flex items-center justify-between z-30 bg-white border-b border-slate-200 shadow-sm">
+      <div class="flex items-center gap-4">
+        <button onclick="showLanding()" class="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold transition-colors border border-slate-300">
+          <i data-lucide="arrow-left" class="w-4 h-4 text-ucuenca-red"></i>
+          <span>Volver</span>
+        </button>
+        <span class="h-5 w-[1px] bg-slate-300"></span>
+        <div class="flex items-center gap-2">
+          <span class="font-heading font-black text-lg tracking-wider text-ucuenca-navy">UCUENCA</span>
+          <span class="text-slate-400">|</span>
+          <h2 id="dashboard-title" class="font-heading font-bold text-base text-slate-800">Cargando módulo...</h2>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2">
+        <label for="module-selector" class="text-xs text-slate-500 font-medium hidden sm:block">Cambiar Módulo:</label>
+        <select id="module-selector" onchange="switchModule(this.value)" class="bg-slate-50 border border-slate-300 text-slate-700 text-xs font-medium rounded-lg px-3 py-1.5 focus:outline-none focus:border-ucuenca-accent shadow-sm">
+          <option value="enemdu">Mercado Laboral ENEMDU</option>
+          <option value="sobrecalificacion">Sobrecalificación</option>
+        </select>
+      </div>
+    </header>
+
+    <div class="p-6 lg:p-8 space-y-6 overflow-y-auto max-h-[740px] bg-slate-100">
+
+      <!-- Filtros -->
+      <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex flex-wrap items-center justify-between gap-4">
+        <div class="flex items-center gap-2 text-xs text-slate-600 font-semibold uppercase tracking-wider">
+          <i data-lucide="filter" class="w-4 h-4 text-ucuenca-red"></i> Filtros:
+        </div>
+        <div class="flex flex-wrap items-center gap-3">
+          <select id="year-filter" onchange="applyFilters()" class="bg-slate-50 border border-slate-300 text-slate-700 text-xs font-medium rounded-lg px-3 py-1.5 focus:outline-none focus:border-ucuenca-accent">
+            <option value="">Todos los años</option>
+          </select>
+          <select id="province-filter" onchange="applyFilters()" class="bg-slate-50 border border-slate-300 text-slate-700 text-xs font-medium rounded-lg px-3 py-1.5 focus:outline-none focus:border-ucuenca-accent">
+            <option value="">Todas las provincias</option>
+          </select>
+          <button onclick="reloadData()" class="bg-ucuenca-navy hover:bg-slate-800 text-white text-xs font-semibold px-4 py-1.5 rounded-lg transition-colors flex items-center gap-1.5 shadow-sm">
+            <i data-lucide="refresh-cw" class="w-3.5 h-3.5"></i> Actualizar
+          </button>
+        </div>
+      </div>
+
+      <!-- KPIs -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+          <p class="text-xs text-slate-500 font-medium" id="kpi1-label">KPI 1</p>
+          <h3 id="kpi-1" class="text-2xl font-black text-ucuenca-navy font-heading mt-1">—</h3>
+          <span class="text-[11px] text-slate-400 flex items-center gap-1 mt-1" id="kpi1-note"></span>
+        </div>
+        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+          <p class="text-xs text-slate-500 font-medium" id="kpi2-label">KPI 2</p>
+          <h3 id="kpi-2" class="text-2xl font-black text-ucuenca-navy font-heading mt-1">—</h3>
+          <span class="text-[11px] text-slate-400 flex items-center gap-1 mt-1" id="kpi2-note"></span>
+        </div>
+        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+          <p class="text-xs text-slate-500 font-medium" id="kpi3-label">KPI 3</p>
+          <h3 id="kpi-3" class="text-2xl font-black text-ucuenca-navy font-heading mt-1">—</h3>
+          <span class="text-[11px] text-slate-400 flex items-center gap-1 mt-1" id="kpi3-note"></span>
+        </div>
+        <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm">
+          <p class="text-xs text-slate-500 font-medium">Muestra</p>
+          <h3 id="kpi-4" class="text-2xl font-black text-ucuenca-navy font-heading mt-1">—</h3>
+          <span class="text-[11px] text-slate-400 flex items-center gap-1 mt-1">Registros validados</span>
+        </div>
+      </div>
+
+      <!-- Gráficos -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        <div class="lg:col-span-2 bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+          <div class="flex items-center justify-between mb-4">
+            <h4 class="text-sm font-bold text-slate-800 font-heading" id="chart-main-title">Evolución Temporal</h4>
+            <span class="text-xs text-slate-400 font-medium">Datos reales</span>
+          </div>
+          <div id="mainChart" style="height: 300px;"></div>
+        </div>
+
+        <div class="bg-white p-5 rounded-xl border border-slate-200 shadow-sm">
+          <div class="flex items-center justify-between mb-4">
+            <h4 class="text-sm font-bold text-slate-800 font-heading" id="chart-secondary-title">Distribución</h4>
+          </div>
+          <div id="secondaryChart" style="height: 300px;"></div>
+        </div>
+      </div>
+
+      <!-- Tabla de Datos -->
+      <div class="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden p-4">
+        <h4 class="text-sm font-bold text-slate-800 font-heading mb-3" id="table-title">Detalle</h4>
+        <div class="overflow-x-auto">
+          <table id="data-table" class="w-full text-left text-xs text-slate-600">
+            <thead class="bg-slate-100 text-slate-700 uppercase font-semibold border-b border-slate-200">
+              <tr id="table-header"></tr>
+            </thead>
+            <tbody id="table-body" class="divide-y divide-slate-100"></tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <script>
+    lucide.createIcons();
+
+    let dashboardData = null;
+    let currentModule = 'enemdu';
+
+    // Cargar datos desde JSON
+    async function loadData() {
+      try {
+        const response = await fetch('static/data.json');
+        if (!response.ok) throw new Error(`HTTP ${response.status}`);
+        dashboardData = await response.json();
+
+        // Actualizar fecha sincronización
+        document.getElementById('sync-date').textContent =
+          new Date(dashboardData.metadata.generated).toLocaleDateString('es-EC');
+
+        // Popula filtros
+        populateFilters();
+
+        console.log('✅ Datos cargados:', dashboardData);
+      } catch (error) {
+        console.error('❌ Error cargando datos:', error);
+        alert('Error cargando datos. Verifica que static/data.json existe.');
+      }
+    }
+
+    function populateFilters() {
+      const moduleData = dashboardData.modules[currentModule];
+      if (!moduleData.filtros_disponibles) return;
+
+      const yearSelect = document.getElementById('year-filter');
+      moduleData.filtros_disponibles.years.forEach(year => {
+        const option = document.createElement('option');
+        option.value = year;
+        option.textContent = year;
+        yearSelect.appendChild(option);
+      });
+
+      const provSelect = document.getElementById('province-filter');
+      moduleData.filtros_disponibles.provincias.forEach(prov => {
+        const option = document.createElement('option');
+        option.value = prov;
+        option.textContent = prov;
+        provSelect.appendChild(option);
+      });
+    }
+
+    function openDashboard(moduleKey) {
+      currentModule = moduleKey;
+      document.getElementById('landing-view').classList.add('hidden');
+      document.getElementById('dashboard-view').classList.remove('hidden');
+      document.getElementById('module-selector').value = moduleKey;
+      renderDashboardContent(moduleKey);
+    }
+
+    function showLanding() {
+      document.getElementById('dashboard-view').classList.add('hidden');
+      document.getElementById('landing-view').classList.remove('hidden');
+    }
+
+    function switchModule(moduleKey) {
+      currentModule = moduleKey;
+      renderDashboardContent(moduleKey);
+    }
+
+    function renderDashboardContent(moduleKey) {
+      if (!dashboardData) return;
+
+      const moduleData = dashboardData.modules[moduleKey];
+
+      document.getElementById('dashboard-title').textContent = moduleData.title;
+
+      if (moduleKey === 'enemdu') {
+        renderEnemduModule(moduleData);
+      } else if (moduleKey === 'sobrecalificacion') {
+        renderSobrecalificacionModule(moduleData);
+      }
+    }
+
+    function renderEnemduModule(data) {
+      const kpi = data.kpi_latest;
+
+      document.getElementById('kpi1-label').textContent = 'Tasa de Desempleo';
+      document.getElementById('kpi-1').textContent = `${kpi.tasa_desempleo.toFixed(1)}%`;
+      document.getElementById('kpi1-note').textContent = `Año ${kpi.year}`;
+
+      document.getElementById('kpi2-label').textContent = 'Ingreso Laboral Medio';
+      document.getElementById('kpi-2').textContent = `$ ${kpi.ingreso_laboral_medio.toFixed(0)}`;
+
+      document.getElementById('kpi3-label').textContent = 'Empleo Adecuado';
+      document.getElementById('kpi-3').textContent = `${kpi.tasa_empleo_adecuado.toFixed(1)}%`;
+
+      document.getElementById('kpi-4').textContent = `${kpi.n_muestral.toLocaleString()}`;
+
+      document.getElementById('chart-main-title').textContent = 'Evolución del Mercado Laboral (2021-2025)';
+      document.getElementById('chart-secondary-title').textContent = 'Top Provincias por Desempleo';
+
+      // Gráfico principal (línea)
+      Plotly.newPlot('mainChart', [
+        {
+          x: data.timeline.years,
+          y: data.timeline.tasa_desempleo,
+          name: 'Tasa Desempleo (%)',
+          type: 'scatter',
+          mode: 'lines+markers',
+          line: { color: '#D3272C', width: 3 },
+          marker: { size: 6 }
+        },
+        {
+          x: data.timeline.years,
+          y: data.timeline.tasa_empleo_adecuado,
+          name: 'Empleo Adecuado (%)',
+          type: 'scatter',
+          mode: 'lines+markers',
+          line: { color: '#10B981', width: 3 },
+          marker: { size: 6 }
+        }
+      ], {
+        layout: { hovermode: 'x unified' },
+        responsive: true,
+        displayModeBar: false
+      });
+
+      // Gráfico secundario (barras provincias)
+      const topProvs = data.por_provincia.slice(0, 8);
+      Plotly.newPlot('secondaryChart', [{
+        x: topProvs.map(p => p.provincia),
+        y: topProvs.map(p => p.tasa_desempleo),
+        type: 'bar',
+        marker: { color: '#0B2341' }
+      }], {
+        layout: { margin: { l: 100 } },
+        responsive: true,
+        displayModeBar: false
+      });
+
+      // Tabla: Provincias
+      populateTable(
+        ['Provincia', 'Tasa Desempleo %', 'Empleo Adecuado %', 'Ingreso $ ', 'Muestra'],
+        data.por_provincia.map(p => [
+          p.provincia,
+          p.tasa_desempleo.toFixed(1),
+          p.tasa_empleo_adecuado.toFixed(1),
+          p.ingreso_laboral_medio.toFixed(0),
+          p.n_muestral
+        ])
+      );
+    }
+
+    function renderSobrecalificacionModule(data) {
+      const latestTasa = data.tasa_general_por_anio.tasas[data.tasa_general_por_anio.tasas.length - 1];
+
+      document.getElementById('kpi1-label').textContent = 'Tasa Sobrecalificación';
+      document.getElementById('kpi-1').textContent = `${latestTasa.toFixed(1)}%`;
+      document.getElementById('kpi1-note').textContent = 'Graduados en ocupaciones no acordes';
+
+      document.getElementById('kpi-2').textContent = '—';
+      document.getElementById('kpi-3').textContent = '—';
+      document.getElementById('kpi-4').textContent = '—';
+
+      document.getElementById('chart-main-title').textContent = 'Evolución Tasa Sobrecalificación';
+      document.getElementById('chart-secondary-title').textContent = 'Top Ocupaciones (CIUO-08)';
+
+      // Gráfico línea
+      Plotly.newPlot('mainChart', [{
+        x: data.tasa_general_por_anio.years,
+        y: data.tasa_general_por_anio.tasas,
+        type: 'scatter',
+        mode: 'lines+markers',
+        fill: 'tozeroy',
+        line: { color: '#FF6B35', width: 3 },
+        fillcolor: 'rgba(255, 107, 53, 0.2)',
+        marker: { size: 8 }
+      }], {
+        layout: { yaxis: { title: 'Tasa %' } },
+        responsive: true,
+        displayModeBar: false
+      });
+
+      // Gráfico ocupaciones
+      const topOcup = data.por_ocupacion_2025.slice(0, 8);
+      Plotly.newPlot('secondaryChart', [{
+        x: topOcup.map(o => o.ciuo_descripcion.substring(0, 20)),
+        y: topOcup.map(o => o.es_sobrecalificado_pct),
+        type: 'bar',
+        marker: { color: '#FF6B35' }
+      }], {
+        layout: { margin: { b: 100 } },
+        responsive: true,
+        displayModeBar: false
+      });
+
+      // Tabla
+      populateTable(
+        ['Ocupación (CIUO)', 'Tasa Sobrecalificación %', 'Ocupados', 'Participación %'],
+        topOcup.map(o => [
+          o.ciuo_descripcion,
+          o.es_sobrecalificado_pct.toFixed(1),
+          o.ocupados,
+          o.participacion_ocupados_pct.toFixed(1)
+        ])
+      );
+    }
+
+    function populateTable(headers, rows) {
+      const headerRow = document.getElementById('table-header');
+      headerRow.innerHTML = '';
+      headers.forEach(h => {
+        const th = document.createElement('th');
+        th.textContent = h;
+        th.className = 'p-3';
+        headerRow.appendChild(th);
+      });
+
+      const tbody = document.getElementById('table-body');
+      tbody.innerHTML = '';
+      rows.forEach(row => {
+        const tr = document.createElement('tr');
+        tr.className = 'hover:bg-slate-50 transition-colors';
+        row.forEach(cell => {
+          const td = document.createElement('td');
+          td.textContent = cell;
+          td.className = 'p-3';
+          tr.appendChild(td);
+        });
+        tbody.appendChild(tr);
+      });
+    }
+
+    function applyFilters() {
+      alert('Filtros dinámicos en construcción');
+    }
+
+    function reloadData() {
+      loadData();
+      renderDashboardContent(currentModule);
+    }
+
+    // Cargar al iniciar
+    window.addEventListener('DOMContentLoaded', loadData);
+  </script>
+</body>
+</html>
