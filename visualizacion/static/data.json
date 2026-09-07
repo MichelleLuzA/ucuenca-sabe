@@ -1,0 +1,1174 @@
+{
+  "metadata": {
+    "timestamp": "2026-09-07T11:21:58.218146",
+    "version": "1.0",
+    "fuente": "data/gold/enemdu/*.parquet",
+    "descripcion": "Dashboard Empleabilidad ENEMDU + Sobrecalificación"
+  },
+  "modules": {
+    "enemdu": {
+      "title": "Mercado Laboral ENEMDU — Contexto Nacional, toda la PEA (2021-2025)",
+      "segmento": "general",
+      "kpi_latest": {
+        "year": 2025,
+        "tasa_desempleo": 3.57,
+        "tasa_empleo_adecuado": 37.13,
+        "tasa_subempleo": 19.42,
+        "ingreso_laboral_medio": 491.74,
+        "n_muestral": 266889,
+        "poblacion": 13400117.0
+      },
+      "timeline": {
+        "years": [
+          2021,
+          2022,
+          2023,
+          2024,
+          2025
+        ],
+        "tasa_desempleo": [
+          5.24,
+          4.35,
+          3.85,
+          3.75,
+          3.57
+        ],
+        "tasa_empleo_adecuado": [
+          32.51,
+          34.41,
+          36.31,
+          35.88,
+          37.13
+        ],
+        "tasa_subempleo": [
+          23.23,
+          22.23,
+          19.55,
+          21.02,
+          19.42
+        ]
+      },
+      "por_provincia": [
+        {
+          "provincia": "Esmeraldas",
+          "tasa_desempleo": 9.1,
+          "tasa_empleo_adecuado": 25.02,
+          "ingreso_laboral_medio": 388.38,
+          "n_muestral": 15606
+        },
+        {
+          "provincia": "Pichincha",
+          "tasa_desempleo": 6.6,
+          "tasa_empleo_adecuado": 53.03,
+          "ingreso_laboral_medio": 640.7,
+          "n_muestral": 38607
+        },
+        {
+          "provincia": "Sucumbíos",
+          "tasa_desempleo": 6.54,
+          "tasa_empleo_adecuado": 27.63,
+          "ingreso_laboral_medio": 442.9,
+          "n_muestral": 6477
+        },
+        {
+          "provincia": "Imbabura",
+          "tasa_desempleo": 6.09,
+          "tasa_empleo_adecuado": 29.31,
+          "ingreso_laboral_medio": 428.61,
+          "n_muestral": 13149
+        },
+        {
+          "provincia": "Carchi",
+          "tasa_desempleo": 4.9,
+          "tasa_empleo_adecuado": 24.38,
+          "ingreso_laboral_medio": 439.86,
+          "n_muestral": 5932
+        },
+        {
+          "provincia": "Loja",
+          "tasa_desempleo": 4.02,
+          "tasa_empleo_adecuado": 26.84,
+          "ingreso_laboral_medio": 413.73,
+          "n_muestral": 8869
+        },
+        {
+          "provincia": "El Oro",
+          "tasa_desempleo": 3.88,
+          "tasa_empleo_adecuado": 42.59,
+          "ingreso_laboral_medio": 519.5,
+          "n_muestral": 27936
+        },
+        {
+          "provincia": "Cañar",
+          "tasa_desempleo": 3.57,
+          "tasa_empleo_adecuado": 31.66,
+          "ingreso_laboral_medio": 446.03,
+          "n_muestral": 4813
+        },
+        {
+          "provincia": "Galápagos",
+          "tasa_desempleo": 3.13,
+          "tasa_empleo_adecuado": 59.55,
+          "ingreso_laboral_medio": 1240.67,
+          "n_muestral": 2460
+        },
+        {
+          "provincia": "Azuay",
+          "tasa_desempleo": 2.53,
+          "tasa_empleo_adecuado": 44.87,
+          "ingreso_laboral_medio": 548.01,
+          "n_muestral": 24376
+        },
+        {
+          "provincia": "Guayas",
+          "tasa_desempleo": 2.49,
+          "tasa_empleo_adecuado": 41.34,
+          "ingreso_laboral_medio": 466.62,
+          "n_muestral": 34653
+        },
+        {
+          "provincia": "Manabí",
+          "tasa_desempleo": 2.46,
+          "tasa_empleo_adecuado": 29.31,
+          "ingreso_laboral_medio": 404.61,
+          "n_muestral": 6022
+        },
+        {
+          "provincia": "Cotopaxi",
+          "tasa_desempleo": 2.12,
+          "tasa_empleo_adecuado": 25.67,
+          "ingreso_laboral_medio": 456.77,
+          "n_muestral": 4852
+        },
+        {
+          "provincia": "Pastaza",
+          "tasa_desempleo": 2.1,
+          "tasa_empleo_adecuado": 24.15,
+          "ingreso_laboral_medio": 471.26,
+          "n_muestral": 4694
+        },
+        {
+          "provincia": "Santa Elena",
+          "tasa_desempleo": 2.01,
+          "tasa_empleo_adecuado": 31.45,
+          "ingreso_laboral_medio": 401.61,
+          "n_muestral": 10997
+        },
+        {
+          "provincia": "Tungurahua",
+          "tasa_desempleo": 1.94,
+          "tasa_empleo_adecuado": 30.54,
+          "ingreso_laboral_medio": 488.95,
+          "n_muestral": 21145
+        },
+        {
+          "provincia": "Chimborazo",
+          "tasa_desempleo": 1.76,
+          "tasa_empleo_adecuado": 21.61,
+          "ingreso_laboral_medio": 418.39,
+          "n_muestral": 4793
+        },
+        {
+          "provincia": "Los Ríos",
+          "tasa_desempleo": 1.69,
+          "tasa_empleo_adecuado": 32.53,
+          "ingreso_laboral_medio": 418.54,
+          "n_muestral": 4946
+        },
+        {
+          "provincia": "Zamora Chinchipe",
+          "tasa_desempleo": 1.56,
+          "tasa_empleo_adecuado": 32.14,
+          "ingreso_laboral_medio": 519.3,
+          "n_muestral": 4652
+        },
+        {
+          "provincia": "Santo Domingo de los Tsáchilas",
+          "tasa_desempleo": 1.33,
+          "tasa_empleo_adecuado": 39.36,
+          "ingreso_laboral_medio": 493.85,
+          "n_muestral": 5247
+        },
+        {
+          "provincia": "Bolívar",
+          "tasa_desempleo": 1.17,
+          "tasa_empleo_adecuado": 24.95,
+          "ingreso_laboral_medio": 431.59,
+          "n_muestral": 4495
+        },
+        {
+          "provincia": "Napo",
+          "tasa_desempleo": 1.16,
+          "tasa_empleo_adecuado": 11.95,
+          "ingreso_laboral_medio": 342.17,
+          "n_muestral": 4206
+        },
+        {
+          "provincia": "Orellana",
+          "tasa_desempleo": 1.06,
+          "tasa_empleo_adecuado": 17.79,
+          "ingreso_laboral_medio": 436.39,
+          "n_muestral": 4940
+        },
+        {
+          "provincia": "Morona Santiago",
+          "tasa_desempleo": 0.15,
+          "tasa_empleo_adecuado": 9.76,
+          "ingreso_laboral_medio": 307.28,
+          "n_muestral": 3022
+        }
+      ],
+      "por_rama": [
+        {
+          "rama_actividad": "A. Agricultura, ganadería, silvicultura y pesca",
+          "ocupados": 2583196,
+          "participacion_pct": 31.11,
+          "ingreso_laboral_medio": 301.6
+        },
+        {
+          "rama_actividad": "B. Explotación de minas y canteras",
+          "ocupados": 33588,
+          "participacion_pct": 0.4,
+          "ingreso_laboral_medio": 848.36
+        },
+        {
+          "rama_actividad": "C. Industrias manufactureras",
+          "ocupados": 884595,
+          "participacion_pct": 10.65,
+          "ingreso_laboral_medio": 545.59
+        },
+        {
+          "rama_actividad": "D. Suministro de electricidad y gas",
+          "ocupados": 14797,
+          "participacion_pct": 0.18,
+          "ingreso_laboral_medio": 1315.09
+        },
+        {
+          "rama_actividad": "E. Suministro de agua y saneamiento",
+          "ocupados": 35888,
+          "participacion_pct": 0.43,
+          "ingreso_laboral_medio": 722.11
+        },
+        {
+          "rama_actividad": "F. Construcción",
+          "ocupados": 530392,
+          "participacion_pct": 6.39,
+          "ingreso_laboral_medio": 432.86
+        },
+        {
+          "rama_actividad": "G. Comercio al por mayor y menor",
+          "ocupados": 1380508,
+          "participacion_pct": 16.62,
+          "ingreso_laboral_medio": 471.58
+        },
+        {
+          "rama_actividad": "H. Transporte y almacenamiento",
+          "ocupados": 479602,
+          "participacion_pct": 5.78,
+          "ingreso_laboral_medio": 489.11
+        },
+        {
+          "rama_actividad": "I. Alojamiento y servicios de comida",
+          "ocupados": 549508,
+          "participacion_pct": 6.62,
+          "ingreso_laboral_medio": 413.52
+        },
+        {
+          "rama_actividad": "J. Información y comunicación",
+          "ocupados": 70754,
+          "participacion_pct": 0.85,
+          "ingreso_laboral_medio": 814.22
+        },
+        {
+          "rama_actividad": "K. Actividades financieras y de seguros",
+          "ocupados": 60893,
+          "participacion_pct": 0.73,
+          "ingreso_laboral_medio": 1112.82
+        },
+        {
+          "rama_actividad": "L. Actividades inmobiliarias",
+          "ocupados": 23929,
+          "participacion_pct": 0.29,
+          "ingreso_laboral_medio": 701.36
+        },
+        {
+          "rama_actividad": "M. Actividades profesionales, científicas y técnicas",
+          "ocupados": 149684,
+          "participacion_pct": 1.8,
+          "ingreso_laboral_medio": 696.63
+        },
+        {
+          "rama_actividad": "N. Actividades de servicios administrativos y de apoyo",
+          "ocupados": 286301,
+          "participacion_pct": 3.45,
+          "ingreso_laboral_medio": 441.71
+        },
+        {
+          "rama_actividad": "O. Administración pública y defensa",
+          "ocupados": 243172,
+          "participacion_pct": 2.93,
+          "ingreso_laboral_medio": 1163.92
+        },
+        {
+          "rama_actividad": "P. Enseñanza",
+          "ocupados": 296424,
+          "participacion_pct": 3.57,
+          "ingreso_laboral_medio": 931.86
+        },
+        {
+          "rama_actividad": "Q. Salud humana y asistencia social",
+          "ocupados": 185413,
+          "participacion_pct": 2.23,
+          "ingreso_laboral_medio": 874.32
+        },
+        {
+          "rama_actividad": "R. Artes, entretenimiento y recreación",
+          "ocupados": 50519,
+          "participacion_pct": 0.61,
+          "ingreso_laboral_medio": 520.24
+        },
+        {
+          "rama_actividad": "S. Otras actividades de servicios",
+          "ocupados": 222908,
+          "participacion_pct": 2.68,
+          "ingreso_laboral_medio": 338.01
+        },
+        {
+          "rama_actividad": "T. Hogares como empleadores",
+          "ocupados": 221023,
+          "participacion_pct": 2.66,
+          "ingreso_laboral_medio": 361.84
+        },
+        {
+          "rama_actividad": "U. Organizaciones extraterritoriales",
+          "ocupados": 1428,
+          "participacion_pct": 0.02,
+          "ingreso_laboral_medio": 2217.82
+        }
+      ],
+      "por_sexo_edad": [
+        {
+          "sexo": "Hombre",
+          "grupo_edad": "15-24",
+          "tasa_desempleo": 6.76,
+          "tasa_empleo_adecuado": 24.42,
+          "brecha_desempleo_pp": 6.48,
+          "n_muestral": 29501
+        },
+        {
+          "sexo": "Mujer",
+          "grupo_edad": "15-24",
+          "tasa_desempleo": 13.24,
+          "tasa_empleo_adecuado": 16.95,
+          "brecha_desempleo_pp": 6.48,
+          "n_muestral": 28327
+        },
+        {
+          "sexo": "Hombre",
+          "grupo_edad": "25-34",
+          "tasa_desempleo": 3.8,
+          "tasa_empleo_adecuado": 51.0,
+          "brecha_desempleo_pp": 2.76,
+          "n_muestral": 21283
+        },
+        {
+          "sexo": "Mujer",
+          "grupo_edad": "25-34",
+          "tasa_desempleo": 6.56,
+          "tasa_empleo_adecuado": 36.38,
+          "brecha_desempleo_pp": 2.76,
+          "n_muestral": 23212
+        },
+        {
+          "sexo": "Hombre",
+          "grupo_edad": "35-44",
+          "tasa_desempleo": 1.83,
+          "tasa_empleo_adecuado": 54.6,
+          "brecha_desempleo_pp": 1.5099999999999998,
+          "n_muestral": 19088
+        },
+        {
+          "sexo": "Mujer",
+          "grupo_edad": "35-44",
+          "tasa_desempleo": 3.34,
+          "tasa_empleo_adecuado": 37.19,
+          "brecha_desempleo_pp": 1.5099999999999998,
+          "n_muestral": 22916
+        },
+        {
+          "sexo": "Hombre",
+          "grupo_edad": "45-54",
+          "tasa_desempleo": 1.15,
+          "tasa_empleo_adecuado": 50.59,
+          "brecha_desempleo_pp": 0.5800000000000001,
+          "n_muestral": 18846
+        },
+        {
+          "sexo": "Mujer",
+          "grupo_edad": "45-54",
+          "tasa_desempleo": 1.73,
+          "tasa_empleo_adecuado": 32.98,
+          "brecha_desempleo_pp": 0.5800000000000001,
+          "n_muestral": 22155
+        },
+        {
+          "sexo": "Hombre",
+          "grupo_edad": "55-64",
+          "tasa_desempleo": 1.53,
+          "tasa_empleo_adecuado": 37.6,
+          "brecha_desempleo_pp": -0.5900000000000001,
+          "n_muestral": 16327
+        },
+        {
+          "sexo": "Mujer",
+          "grupo_edad": "55-64",
+          "tasa_desempleo": 0.94,
+          "tasa_empleo_adecuado": 25.0,
+          "brecha_desempleo_pp": -0.5900000000000001,
+          "n_muestral": 19275
+        },
+        {
+          "sexo": "Hombre",
+          "grupo_edad": "65+",
+          "tasa_desempleo": 1.03,
+          "tasa_empleo_adecuado": 16.91,
+          "brecha_desempleo_pp": -0.8,
+          "n_muestral": 21066
+        },
+        {
+          "sexo": "Mujer",
+          "grupo_edad": "65+",
+          "tasa_desempleo": 0.23,
+          "tasa_empleo_adecuado": 8.82,
+          "brecha_desempleo_pp": -0.8,
+          "n_muestral": 24893
+        }
+      ],
+      "filtros_disponibles": {
+        "years": [
+          2021,
+          2022,
+          2023,
+          2024,
+          2025
+        ],
+        "provincias": [
+          "Azuay",
+          "Bolívar",
+          "Carchi",
+          "Cañar",
+          "Chimborazo",
+          "Cotopaxi",
+          "El Oro",
+          "Esmeraldas",
+          "Galápagos",
+          "Guayas",
+          "Imbabura",
+          "Loja",
+          "Los Ríos",
+          "Manabí",
+          "Morona Santiago",
+          "Napo",
+          "Orellana",
+          "Pastaza",
+          "Pichincha",
+          "Santa Elena",
+          "Santo Domingo de los Tsáchilas",
+          "Sucumbíos",
+          "Tungurahua",
+          "Zamora Chinchipe"
+        ],
+        "sectores": [
+          "A. Agricultura, ganadería, silvicultura y pesca",
+          "B. Explotación de minas y canteras",
+          "C. Industrias manufactureras",
+          "D. Suministro de electricidad y gas",
+          "E. Suministro de agua y saneamiento",
+          "F. Construcción",
+          "G. Comercio al por mayor y menor",
+          "H. Transporte y almacenamiento",
+          "I. Alojamiento y servicios de comida",
+          "J. Información y comunicación",
+          "K. Actividades financieras y de seguros",
+          "L. Actividades inmobiliarias",
+          "M. Actividades profesionales, científicas y técnicas",
+          "N. Actividades de servicios administrativos y de apoyo",
+          "O. Administración pública y defensa",
+          "P. Enseñanza",
+          "Q. Salud humana y asistencia social",
+          "R. Artes, entretenimiento y recreación",
+          "S. Otras actividades de servicios",
+          "T. Hogares como empleadores",
+          "U. Organizaciones extraterritoriales"
+        ]
+      },
+      "por_nivel_instruccion": [
+        {
+          "nivel_instruccion": "Ninguno",
+          "tasa_desempleo": 0.71,
+          "tasa_empleo_adecuado": 8.26,
+          "tasa_sobrecalificacion": null,
+          "n_muestral": 8273
+        },
+        {
+          "nivel_instruccion": "Centro de alfabetización",
+          "tasa_desempleo": 0.0,
+          "tasa_empleo_adecuado": 6.57,
+          "tasa_sobrecalificacion": null,
+          "n_muestral": 362
+        },
+        {
+          "nivel_instruccion": "Primaria",
+          "tasa_desempleo": 1.09,
+          "tasa_empleo_adecuado": 22.93,
+          "tasa_sobrecalificacion": null,
+          "n_muestral": 63430
+        },
+        {
+          "nivel_instruccion": "Educación Básica",
+          "tasa_desempleo": 2.41,
+          "tasa_empleo_adecuado": 15.09,
+          "tasa_sobrecalificacion": null,
+          "n_muestral": 14202
+        },
+        {
+          "nivel_instruccion": "Secundaria",
+          "tasa_desempleo": 2.09,
+          "tasa_empleo_adecuado": 44.01,
+          "tasa_sobrecalificacion": null,
+          "n_muestral": 62707
+        },
+        {
+          "nivel_instruccion": "Educación Media/Bachillerato",
+          "tasa_desempleo": 7.8,
+          "tasa_empleo_adecuado": 30.22,
+          "tasa_sobrecalificacion": null,
+          "n_muestral": 46637
+        },
+        {
+          "nivel_instruccion": "Superior no universitaria",
+          "tasa_desempleo": 7.24,
+          "tasa_empleo_adecuado": 59.88,
+          "tasa_sobrecalificacion": 59.92,
+          "n_muestral": 9726
+        },
+        {
+          "nivel_instruccion": "Superior universitaria",
+          "tasa_desempleo": 6.07,
+          "tasa_empleo_adecuado": 59.76,
+          "tasa_sobrecalificacion": 51.41,
+          "n_muestral": 53179
+        },
+        {
+          "nivel_instruccion": "Post-grado",
+          "tasa_desempleo": 2.93,
+          "tasa_empleo_adecuado": 85.58,
+          "tasa_sobrecalificacion": 9.99,
+          "n_muestral": 8373
+        }
+      ]
+    },
+    "empleabilidad_superior": {
+      "title": "Empleabilidad — Graduados de Educación Superior (2021-2025)",
+      "segmento": "educacion_superior",
+      "kpi_latest": {
+        "year": 2025,
+        "tasa_desempleo": 5.91,
+        "tasa_empleo_adecuado": 62.81,
+        "tasa_subempleo": 12.38,
+        "ingreso_laboral_medio": 836.8,
+        "n_muestral": 71278,
+        "poblacion": 2558909.0
+      },
+      "timeline": {
+        "years": [
+          2021,
+          2022,
+          2023,
+          2024,
+          2025
+        ],
+        "tasa_desempleo": [
+          7.48,
+          6.06,
+          5.98,
+          6.33,
+          5.91
+        ],
+        "tasa_empleo_adecuado": [
+          56.17,
+          60.71,
+          62.95,
+          63.22,
+          62.81
+        ],
+        "tasa_subempleo": [
+          16.14,
+          14.22,
+          12.48,
+          12.96,
+          12.38
+        ]
+      },
+      "por_provincia": [
+        {
+          "provincia": "Esmeraldas",
+          "tasa_desempleo": 14.67,
+          "tasa_empleo_adecuado": 54.4,
+          "ingreso_laboral_medio": 715.48,
+          "n_muestral": 2855
+        },
+        {
+          "provincia": "Carchi",
+          "tasa_desempleo": 10.14,
+          "tasa_empleo_adecuado": 59.77,
+          "ingreso_laboral_medio": 903.12,
+          "n_muestral": 1227
+        },
+        {
+          "provincia": "Imbabura",
+          "tasa_desempleo": 9.77,
+          "tasa_empleo_adecuado": 57.2,
+          "ingreso_laboral_medio": 773.39,
+          "n_muestral": 2670
+        },
+        {
+          "provincia": "Cañar",
+          "tasa_desempleo": 8.65,
+          "tasa_empleo_adecuado": 63.06,
+          "ingreso_laboral_medio": 798.46,
+          "n_muestral": 999
+        },
+        {
+          "provincia": "Sucumbíos",
+          "tasa_desempleo": 8.48,
+          "tasa_empleo_adecuado": 61.64,
+          "ingreso_laboral_medio": 846.23,
+          "n_muestral": 1021
+        },
+        {
+          "provincia": "Loja",
+          "tasa_desempleo": 7.91,
+          "tasa_empleo_adecuado": 55.92,
+          "ingreso_laboral_medio": 765.53,
+          "n_muestral": 2228
+        },
+        {
+          "provincia": "Pichincha",
+          "tasa_desempleo": 7.01,
+          "tasa_empleo_adecuado": 70.19,
+          "ingreso_laboral_medio": 994.43,
+          "n_muestral": 13642
+        },
+        {
+          "provincia": "Manabí",
+          "tasa_desempleo": 6.05,
+          "tasa_empleo_adecuado": 57.58,
+          "ingreso_laboral_medio": 675.02,
+          "n_muestral": 1136
+        },
+        {
+          "provincia": "El Oro",
+          "tasa_desempleo": 5.64,
+          "tasa_empleo_adecuado": 63.59,
+          "ingreso_laboral_medio": 822.69,
+          "n_muestral": 7729
+        },
+        {
+          "provincia": "Cotopaxi",
+          "tasa_desempleo": 5.28,
+          "tasa_empleo_adecuado": 46.23,
+          "ingreso_laboral_medio": 756.62,
+          "n_muestral": 1289
+        },
+        {
+          "provincia": "Los Ríos",
+          "tasa_desempleo": 5.23,
+          "tasa_empleo_adecuado": 56.36,
+          "ingreso_laboral_medio": 696.25,
+          "n_muestral": 807
+        },
+        {
+          "provincia": "Bolívar",
+          "tasa_desempleo": 4.94,
+          "tasa_empleo_adecuado": 58.78,
+          "ingreso_laboral_medio": 784.2,
+          "n_muestral": 1152
+        },
+        {
+          "provincia": "Chimborazo",
+          "tasa_desempleo": 4.78,
+          "tasa_empleo_adecuado": 42.51,
+          "ingreso_laboral_medio": 725.45,
+          "n_muestral": 1300
+        },
+        {
+          "provincia": "Santa Elena",
+          "tasa_desempleo": 4.67,
+          "tasa_empleo_adecuado": 60.03,
+          "ingreso_laboral_medio": 675.45,
+          "n_muestral": 1738
+        },
+        {
+          "provincia": "Azuay",
+          "tasa_desempleo": 4.47,
+          "tasa_empleo_adecuado": 70.75,
+          "ingreso_laboral_medio": 918.27,
+          "n_muestral": 9221
+        },
+        {
+          "provincia": "Pastaza",
+          "tasa_desempleo": 4.2,
+          "tasa_empleo_adecuado": 57.88,
+          "ingreso_laboral_medio": 880.02,
+          "n_muestral": 1181
+        },
+        {
+          "provincia": "Galápagos",
+          "tasa_desempleo": 4.08,
+          "tasa_empleo_adecuado": 80.92,
+          "ingreso_laboral_medio": 1612.33,
+          "n_muestral": 686
+        },
+        {
+          "provincia": "Tungurahua",
+          "tasa_desempleo": 4.07,
+          "tasa_empleo_adecuado": 56.08,
+          "ingreso_laboral_medio": 834.02,
+          "n_muestral": 8244
+        },
+        {
+          "provincia": "Guayas",
+          "tasa_desempleo": 3.92,
+          "tasa_empleo_adecuado": 63.66,
+          "ingreso_laboral_medio": 732.82,
+          "n_muestral": 8596
+        },
+        {
+          "provincia": "Santo Domingo de los Tsáchilas",
+          "tasa_desempleo": 3.64,
+          "tasa_empleo_adecuado": 65.97,
+          "ingreso_laboral_medio": 758.8,
+          "n_muestral": 709
+        },
+        {
+          "provincia": "Zamora Chinchipe",
+          "tasa_desempleo": 3.36,
+          "tasa_empleo_adecuado": 77.83,
+          "ingreso_laboral_medio": 984.88,
+          "n_muestral": 905
+        },
+        {
+          "provincia": "Orellana",
+          "tasa_desempleo": 3.34,
+          "tasa_empleo_adecuado": 54.73,
+          "ingreso_laboral_medio": 881.61,
+          "n_muestral": 680
+        },
+        {
+          "provincia": "Napo",
+          "tasa_desempleo": 3.02,
+          "tasa_empleo_adecuado": 51.85,
+          "ingreso_laboral_medio": 876.29,
+          "n_muestral": 816
+        },
+        {
+          "provincia": "Morona Santiago",
+          "tasa_desempleo": 0.83,
+          "tasa_empleo_adecuado": 84.65,
+          "ingreso_laboral_medio": 912.47,
+          "n_muestral": 447
+        }
+      ],
+      "por_rama": [
+        {
+          "rama_actividad": "A. Agricultura, ganadería, silvicultura y pesca",
+          "ocupados": 110872,
+          "participacion_pct": 6.35,
+          "ingreso_laboral_medio": 519.88
+        },
+        {
+          "rama_actividad": "B. Explotación de minas y canteras",
+          "ocupados": 5504,
+          "participacion_pct": 0.32,
+          "ingreso_laboral_medio": 1388.69
+        },
+        {
+          "rama_actividad": "C. Industrias manufactureras",
+          "ocupados": 169666,
+          "participacion_pct": 9.72,
+          "ingreso_laboral_medio": 831.92
+        },
+        {
+          "rama_actividad": "D. Suministro de electricidad y gas",
+          "ocupados": 9372,
+          "participacion_pct": 0.54,
+          "ingreso_laboral_medio": 1657.19
+        },
+        {
+          "rama_actividad": "E. Suministro de agua y saneamiento",
+          "ocupados": 8182,
+          "participacion_pct": 0.47,
+          "ingreso_laboral_medio": 1081.17
+        },
+        {
+          "rama_actividad": "F. Construcción",
+          "ocupados": 53325,
+          "participacion_pct": 3.05,
+          "ingreso_laboral_medio": 655.82
+        },
+        {
+          "rama_actividad": "G. Comercio al por mayor y menor",
+          "ocupados": 314377,
+          "participacion_pct": 18.01,
+          "ingreso_laboral_medio": 670.98
+        },
+        {
+          "rama_actividad": "H. Transporte y almacenamiento",
+          "ocupados": 74231,
+          "participacion_pct": 4.25,
+          "ingreso_laboral_medio": 658.38
+        },
+        {
+          "rama_actividad": "I. Alojamiento y servicios de comida",
+          "ocupados": 90889,
+          "participacion_pct": 5.21,
+          "ingreso_laboral_medio": 570.24
+        },
+        {
+          "rama_actividad": "J. Información y comunicación",
+          "ocupados": 50563,
+          "participacion_pct": 2.9,
+          "ingreso_laboral_medio": 926.36
+        },
+        {
+          "rama_actividad": "K. Actividades financieras y de seguros",
+          "ocupados": 49695,
+          "participacion_pct": 2.85,
+          "ingreso_laboral_medio": 1203.36
+        },
+        {
+          "rama_actividad": "L. Actividades inmobiliarias",
+          "ocupados": 8613,
+          "participacion_pct": 0.49,
+          "ingreso_laboral_medio": 909.13
+        },
+        {
+          "rama_actividad": "M. Actividades profesionales, científicas y técnicas",
+          "ocupados": 124276,
+          "participacion_pct": 7.12,
+          "ingreso_laboral_medio": 755.21
+        },
+        {
+          "rama_actividad": "N. Actividades de servicios administrativos y de apoyo",
+          "ocupados": 45481,
+          "participacion_pct": 2.61,
+          "ingreso_laboral_medio": 635.24
+        },
+        {
+          "rama_actividad": "O. Administración pública y defensa",
+          "ocupados": 141788,
+          "participacion_pct": 8.12,
+          "ingreso_laboral_medio": 1269.91
+        },
+        {
+          "rama_actividad": "P. Enseñanza",
+          "ocupados": 260825,
+          "participacion_pct": 14.94,
+          "ingreso_laboral_medio": 986.01
+        },
+        {
+          "rama_actividad": "Q. Salud humana y asistencia social",
+          "ocupados": 140122,
+          "participacion_pct": 8.03,
+          "ingreso_laboral_medio": 987.39
+        },
+        {
+          "rama_actividad": "R. Artes, entretenimiento y recreación",
+          "ocupados": 21131,
+          "participacion_pct": 1.21,
+          "ingreso_laboral_medio": 662.59
+        },
+        {
+          "rama_actividad": "S. Otras actividades de servicios",
+          "ocupados": 49830,
+          "participacion_pct": 2.85,
+          "ingreso_laboral_medio": 533.96
+        },
+        {
+          "rama_actividad": "T. Hogares como empleadores",
+          "ocupados": 15797,
+          "participacion_pct": 0.9,
+          "ingreso_laboral_medio": 376.08
+        },
+        {
+          "rama_actividad": "U. Organizaciones extraterritoriales",
+          "ocupados": 1380,
+          "participacion_pct": 0.08,
+          "ingreso_laboral_medio": 2270.07
+        }
+      ],
+      "por_sexo_edad": [
+        {
+          "sexo": "Hombre",
+          "grupo_edad": "15-24",
+          "tasa_desempleo": 10.18,
+          "tasa_empleo_adecuado": 34.06,
+          "brecha_desempleo_pp": 4.790000000000001,
+          "n_muestral": 5678
+        },
+        {
+          "sexo": "Mujer",
+          "grupo_edad": "15-24",
+          "tasa_desempleo": 14.97,
+          "tasa_empleo_adecuado": 31.4,
+          "brecha_desempleo_pp": 4.790000000000001,
+          "n_muestral": 7338
+        },
+        {
+          "sexo": "Hombre",
+          "grupo_edad": "25-34",
+          "tasa_desempleo": 6.68,
+          "tasa_empleo_adecuado": 65.59,
+          "brecha_desempleo_pp": 3.1099999999999994,
+          "n_muestral": 8709
+        },
+        {
+          "sexo": "Mujer",
+          "grupo_edad": "25-34",
+          "tasa_desempleo": 9.79,
+          "tasa_empleo_adecuado": 55.43,
+          "brecha_desempleo_pp": 3.1099999999999994,
+          "n_muestral": 10867
+        },
+        {
+          "sexo": "Hombre",
+          "grupo_edad": "35-44",
+          "tasa_desempleo": 2.94,
+          "tasa_empleo_adecuado": 77.84,
+          "brecha_desempleo_pp": 1.98,
+          "n_muestral": 5639
+        },
+        {
+          "sexo": "Mujer",
+          "grupo_edad": "35-44",
+          "tasa_desempleo": 4.92,
+          "tasa_empleo_adecuado": 68.9,
+          "brecha_desempleo_pp": 1.98,
+          "n_muestral": 7741
+        },
+        {
+          "sexo": "Hombre",
+          "grupo_edad": "45-54",
+          "tasa_desempleo": 1.59,
+          "tasa_empleo_adecuado": 76.54,
+          "brecha_desempleo_pp": 0.95,
+          "n_muestral": 4275
+        },
+        {
+          "sexo": "Mujer",
+          "grupo_edad": "45-54",
+          "tasa_desempleo": 2.54,
+          "tasa_empleo_adecuado": 69.59,
+          "brecha_desempleo_pp": 0.95,
+          "n_muestral": 5842
+        },
+        {
+          "sexo": "Hombre",
+          "grupo_edad": "55-64",
+          "tasa_desempleo": 2.89,
+          "tasa_empleo_adecuado": 64.99,
+          "brecha_desempleo_pp": -1.27,
+          "n_muestral": 3805
+        },
+        {
+          "sexo": "Mujer",
+          "grupo_edad": "55-64",
+          "tasa_desempleo": 1.62,
+          "tasa_empleo_adecuado": 68.79,
+          "brecha_desempleo_pp": -1.27,
+          "n_muestral": 4541
+        },
+        {
+          "sexo": "Hombre",
+          "grupo_edad": "65+",
+          "tasa_desempleo": 1.66,
+          "tasa_empleo_adecuado": 44.69,
+          "brecha_desempleo_pp": -1.43,
+          "n_muestral": 3677
+        },
+        {
+          "sexo": "Mujer",
+          "grupo_edad": "65+",
+          "tasa_desempleo": 0.23,
+          "tasa_empleo_adecuado": 47.34,
+          "brecha_desempleo_pp": -1.43,
+          "n_muestral": 3166
+        }
+      ],
+      "filtros_disponibles": {
+        "years": [
+          2021,
+          2022,
+          2023,
+          2024,
+          2025
+        ],
+        "provincias": [
+          "Azuay",
+          "Bolívar",
+          "Carchi",
+          "Cañar",
+          "Chimborazo",
+          "Cotopaxi",
+          "El Oro",
+          "Esmeraldas",
+          "Galápagos",
+          "Guayas",
+          "Imbabura",
+          "Loja",
+          "Los Ríos",
+          "Manabí",
+          "Morona Santiago",
+          "Napo",
+          "Orellana",
+          "Pastaza",
+          "Pichincha",
+          "Santa Elena",
+          "Santo Domingo de los Tsáchilas",
+          "Sucumbíos",
+          "Tungurahua",
+          "Zamora Chinchipe"
+        ],
+        "sectores": [
+          "A. Agricultura, ganadería, silvicultura y pesca",
+          "B. Explotación de minas y canteras",
+          "C. Industrias manufactureras",
+          "D. Suministro de electricidad y gas",
+          "E. Suministro de agua y saneamiento",
+          "F. Construcción",
+          "G. Comercio al por mayor y menor",
+          "H. Transporte y almacenamiento",
+          "I. Alojamiento y servicios de comida",
+          "J. Información y comunicación",
+          "K. Actividades financieras y de seguros",
+          "L. Actividades inmobiliarias",
+          "M. Actividades profesionales, científicas y técnicas",
+          "N. Actividades de servicios administrativos y de apoyo",
+          "O. Administración pública y defensa",
+          "P. Enseñanza",
+          "Q. Salud humana y asistencia social",
+          "R. Artes, entretenimiento y recreación",
+          "S. Otras actividades de servicios",
+          "T. Hogares como empleadores",
+          "U. Organizaciones extraterritoriales"
+        ]
+      }
+    },
+    "sobrecalificacion": {
+      "title": "Sobrecalificación — Graduados en Ocupaciones No Acordes",
+      "tasa_general_por_anio": {
+        "years": [
+          2021,
+          2022,
+          2023,
+          2024,
+          2025
+        ],
+        "tasa_sobrecalificacion": [
+          48.59,
+          47.29,
+          46.83,
+          46.51,
+          47.89
+        ]
+      },
+      "por_ocupacion_2025": [
+        {
+          "ocupacion": "Profesionales científicos e intelectuales",
+          "ciuo_grupo": 2,
+          "participacion_pct": 33.78,
+          "requiere_titulo": 1,
+          "sobrecalificado": false,
+          "ocupados_totales": 589717
+        },
+        {
+          "ocupacion": "Trabajadores de servicios y vendedores",
+          "ciuo_grupo": 5,
+          "participacion_pct": 20.64,
+          "requiere_titulo": 0,
+          "sobrecalificado": true,
+          "ocupados_totales": 360363
+        },
+        {
+          "ocupacion": "Técnicos y profesionales de nivel medio",
+          "ciuo_grupo": 3,
+          "participacion_pct": 14.47,
+          "requiere_titulo": 1,
+          "sobrecalificado": false,
+          "ocupados_totales": 252666
+        },
+        {
+          "ocupacion": "Personal de apoyo administrativo",
+          "ciuo_grupo": 4,
+          "participacion_pct": 7.19,
+          "requiere_titulo": 0,
+          "sobrecalificado": true,
+          "ocupados_totales": 125610
+        },
+        {
+          "ocupacion": "Ocupaciones elementales",
+          "ciuo_grupo": 9,
+          "participacion_pct": 7.16,
+          "requiere_titulo": 0,
+          "sobrecalificado": true,
+          "ocupados_totales": 125017
+        },
+        {
+          "ocupacion": "Oficiales, operarios y artesanos",
+          "ciuo_grupo": 7,
+          "participacion_pct": 5.79,
+          "requiere_titulo": 0,
+          "sobrecalificado": true,
+          "ocupados_totales": 101125
+        },
+        {
+          "ocupacion": "Operadores de instalaciones y máquinas",
+          "ciuo_grupo": 8,
+          "participacion_pct": 4.15,
+          "requiere_titulo": 0,
+          "sobrecalificado": true,
+          "ocupados_totales": 72472
+        },
+        {
+          "ocupacion": "Directores y gerentes",
+          "ciuo_grupo": 1,
+          "participacion_pct": 3.86,
+          "requiere_titulo": 1,
+          "sobrecalificado": false,
+          "ocupados_totales": 67405
+        },
+        {
+          "ocupacion": "Agricultores y trabajadores calificados agropecuarios",
+          "ciuo_grupo": 6,
+          "participacion_pct": 2.95,
+          "requiere_titulo": 0,
+          "sobrecalificado": true,
+          "ocupados_totales": 51548
+        }
+      ],
+      "ciuo_mapping": {
+        "1": "Profesionales",
+        "2": "Técnicos",
+        "3": "Personal de apoyo",
+        "4": "Empleados de oficina",
+        "5": "Servicios y ventas",
+        "6": "Agricultura",
+        "7": "Oficios",
+        "8": "Operarios",
+        "9": "Trabajadores no calificados"
+      },
+      "metodologia": "Sobrecalificado = graduado de educación superior ocupado en una ocupación (CIUO-08 grupos 4-9) que no requiere título superior. 'tasa_general_por_anio' es la tasa real (sobrecalificados/ocupados, ponderada por fexp). 'por_ocupacion_2025.participacion_pct' es distinto: qué % de los graduados ocupados trabaja en cada grupo CIUO (no es, en sí, una tasa de sobrecalificación)."
+    }
+  }
+}

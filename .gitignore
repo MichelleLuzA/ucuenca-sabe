@@ -4,6 +4,7 @@
 !.env.example
 *.json
 !config/*.json
+!visualizacion/static/data.json
 
 # === Almacenamiento de Datos (Bloqueo total) ===
 data/
