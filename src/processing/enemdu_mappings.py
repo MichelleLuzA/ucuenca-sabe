@@ -46,6 +46,11 @@ COLUMN_ALIASES: Dict[str, List[str]] = {
     "parentesco_cod":       ["p01", "parentesco"],
     # Educación
     "nivel_instruccion_cod": ["p10a", "nivel_instruccion", "nivelins", "nnivins"],
+    # `nnivins` existe los 5 años junto a `p10a` (no sólo en 2023, como se pensaba
+    # originalmente — ver CORRECCIONES_NIVEL_INSTRUCCION.md). Se resuelve aparte,
+    # como columna propia, para no perderla: es una variable distinta (5 categorías,
+    # no intercambiable con las 10 de p10a) que sirve para contrastar/auditar.
+    "nnivins_cod":          ["nnivins"],
     "anios_aprobados":      ["p10b", "anio_aprobado", "grado_aprobado"],
     "asiste_clases_cod":    ["p07", "asiste"],
     # Mercado laboral

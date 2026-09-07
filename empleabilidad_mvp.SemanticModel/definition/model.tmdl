@@ -11,5 +11,9 @@ annotation __PBI_TimeIntelligenceEnabled = 1
 
 annotation PBI_ProTooling = ["DevMode"]
 
+annotation PBI_QueryOrder = ["enemdu"]
+
+ref table enemdu
+
 ref cultureInfo es-ES
 

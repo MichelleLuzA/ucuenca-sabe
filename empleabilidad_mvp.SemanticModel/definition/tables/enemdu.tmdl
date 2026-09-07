@@ -1,0 +1,560 @@
+table enemdu
+	lineageTag: af29e72e-92aa-4749-b5c8-15f1945b0f2a
+
+	measure 'Población expandida' =
+			
+			SUM(enemdu[factor_expansion])
+		lineageTag: 8ef83c50-049d-4298-b848-0e17407a3de5
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure PEA =
+			
+			CALCULATE(
+			    SUM(enemdu[factor_expansion]),
+			    enemdu[es_pea] = TRUE()
+			)
+		formatString: 0
+		lineageTag: 0f99a72d-f81d-4513-bb21-47f39d567a92
+
+	measure Ocupados =
+			
+			CALCULATE(
+			    SUM(enemdu[factor_expansion]),
+			    enemdu[es_ocupado] = TRUE()
+			)
+		formatString: 0
+		lineageTag: ce7c50ed-dfb4-4e3f-af52-5354b671b9ff
+
+	measure Desempleados =
+			
+			CALCULATE(
+			    SUM(enemdu[factor_expansion]),
+			    enemdu[es_desempleado] = TRUE()
+			)
+		formatString: 0
+		lineageTag: 4991bc58-66ac-45fd-8bd1-ed7e35ca67e6
+
+	measure 'Tasa Desempleo' =
+			
+			DIVIDE(
+			    [Desempleados],
+			    [PEA]
+			)
+		formatString: 0.00\ %;-0.00\ %;0.00\ %
+		lineageTag: 76578f84-8d50-4ab7-bd0d-f83fda1a0cf2
+
+	measure 'Empleo Adecuado' =
+			
+			CALCULATE(
+			    SUM(enemdu[factor_expansion]),
+			    enemdu[es_empleo_adecuado] = TRUE()
+			)
+		lineageTag: 971d8d41-5781-4288-8290-daa05a23580b
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Tasa Empleo Adecuado' =
+			
+			DIVIDE(
+			    [Empleo Adecuado],
+			    [PEA]
+			)
+		formatString: 0.00\ %;-0.00\ %;0.00\ %
+		lineageTag: 52e7c03e-d818-4927-a26c-4130b155be21
+
+	measure Subempleados =
+			
+			CALCULATE(
+			    SUM(enemdu[factor_expansion]),
+			    enemdu[es_subempleado] = TRUE()
+			)
+		lineageTag: 1566cd36-a351-4140-9b98-7a07d595dedf
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Tasa Subempleo' =
+			
+			DIVIDE(
+			    [Subempleados],
+			    [PEA]
+			)
+		formatString: 0.00\ %;-0.00\ %;0.00\ %
+		lineageTag: 6d6b9760-322f-4688-a7a6-7ef5fdb6bd21
+
+	column anio
+		dataType: int64
+		formatString: 0
+		lineageTag: c076997e-18c0-4124-8de6-262353f5e10e
+		summarizeBy: sum
+		sourceColumn: anio
+
+		annotation SummarizationSetBy = Automatic
+
+	column mes
+		dataType: int64
+		formatString: 0
+		lineageTag: dfc08c56-a2c0-4e67-857e-c0ebb9df39bb
+		summarizeBy: sum
+		sourceColumn: mes
+
+		annotation SummarizationSetBy = Automatic
+
+	column provincia
+		dataType: string
+		lineageTag: 9c8827eb-0fcd-4f50-93ee-f3a95b7f83ba
+		summarizeBy: none
+		sourceColumn: provincia
+
+		annotation SummarizationSetBy = Automatic
+
+	column area
+		dataType: string
+		lineageTag: f78fb127-0298-4fe9-b301-4f2ff2f466dd
+		summarizeBy: none
+		sourceColumn: area
+
+		annotation SummarizationSetBy = Automatic
+
+	column sexo
+		dataType: string
+		lineageTag: b41f2791-7cc2-44c5-b086-32486b542539
+		summarizeBy: none
+		sourceColumn: sexo
+
+		annotation SummarizationSetBy = Automatic
+
+	column edad
+		dataType: double
+		lineageTag: 42a6fbfd-7b45-4d85-a2cb-894db180b522
+		summarizeBy: sum
+		sourceColumn: edad
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column grupo_edad
+		dataType: string
+		lineageTag: de308f95-7f41-4a98-bdbf-04509f944b81
+		summarizeBy: none
+		sourceColumn: grupo_edad
+
+		annotation SummarizationSetBy = Automatic
+
+	column nivel_instruccion
+		dataType: string
+		lineageTag: 994797dd-f733-4865-8f77-616eebda7728
+		summarizeBy: none
+		sourceColumn: nivel_instruccion
+
+		annotation SummarizationSetBy = Automatic
+
+	column es_graduado_superior
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 5e03d8fa-4cd6-4e14-bd88-8b777073305c
+		summarizeBy: none
+		sourceColumn: es_graduado_superior
+
+		annotation SummarizationSetBy = Automatic
+
+	column condicion_actividad
+		dataType: string
+		lineageTag: 12dd3865-bfff-4ea8-b374-ecd460719467
+		summarizeBy: none
+		sourceColumn: condicion_actividad
+
+		annotation SummarizationSetBy = Automatic
+
+	column es_ocupado
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 80294f24-e20e-4102-b619-234c41bd6225
+		summarizeBy: none
+		sourceColumn: es_ocupado
+
+		annotation SummarizationSetBy = Automatic
+
+	column es_desempleado
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 4595332b-3229-4625-b5c4-008bc1744483
+		summarizeBy: none
+		sourceColumn: es_desempleado
+
+		annotation SummarizationSetBy = Automatic
+
+	column es_sobrecalificado
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 9df3421d-db53-4f27-bf62-dd7addf2d403
+		summarizeBy: none
+		sourceColumn: es_sobrecalificado
+
+		annotation SummarizationSetBy = Automatic
+
+	column ciuo_gran_grupo_desc
+		dataType: string
+		lineageTag: 2f340b43-fda0-42ec-98d6-49abd9541f97
+		summarizeBy: none
+		sourceColumn: ciuo_gran_grupo_desc
+
+		annotation SummarizationSetBy = Automatic
+
+	column rama_actividad
+		dataType: string
+		lineageTag: 117d8976-dd77-4eca-8c62-9b50f493e293
+		summarizeBy: none
+		sourceColumn: rama_actividad
+
+		annotation SummarizationSetBy = Automatic
+
+	column ingreso_laboral
+		dataType: double
+		lineageTag: 9c071c8c-83e3-4368-aae3-f63da5bf3077
+		summarizeBy: sum
+		sourceColumn: ingreso_laboral
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column horas_trabajadas
+		dataType: double
+		lineageTag: b60cbbfd-38aa-4eda-b8e3-ad6d3c41bd13
+		summarizeBy: sum
+		sourceColumn: horas_trabajadas
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column factor_expansion
+		dataType: double
+		lineageTag: 819f2519-9510-4e54-ae1b-d120a13cf58b
+		summarizeBy: sum
+		sourceColumn: factor_expansion
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column area_cod
+		dataType: int64
+		formatString: 0
+		lineageTag: d05d445d-7f04-4e79-88c6-a41965a14cbc
+		summarizeBy: sum
+		sourceColumn: area_cod
+
+		annotation SummarizationSetBy = Automatic
+
+	column codigo_ciudad
+		dataType: int64
+		formatString: 0
+		lineageTag: 727951f1-0e3a-4239-b898-cf66e4b09fe5
+		summarizeBy: sum
+		sourceColumn: codigo_ciudad
+
+		annotation SummarizationSetBy = Automatic
+
+	column conglomerado
+		dataType: int64
+		formatString: 0
+		lineageTag: c9f4a019-56d6-4f57-b5ac-c5e9d67ddeef
+		summarizeBy: sum
+		sourceColumn: conglomerado
+
+		annotation SummarizationSetBy = Automatic
+
+	column vivienda
+		dataType: int64
+		formatString: 0
+		lineageTag: 7543630d-fefb-43d0-982b-fce7114b8d6c
+		summarizeBy: sum
+		sourceColumn: vivienda
+
+		annotation SummarizationSetBy = Automatic
+
+	column hogar
+		dataType: int64
+		formatString: 0
+		lineageTag: 4ea6888c-1343-406b-a8d5-68bb0b0eea71
+		summarizeBy: sum
+		sourceColumn: hogar
+
+		annotation SummarizationSetBy = Automatic
+
+	column parentesco_cod
+		dataType: int64
+		formatString: 0
+		lineageTag: 61421356-20de-4ac4-b48b-9c650dccc6ff
+		summarizeBy: sum
+		sourceColumn: parentesco_cod
+
+		annotation SummarizationSetBy = Automatic
+
+	column sexo_cod
+		dataType: int64
+		formatString: 0
+		lineageTag: 36421387-e02d-4ed0-8e56-3838b8ea2211
+		summarizeBy: sum
+		sourceColumn: sexo_cod
+
+		annotation SummarizationSetBy = Automatic
+
+	column estado_civil_cod
+		dataType: int64
+		formatString: 0
+		lineageTag: 22c5f371-ef1e-4b2e-9611-5a7bf0b35d9d
+		summarizeBy: sum
+		sourceColumn: estado_civil_cod
+
+		annotation SummarizationSetBy = Automatic
+
+	column afiliacion_cod
+		dataType: int64
+		formatString: 0
+		lineageTag: 68689bc0-62a7-4a69-a716-6315803b6f7e
+		summarizeBy: sum
+		sourceColumn: afiliacion_cod
+
+		annotation SummarizationSetBy = Automatic
+
+	column asiste_clases_cod
+		dataType: int64
+		formatString: 0
+		lineageTag: e588961b-e23a-4a26-9be0-b77ad932f301
+		summarizeBy: sum
+		sourceColumn: asiste_clases_cod
+
+		annotation SummarizationSetBy = Automatic
+
+	column nivel_instruccion_cod
+		dataType: int64
+		formatString: 0
+		lineageTag: edd2614f-4d02-4336-ba3e-d71cb17626fc
+		summarizeBy: sum
+		sourceColumn: nivel_instruccion_cod
+
+		annotation SummarizationSetBy = Automatic
+
+	column anios_aprobados
+		dataType: double
+		lineageTag: 6fb75181-1bb9-45ad-9cdd-c45c8fb9702f
+		summarizeBy: sum
+		sourceColumn: anios_aprobados
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column ocupacion_cod
+		dataType: int64
+		formatString: 0
+		lineageTag: f98bcac7-6727-4a85-97b6-2b4b4ce542cf
+		summarizeBy: sum
+		sourceColumn: ocupacion_cod
+
+		annotation SummarizationSetBy = Automatic
+
+	column rama_cod
+		dataType: int64
+		formatString: 0
+		lineageTag: a0db3752-e2a0-4edc-b69d-dc8e37f8d874
+		summarizeBy: sum
+		sourceColumn: rama_cod
+
+		annotation SummarizationSetBy = Automatic
+
+	column categoria_ocupacion_cod
+		dataType: int64
+		formatString: 0
+		lineageTag: cbf73af1-6d75-4846-97f1-2d733c1719f4
+		summarizeBy: sum
+		sourceColumn: categoria_ocupacion_cod
+
+		annotation SummarizationSetBy = Automatic
+
+	column condicion_actividad_cod
+		dataType: int64
+		formatString: 0
+		lineageTag: 0fc4db1b-1b75-482a-9557-f543543c16cc
+		summarizeBy: sum
+		sourceColumn: condicion_actividad_cod
+
+		annotation SummarizationSetBy = Automatic
+
+	column sector_empleo_cod
+		dataType: int64
+		formatString: 0
+		lineageTag: 71528185-41c4-41f8-ad4b-61dd1c85a19f
+		summarizeBy: sum
+		sourceColumn: sector_empleo_cod
+
+		annotation SummarizationSetBy = Automatic
+
+	column grupo_ocupacion_cod
+		dataType: int64
+		formatString: 0
+		lineageTag: 0c7ff828-ed8d-4eac-b6b5-4572fc07111b
+		summarizeBy: sum
+		sourceColumn: grupo_ocupacion_cod
+
+		annotation SummarizationSetBy = Automatic
+
+	column rama_agrupada_cod
+		dataType: int64
+		formatString: 0
+		lineageTag: 9a3ba924-d78d-4a3b-8946-2ed398f193fa
+		summarizeBy: sum
+		sourceColumn: rama_agrupada_cod
+
+		annotation SummarizationSetBy = Automatic
+
+	column codigo_provincia
+		dataType: int64
+		formatString: 0
+		lineageTag: bed226ba-3900-44dc-a0fc-f631b0a4654b
+		summarizeBy: sum
+		sourceColumn: codigo_provincia
+
+		annotation SummarizationSetBy = Automatic
+
+	column id_persona
+		dataType: string
+		lineageTag: eadc5403-57e2-4613-a458-2ca0cb72e3f8
+		summarizeBy: none
+		sourceColumn: id_persona
+
+		annotation SummarizationSetBy = Automatic
+
+	column empleo_informal_cod
+		dataType: int64
+		formatString: 0
+		lineageTag: df67ffc4-4b8c-448c-abff-7dbfff8ff89b
+		summarizeBy: sum
+		sourceColumn: empleo_informal_cod
+
+		annotation SummarizationSetBy = Automatic
+
+	column establecimiento_estudia
+		dataType: string
+		lineageTag: 909c23db-db1b-4009-a4ec-1bd0c02d43f9
+		summarizeBy: none
+		sourceColumn: establecimiento_estudia
+
+		annotation SummarizationSetBy = Automatic
+
+	column modalidad_educativa
+		dataType: string
+		lineageTag: abe14f73-5a4e-45da-85fb-4e447148e371
+		summarizeBy: none
+		sourceColumn: modalidad_educativa
+
+		annotation SummarizationSetBy = Automatic
+
+	column fuente
+		dataType: string
+		lineageTag: 2e9981d3-8a32-45b3-a5fa-863e2bb85810
+		summarizeBy: none
+		sourceColumn: fuente
+
+		annotation SummarizationSetBy = Automatic
+
+	column ciuo_gran_grupo
+		dataType: int64
+		formatString: 0
+		lineageTag: 42fb0107-4191-41ee-8f3c-d88c18f68ab9
+		summarizeBy: sum
+		sourceColumn: ciuo_gran_grupo
+
+		annotation SummarizationSetBy = Automatic
+
+	column ciuo_nivel_competencia
+		dataType: int64
+		formatString: 0
+		lineageTag: c482f48c-2758-47e4-b1c8-cb34849958fe
+		summarizeBy: sum
+		sourceColumn: ciuo_nivel_competencia
+
+		annotation SummarizationSetBy = Automatic
+
+	column es_subempleado
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 447ce51b-4dc2-406a-8130-e9e4f86c2d3f
+		summarizeBy: none
+		sourceColumn: es_subempleado
+
+		annotation SummarizationSetBy = Automatic
+
+	column es_empleo_adecuado
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 0a43eb7f-a243-40ca-9a5e-5cacd2f9d30d
+		summarizeBy: none
+		sourceColumn: es_empleo_adecuado
+
+		annotation SummarizationSetBy = Automatic
+
+	column es_pea
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 3816b965-86bf-4de7-a1ec-4f72119b4e98
+		summarizeBy: none
+		sourceColumn: es_pea
+
+		annotation SummarizationSetBy = Automatic
+
+	column es_edad_trabajar
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 475b79be-237d-45a9-a00d-cb3808fd746c
+		summarizeBy: none
+		sourceColumn: es_edad_trabajar
+
+		annotation SummarizationSetBy = Automatic
+
+	column es_posgrado
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: 400f5b62-91ab-4144-b3ed-5793960c8001
+		summarizeBy: none
+		sourceColumn: es_posgrado
+
+		annotation SummarizationSetBy = Automatic
+
+	column ocupacion_requiere_superior
+		dataType: boolean
+		formatString: """TRUE"";""TRUE"";""FALSE"""
+		lineageTag: c82e35a0-dd39-404c-9a92-13128b4b410b
+		summarizeBy: none
+		sourceColumn: ocupacion_requiere_superior
+
+		annotation SummarizationSetBy = Automatic
+
+	column ingreso_por_hora
+		dataType: double
+		lineageTag: 37d27c4f-0d9e-47a2-b747-dfb5419f5fb6
+		summarizeBy: sum
+		sourceColumn: ingreso_por_hora
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	partition enemdu = m
+		mode: import
+		source =
+				let
+				    Origen = Parquet.Document(File.Contents("C:\Users\michu\mis-proyectos\ucuenca-sabe\data\silver\enemdu\enemdu_unificado.parquet"), [Compression=null, LegacyColumnNameEncoding=false, MaxDepth=null]),
+				    #"Filas filtradas" = Table.SelectRows(Origen, each [edad] >= 15),
+				    #"Filas filtradas1" = Table.SelectRows(#"Filas filtradas", each ([condicion_actividad] <> "Población económicamente inactiva (PEI)"))
+				in
+				    #"Filas filtradas1"
+
+	annotation PBI_NavigationStepName = Navegación
+
+	annotation PBI_ResultType = Table
+
