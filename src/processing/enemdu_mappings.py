@@ -60,6 +60,10 @@ COLUMN_ALIASES: Dict[str, List[str]] = {
     "ingreso_laboral":      ["ingrl", "ingreso_laboral", "ingreso"],
     "afiliacion_cod":       ["p05a", "afiliacion", "p05"],
     "empleo_informal_cod":  ["informal", "sectinf", "empleo_informal"],
+    # 👇 NUEVAS: columnas que aparecen desde 2023
+    "establecimiento_estudia": ["p081", "establecimiento_estudia"],  # opcional, solo 2024-2025
+    "modalidad_educativa":     ["p085", "modalidad_educativa"],      # opcional, solo 2024-2025
+    # Nota: p59 y p60a-p60k (descontento laboral) solo existen en 2021-2023
 }
 
 #: Variables sin las cuales el caso de uso de empleabilidad no es viable.
@@ -87,7 +91,19 @@ FALLBACK_NIVEL_INSTRUCCION: Dict[int, str] = {
     10: "Post-grado",
 }
 
+#: ⚠️ IMPORTANTE: `nnivins` (5 categorías, solo 2023) es una VARIABLE DIFERENTE de `p10a` (10 categorías)
+#: NO MAPEAR entre ellas: la estructura es incompatible y pierden información.
+#: Son dos versiones distintas de la misma pregunta. Tratar como variables separadas.
+FALLBACK_NNIVINS: Dict[int, str] = {
+    1: "Ninguno",
+    2: "Centro de Alfabetización",
+    3: "Educación Básica",
+    4: "Educación Media/Bachillerato",
+    5: "Superior",
+}
+
 FALLBACK_CONDACT: Dict[int, str] = {
+    0: "Menores de 15 años",  # Código 0 en algunos años
     1: "Empleo adecuado/pleno",
     2: "Subempleo por insuficiencia de tiempo de trabajo",
     3: "Subempleo por insuficiencia de ingresos",
@@ -97,8 +113,9 @@ FALLBACK_CONDACT: Dict[int, str] = {
     7: "Desempleo abierto",
     8: "Desempleo oculto",
     9: "Población económicamente inactiva (PEI)",
-    10: "Menor de 15 años",
 }
+# Nota: 2021 usa "Adecuado", 2022+ usa "Empleo Adecuado/Pleno"; 2021 usa "Otro empleo inadecuado"
+# Los patrones CONDACT_PATTERNS deben capturar ambas versiones
 
 #: CIUO-08, grandes grupos (primer dígito).
 CIUO08_GRUPOS: Dict[int, str] = {
@@ -188,7 +205,32 @@ CONDACT_PATTERNS: List[Tuple[str, str]] = [
 ]
 
 #: Categorías de nivel educativo consideradas "graduado universitario".
-NIVELES_SUPERIOR: Tuple[str, ...] = ("Superior universitaria", "Post-grado")
+NIVELES_SUPERIOR: Tuple[str, ...] = ("Superior universitaria", "Superior no universitaria", "Post-grado")
+
+#: Regla de "graduado superior" **por código numérico**, no por texto de etiqueta.
+#:
+#: Se deriva directamente del código (no de `nivel_instruccion` clasificado por
+#: EDU_PATTERNS) porque la variable fuente cambia de estructura entre años y un
+#: texto de diccionario mal escrito (p. ej. "Superior" a secas, sin "universitaria")
+#: puede no matchear ningún patrón y dejar `es_graduado_superior` en NaN/False
+#: para años enteros. Ver CORRECCIONES_NIVEL_INSTRUCCION.md.
+#:
+#: - `p10a` (10 categorías; 2021-2022, 2024-2025): 8=Superior no universitaria,
+#:   9=Superior universitaria, 10=Post-grado → graduado si código **>= 8**.
+#: - `nnivins` (5 categorías; SOLO 2023): 5=Superior, sin distinguir
+#:   universitaria/no universitaria → graduado si código **== 5** (no ">=", ya
+#:   que en esta variable 5 es el código máximo válido).
+#:
+#: Formato: variable fuente (normalizada) → (código_umbral, operador).
+NIVEL_INSTRUCCION_GRADUADO_RULE: Dict[str, Tuple[int, str]] = {
+    "p10a": (8, "ge"),
+    "nivelins": (8, "ge"),
+    "nivel_instruccion": (8, "ge"),
+    "nnivins": (5, "eq"),
+}
+#: Regla a aplicar cuando la variable fuente resuelta no está en el diccionario
+#: anterior (por defecto se asume el formato de 10 categorías tipo p10a).
+NIVEL_INSTRUCCION_GRADUADO_RULE_DEFAULT: Tuple[int, str] = (8, "ge")
 
 #: Categorías de `condicion_actividad` que implican estar ocupado.
 CATEGORIAS_OCUPADO: Tuple[str, ...] = (
@@ -213,6 +255,8 @@ def classify_labels(labels: Dict[str, str],
     Ejemplo: {'9': 'Superior Universitario'} → {9: 'Superior universitaria'}
     Los códigos cuya etiqueta no coincide con ningún patrón se descartan
     (quedarán como NaN en Silver y se reportan en la auditoría).
+
+    Nota: Normaliza espacios en blanco de etiquetas antes de clasificar.
     """
     out: Dict[int, str] = {}
     for code, text in (labels or {}).items():
@@ -220,7 +264,7 @@ def classify_labels(labels: Dict[str, str],
             code_int = int(code)
         except (TypeError, ValueError):
             continue
-        norm = str(text).lower()
+        norm = str(text).strip().lower()  # ← Normaliza espacios al inicio/final
         for canon, pattern in patterns:
             if re.search(pattern, norm):
                 out[code_int] = canon
@@ -235,6 +279,8 @@ def resolve_map(labels: Optional[Dict[str, str]],
 
     Prioriza el diccionario del año; si no alcanza al menos el 60 % de los
     códigos del fallback, usa el fallback documentado.
+
+    Nota: Normaliza espacios en blanco de etiquetas (strip).
     """
     if labels and patterns:
         derived = classify_labels(labels, patterns)
@@ -244,7 +290,7 @@ def resolve_map(labels: Optional[Dict[str, str]],
         direct = {}
         for code, text in labels.items():
             try:
-                direct[int(code)] = str(text).strip()
+                direct[int(code)] = str(text).strip()  # ← Elimina espacios al inicio/final
             except (TypeError, ValueError):
                 continue
         if direct:
