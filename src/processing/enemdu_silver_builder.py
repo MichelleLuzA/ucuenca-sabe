@@ -227,6 +227,17 @@ class ENEMDUSilverBuilder:
             df[name] = (df[cod_col].map(mapping) if cod_col in df.columns else pd.NA)
 
         prov["nivel_instruccion_variable"] = educ_source or None
+
+        # `nnivins` se conserva SIEMPRE como columna propia (código + etiqueta),
+        # exista o no como fuente de `nivel_instruccion_cod` ese año — no se
+        # descarta. Es una variable de 5 categorías, distinta de p10a (10
+        # categorías): se decodifica con su propio fallback, nunca con
+        # EDU_PATTERNS/FALLBACK_NIVEL_INSTRUCCION (que es el de p10a).
+        nnivins_map, nnivins_origin = resolve_map(labels_of("nnivins_cod"), None, FALLBACK_NNIVINS)
+        df["nnivins_nivel"] = (df["nnivins_cod"].map(nnivins_map)
+                               if "nnivins_cod" in df.columns else pd.NA)
+        prov["nnivins_nivel"] = nnivins_origin
+
         self._provenance[year] = prov
 
         # "Graduado superior" se deriva del CÓDIGO numérico (no del texto de
@@ -427,7 +438,9 @@ class ENEMDUSilverBuilder:
 
         # Orden lógico de columnas
         front = ["anio", "mes", "provincia", "area", "sexo", "edad", "grupo_edad",
-                 "nivel_instruccion", "es_graduado_superior", "condicion_actividad",
+                 "nivel_instruccion", "nivel_instruccion_cod",
+                 "nnivins_cod", "nnivins_nivel",
+                 "es_graduado_superior", "condicion_actividad",
                  "es_ocupado", "es_desempleado", "es_sobrecalificado",
                  "ciuo_gran_grupo_desc", "rama_actividad", "ingreso_laboral",
                  "horas_trabajadas", "factor_expansion"]
