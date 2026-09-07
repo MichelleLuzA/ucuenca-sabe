@@ -82,16 +82,17 @@
 
         // Abrir módulo
         function openModule(moduleName) {
-            currentModule = moduleName;
-            if (moduleName === 'enemdu') renderEnemduModule();
+            if (moduleName === 'enemdu') renderEnemduModule('enemdu');
             else if (moduleName === 'sobrecalificacion') renderSobrecalificacionModule();
         }
 
-        // Módulo ENEMDU
-        function renderEnemduModule() {
-            const module = dashboardData.modules.enemdu;
+        // Módulo ENEMDU / Empleabilidad Superior (mismo shape de datos, distinto segmento)
+        function renderEnemduModule(moduleKey) {
+            currentModule = moduleKey;
+            const module = dashboardData.modules[moduleKey];
             const kpi = module.kpi_latest;
             const app = document.getElementById('app');
+            const isGeneral = moduleKey === 'enemdu';
 
             app.innerHTML = `
                 <div class="min-h-screen bg-gray-50">
@@ -100,14 +101,28 @@
                         <div class="max-w-6xl mx-auto flex items-center justify-between">
                             <div>
                                 <h1 class="text-3xl font-bold">${module.title}</h1>
-                                <p class="text-gray-200">Año: ${kpi.year}</p>
+                                <p class="text-gray-200">Año: ${kpi.year} · Población: ${Math.round(kpi.poblacion).toLocaleString()}</p>
                             </div>
                             <button onclick="renderLanding()" class="bg-white text-${colors.navy} px-4 py-2 rounded font-bold hover:bg-gray-200">← Volver</button>
                         </div>
                     </div>
 
-                    <!-- KPIs -->
                     <div class="max-w-6xl mx-auto p-6">
+                        <!-- Selector de segmento -->
+                        <div class="flex gap-2 mb-6">
+                            <button onclick="renderEnemduModule('enemdu')"
+                                class="px-5 py-2 rounded-full font-bold text-sm transition ${isGeneral ? 'text-white' : 'bg-white text-gray-600 hover:bg-gray-100'}"
+                                style="${isGeneral ? `background:${colors.navy}` : ''}">
+                                🌎 Toda la PEA
+                            </button>
+                            <button onclick="renderEnemduModule('empleabilidad_superior')"
+                                class="px-5 py-2 rounded-full font-bold text-sm transition ${!isGeneral ? 'text-white' : 'bg-white text-gray-600 hover:bg-gray-100'}"
+                                style="${!isGeneral ? `background:${colors.navy}` : ''}">
+                                🎓 Educación Superior
+                            </button>
+                        </div>
+
+                        <!-- KPIs -->
                         <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
                             <div class="bg-white p-6 rounded-lg shadow text-center">
                                 <div class="text-3xl font-bold text-red-600">${kpi.tasa_desempleo.toFixed(1)}%</div>
@@ -165,14 +180,85 @@
                                 </table>
                             </div>
                         </div>
+
+                        <!-- Brecha de género -->
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-8">
+                            <div class="bg-white p-6 rounded-lg shadow">
+                                <h3 class="text-lg font-bold mb-4">Brecha de Género en Desempleo (${kpi.year})</h3>
+                                <p class="text-xs text-gray-500 mb-2">Puntos porcentuales, Mujer − Hombre, por grupo etario</p>
+                                <div id="brecha-genero-chart" style="height: 280px;"></div>
+                            </div>
+                            <div class="bg-white p-6 rounded-lg shadow">
+                                <h3 class="text-lg font-bold mb-4">Desempleo por Sexo y Edad</h3>
+                                <div class="overflow-x-auto">
+                                    <table class="w-full text-sm">
+                                        <thead class="bg-gray-100">
+                                            <tr>
+                                                <th class="px-3 py-2 text-left">Grupo etario</th>
+                                                <th class="px-3 py-2 text-right">Hombres %</th>
+                                                <th class="px-3 py-2 text-right">Mujeres %</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            ${[...new Set(module.por_sexo_edad.map(r => r.grupo_edad))].map(grupo => {
+                                                const h = module.por_sexo_edad.find(r => r.grupo_edad === grupo && r.sexo === 'Hombre');
+                                                const m = module.por_sexo_edad.find(r => r.grupo_edad === grupo && r.sexo === 'Mujer');
+                                                return `
+                                                <tr class="border-b hover:bg-gray-50">
+                                                    <td class="px-3 py-2">${grupo}</td>
+                                                    <td class="px-3 py-2 text-right">${h ? h.tasa_desempleo.toFixed(1) : '—'}%</td>
+                                                    <td class="px-3 py-2 text-right">${m ? m.tasa_desempleo.toFixed(1) : '—'}%</td>
+                                                </tr>`;
+                                            }).join('')}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        ${module.por_nivel_instruccion ? `
+                        <!-- Por nivel de instrucción -->
+                        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-8">
+                            <div class="bg-white p-6 rounded-lg shadow">
+                                <h3 class="text-lg font-bold mb-4">Desempleo por Nivel de Instrucción (${kpi.year})</h3>
+                                <div id="nivel-instruccion-chart" style="height: 320px;"></div>
+                            </div>
+                            <div class="bg-white p-6 rounded-lg shadow">
+                                <h3 class="text-lg font-bold mb-4">Detalle por Nivel de Instrucción</h3>
+                                <div class="overflow-x-auto">
+                                    <table class="w-full text-sm">
+                                        <thead class="bg-gray-100">
+                                            <tr>
+                                                <th class="px-3 py-2 text-left">Nivel</th>
+                                                <th class="px-3 py-2 text-right">Desempleo %</th>
+                                                <th class="px-3 py-2 text-right">Empleo Adec. %</th>
+                                                <th class="px-3 py-2 text-right">Sobrecalif. %</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            ${module.por_nivel_instruccion.map(n => `
+                                                <tr class="border-b hover:bg-gray-50">
+                                                    <td class="px-3 py-2">${n.nivel_instruccion}</td>
+                                                    <td class="px-3 py-2 text-right">${n.tasa_desempleo.toFixed(1)}%</td>
+                                                    <td class="px-3 py-2 text-right">${n.tasa_empleo_adecuado.toFixed(1)}%</td>
+                                                    <td class="px-3 py-2 text-right">${n.tasa_sobrecalificacion !== null ? n.tasa_sobrecalificacion.toFixed(1) + '%' : '—'}</td>
+                                                </tr>
+                                            `).join('')}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>` : ''}
                     </div>
                 </div>
             `;
 
             // Dibujar gráficos
             setTimeout(() => {
-                drawTimelineChart();
-                drawProvinciaChart();
+                drawTimelineChart(moduleKey);
+                drawProvinciaChart(moduleKey);
+                drawBrechaGeneroChart(moduleKey);
+                if (module.por_nivel_instruccion) drawNivelInstruccionChart(moduleKey);
             }, 100);
         }
 
@@ -222,7 +308,8 @@
                                     <thead class="bg-gray-100">
                                         <tr>
                                             <th class="px-4 py-2 text-left">Ocupación (CIUO-08)</th>
-                                            <th class="px-4 py-2 text-right">Tasa Sobrecalificación %</th>
+                                            <th class="px-4 py-2 text-right">% Graduados Ocupados</th>
+                                            <th class="px-4 py-2 text-center">¿Sobrecalificado?</th>
                                             <th class="px-4 py-2 text-right">Ocupados Totales</th>
                                         </tr>
                                     </thead>
@@ -230,7 +317,8 @@
                                         ${module.por_ocupacion_2025.map(o => `
                                             <tr class="border-b hover:bg-gray-50">
                                                 <td class="px-4 py-2">${o.ocupacion}</td>
-                                                <td class="px-4 py-2 text-right">${o.tasa_sobrecalificacion.toFixed(1)}%</td>
+                                                <td class="px-4 py-2 text-right">${o.participacion_pct.toFixed(1)}%</td>
+                                                <td class="px-4 py-2 text-center">${o.sobrecalificado ? '⚠️ Sí' : '—'}</td>
                                                 <td class="px-4 py-2 text-right">${o.ocupados_totales.toLocaleString()}</td>
                                             </tr>
                                         `).join('')}
@@ -250,8 +338,8 @@
         }
 
         // Gráficos
-        function drawTimelineChart() {
-            const timeline = dashboardData.modules.enemdu.timeline;
+        function drawTimelineChart(moduleKey) {
+            const timeline = dashboardData.modules[moduleKey].timeline;
             const trace1 = {
                 x: timeline.years,
                 y: timeline.tasa_desempleo,
@@ -274,8 +362,8 @@
             }, { responsive: true });
         }
 
-        function drawProvinciaChart() {
-            const provincias = dashboardData.modules.enemdu.por_provincia.slice(0, 10).reverse();
+        function drawProvinciaChart(moduleKey) {
+            const provincias = dashboardData.modules[moduleKey].por_provincia.slice(0, 10).reverse();
             const trace = {
                 x: provincias.map(p => p.tasa_desempleo),
                 y: provincias.map(p => p.provincia),
@@ -283,9 +371,47 @@
                 orientation: 'h',
                 marker: { color: colors.red }
             };
-            Plotly.newPlot('provincia-chart', [trace], { 
+            Plotly.newPlot('provincia-chart', [trace], {
                 margin: { l: 150, r: 20, t: 20, b: 30 },
                 xaxis: { title: 'Tasa Desempleo %' }
+            }, { responsive: true });
+        }
+
+        function drawBrechaGeneroChart(moduleKey) {
+            // Un valor de brecha_desempleo_pp por grupo_edad (viene repetido en
+            // Hombre y Mujer del mismo grupo; nos quedamos con uno solo).
+            const porSexoEdad = dashboardData.modules[moduleKey].por_sexo_edad;
+            const grupos = [...new Set(porSexoEdad.map(r => r.grupo_edad))];
+            const brechas = grupos.map(g => {
+                const row = porSexoEdad.find(r => r.grupo_edad === g && r.brecha_desempleo_pp !== null);
+                return row ? row.brecha_desempleo_pp : 0;
+            });
+            const trace = {
+                x: grupos,
+                y: brechas,
+                type: 'bar',
+                marker: { color: brechas.map(b => b >= 0 ? colors.red : colors.accent) }
+            };
+            Plotly.newPlot('brecha-genero-chart', [trace], {
+                margin: { l: 50, r: 20, t: 20, b: 30 },
+                yaxis: { title: 'p.p. (Mujer − Hombre)', zeroline: true },
+                shapes: [{ type: 'line', x0: -0.5, x1: grupos.length - 0.5, y0: 0, y1: 0,
+                          line: { color: '#999', width: 1 } }]
+            }, { responsive: true });
+        }
+
+        function drawNivelInstruccionChart(moduleKey) {
+            const niveles = dashboardData.modules[moduleKey].por_nivel_instruccion;
+            const trace = {
+                x: niveles.map(n => n.nivel_instruccion),
+                y: niveles.map(n => n.tasa_desempleo),
+                type: 'bar',
+                marker: { color: colors.accent }
+            };
+            Plotly.newPlot('nivel-instruccion-chart', [trace], {
+                margin: { l: 50, r: 20, t: 20, b: 100 },
+                yaxis: { title: 'Tasa Desempleo %' },
+                xaxis: { tickangle: -35 }
             }, { responsive: true });
         }
 
@@ -310,11 +436,11 @@
         function drawOcupacionChart() {
             const ocupaciones = dashboardData.modules.sobrecalificacion.por_ocupacion_2025.slice(0, 8).reverse();
             const trace = {
-                x: ocupaciones.map(o => o.tasa_sobrecalificacion),
+                x: ocupaciones.map(o => o.participacion_pct),
                 y: ocupaciones.map(o => o.ocupacion),
                 type: 'bar',
                 orientation: 'h',
-                marker: { color: colors.accent }
+                marker: { color: ocupaciones.map(o => o.sobrecalificado ? colors.red : colors.accent) }
             };
             Plotly.newPlot('ocupacion-chart', [trace], { 
                 margin: { l: 150, r: 20, t: 20, b: 30 },

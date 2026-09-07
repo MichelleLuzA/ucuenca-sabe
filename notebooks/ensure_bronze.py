@@ -15,8 +15,162 @@ import re
 import argparse
 from pathlib import Path
 from datetime import datetime
-from typing import List, Dict, Tuple
+from typing import Dict, List
 
 # Inyectar proyecto
 PROJECT_ROOT = Path.cwd().parent if Path.cwd().name == "notebooks" else Path.cwd()
-if str(PROJECT_ROOT) not in sys.path:\n    sys.path.append(str(PROJECT_ROOT))\n\ndef check_bronze_exists(\n    years: List[int] = None,\n) -> Dict:\n    \"\"\"\n    Verifica qué años de Bronze existen localmente.\n    \"\"\"\n    if years is None:\n        years = list(range(2021, 2026))\n    \n    # Importar después del sys.path setup\n    from src.config import get_external_bronze_dir\n    \n    bronze_dir = get_external_bronze_dir() / \"enemdu\"\n    csv_dir = bronze_dir / \"microdatos_csv\"\n    manifest_path = bronze_dir / \".manifest.json\"\n    \n    años_locales = []\n    if csv_dir.exists():\n        años_locales = sorted(\n            int(m.group()) for f in csv_dir.glob(\"*.csv\")\n            if (m := re.search(r\"(?:19|20)\\d{2}\", f.stem))\n        )\n    \n    años_faltantes = [a for a in years if a not in años_locales]\n    \n    última_descarga = None\n    if manifest_path.exists():\n        try:\n            with open(manifest_path) as f:\n                manifest = json.load(f)\n                última_descarga = manifest.get(\"última_descarga\")\n        except Exception:\n            pass\n    \n    tamaño_mb = 0\n    if csv_dir.exists():\n        tamaño_mb = sum(f.stat().st_size for f in csv_dir.rglob(\"*.csv\")) / 1e6\n    \n    return {\n        \"años_locales\": años_locales,\n        \"años_faltantes\": años_faltantes,\n        \"existe_completo\": len(años_faltantes) == 0 and len(años_locales) > 0,\n        \"tamaño_mb\": tamaño_mb,\n        \"última_descarga\": última_descarga,\n        \"bronze_dir\": str(bronze_dir),\n    }\n\n\ndef save_manifest(años_descargados: List[int]):\n    \"\"\"\n    Guarda un manifest.json con timestamp de descarga.\n    \"\"\"\n    from src.config import get_external_bronze_dir\n    \n    bronze_dir = get_external_bronze_dir() / \"enemdu\"\n    manifest_path = bronze_dir / \".manifest.json\"\n    \n    manifest = {\n        \"última_descarga\": datetime.now().isoformat(),\n        \"años\": años_descargados,\n        \"fuente\": \"https://www.kaggle.com/datasets/kmichelle/enemdu-ecuador-microdatos-anuales-personas\"\n    }\n    with open(manifest_path, \"w\") as f:\n        json.dump(manifest, f, indent=2, default=str)\n\n\ndef download_bronze():\n    \"\"\"\n    Descarga desde Kaggle.\n    \"\"\"\n    from src.ingestion.kaggle_downloader import download_and_organize_enemdu\n    \n    print(\"🚀 Descargando desde Kaggle ENEMDU...\")\n    print(\"   (esto puede tomar ~9 minutos)\\n\")\n    \n    try:\n        inventario = download_and_organize_enemdu()\n        años = list(range(2021, 2026))\n        save_manifest(años)\n        return True, inventario\n    except Exception as e:\n        print(f\"❌ Error durante descarga: {e}\")\n        return False, None\n\n\ndef main():\n    parser = argparse.ArgumentParser(\n        description=\"Asegurar que Bronze (Kaggle ENEMDU) esté descargado.\",\n        formatter_class=argparse.RawDescriptionHelpFormatter,\n        epilog=\"\"\"\nEjemplos:\n  python ensure_bronze.py              # Descarga si falta\n  python ensure_bronze.py --force      # Fuerza descarga\n  python ensure_bronze.py --check-only # Solo verifica\n  python ensure_bronze.py --years 2024 2025  # Solo esos años\n        \"\"\"\n    )\n    parser.add_argument(\n        \"--force\",\n        action=\"store_true\",\n        help=\"Fuerza descarga (ignora caché local)\"\n    )\n    parser.add_argument(\n        \"--check-only\",\n        action=\"store_true\",\n        help=\"Solo verifica sin descargar\"\n    )\n    parser.add_argument(\n        \"--years\",\n        type=int,\n        nargs=\"+\",\n        default=list(range(2021, 2026)),\n        help=\"Años a verificar (default: 2021-2025)\"\n    )\n    parser.add_argument(\n        \"--verbose\",\n        action=\"store_true\",\n        help=\"Output más detallado\"\n    )\n    \n    args = parser.parse_args()\n    \n    # Verificar estado actual\n    print(\"\\n\" + \"=\"*70)\n    print(\"📦 COMPROBANDO ESTADO DE CACHÉ LOCAL\")\n    print(\"=\"*70)\n    \n    estado = check_bronze_exists(years=args.years)\n    \n    print(f\"\\n  Años esperados:    {args.years}\")\n    print(f\"  Años locales:      {estado['años_locales'] if estado['años_locales'] else '(ninguno)'}\")\n    if estado['años_faltantes']:\n        print(f\"  Años faltantes:    {estado['años_faltantes']}\")\n    print(f\"  Tamaño en disco:   {estado['tamaño_mb']:.1f} MB\")\n    if estado['última_descarga']:\n        print(f\"  Última descarga:   {estado['última_descarga']}\")\n    \n    print(f\"\\n  Ubicación:         {estado['bronze_dir']}\")\n    \n    # Decidir qué hacer\n    if args.check_only:\n        print(\"\\n  📋 (modo verificación: sin descargar)\")\n        print(\"=\"*70)\n        return 0 if estado['existe_completo'] else 1\n    \n    if estado['existe_completo'] and not args.force:\n        print(\"\\n  ✅ Bronze completo en caché — saltando descarga\")\n        print(\"     (usa --force para re-descargar)\")\n        print(\"=\"*70)\n        return 0\n    \n    # Descargar\n    print(\"\\n\" + \"-\"*70)\n    if args.force:\n        print(\"  🔄 Forzando descarga (por --force)\")\n    elif estado['años_faltantes']:\n        print(f\"  📥 Faltan años {estado['años_faltantes']}: descargando\")\n    else:\n        print(\"  🚀 Bronze no encontrado: descargando\")\n    print(\"-\"*70 + \"\\n\")\n    \n    success, inventario = download_bronze()\n    \n    if success:\n        # Re-verificar\n        estado_final = check_bronze_exists(years=args.years)\n        print(f\"\\n✅ Descarga completada\")\n        print(f\"   Años disponibles: {estado_final['años_locales']}\")\n        print(f\"   Tamaño total:    {estado_final['tamaño_mb']:.1f} MB\")\n        print(\"=\"*70)\n        return 0\n    else:\n        print(f\"\\n❌ Fallo en la descarga\")\n        print(\"=\"*70)\n        return 1\n\n\nif __name__ == \"__main__\":\n    sys.exit(main())\n
+if str(PROJECT_ROOT) not in sys.path:
+    sys.path.append(str(PROJECT_ROOT))
+
+
+def check_bronze_exists(years: List[int] = None) -> Dict:
+    """Verifica qué años de Bronze existen localmente."""
+    if years is None:
+        years = list(range(2021, 2026))
+
+    # Importar después del sys.path setup
+    from src.processing import ENEMDUPaths
+
+    paths = ENEMDUPaths.build(PROJECT_ROOT)
+    manifest_path = paths.bronze / ".manifest.json"
+
+    años_locales = []
+    if paths.microdatos.exists():
+        años_locales = sorted(
+            int(m.group()) for f in paths.microdatos.glob("*.csv")
+            if (m := re.search(r"(?:19|20)\d{2}", f.stem))
+        )
+
+    años_faltantes = [a for a in years if a not in años_locales]
+
+    última_descarga = None
+    if manifest_path.exists():
+        try:
+            with open(manifest_path, encoding="utf-8") as f:
+                última_descarga = json.load(f).get("última_descarga")
+        except Exception:
+            pass
+
+    tamaño_mb = 0.0
+    if paths.microdatos.exists():
+        tamaño_mb = sum(f.stat().st_size for f in paths.microdatos.rglob("*.csv")) / 1e6
+
+    return {
+        "años_locales": años_locales,
+        "años_faltantes": años_faltantes,
+        "existe_completo": len(años_faltantes) == 0 and len(años_locales) > 0,
+        "tamaño_mb": tamaño_mb,
+        "última_descarga": última_descarga,
+        "bronze_dir": str(paths.bronze),
+        "manifest_path": manifest_path,
+    }
+
+
+def save_manifest(manifest_path: Path, años_descargados: List[int]) -> None:
+    """Guarda un manifest.json con timestamp de descarga."""
+    from src.config import CONFIG
+
+    manifest = {
+        "última_descarga": datetime.now().isoformat(),
+        "años": años_descargados,
+        "fuente": CONFIG["sources"]["enemdu"]["kaggle_dataset"],
+    }
+    manifest_path.parent.mkdir(parents=True, exist_ok=True)
+    with open(manifest_path, "w", encoding="utf-8") as f:
+        json.dump(manifest, f, indent=2, ensure_ascii=False, default=str)
+
+
+def download_bronze(years: List[int], manifest_path: Path):
+    """Descarga desde Kaggle."""
+    from src.ingestion.kaggle_downloader import download_and_organize_enemdu
+
+    print("🚀 Descargando desde Kaggle ENEMDU...")
+    print("   (esto puede tomar varios minutos)\n")
+
+    try:
+        inventario = download_and_organize_enemdu()
+        save_manifest(manifest_path, years)
+        return True, inventario
+    except Exception as e:
+        print(f"❌ Error durante descarga: {e}")
+        return False, None
+
+
+def main():
+    parser = argparse.ArgumentParser(
+        description="Asegurar que Bronze (Kaggle ENEMDU) esté descargado.",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+        epilog="""
+Ejemplos:
+  python ensure_bronze.py              # Descarga si falta
+  python ensure_bronze.py --force      # Fuerza descarga
+  python ensure_bronze.py --check-only # Solo verifica
+  python ensure_bronze.py --years 2024 2025  # Solo esos años
+        """,
+    )
+    parser.add_argument("--force", action="store_true", help="Fuerza descarga (ignora caché local)")
+    parser.add_argument("--check-only", action="store_true", help="Solo verifica sin descargar")
+    parser.add_argument(
+        "--years", type=int, nargs="+", default=list(range(2021, 2026)),
+        help="Años a verificar (default: 2021-2025)",
+    )
+    parser.add_argument("--verbose", action="store_true", help="Output más detallado")
+
+    args = parser.parse_args()
+
+    # Verificar estado actual
+    print("\n" + "=" * 70)
+    print("📦 COMPROBANDO ESTADO DE CACHÉ LOCAL")
+    print("=" * 70)
+
+    estado = check_bronze_exists(years=args.years)
+
+    print(f"\n  Años esperados:    {args.years}")
+    print(f"  Años locales:      {estado['años_locales'] if estado['años_locales'] else '(ninguno)'}")
+    if estado["años_faltantes"]:
+        print(f"  Años faltantes:    {estado['años_faltantes']}")
+    print(f"  Tamaño en disco:   {estado['tamaño_mb']:.1f} MB")
+    if estado["última_descarga"]:
+        print(f"  Última descarga:   {estado['última_descarga']}")
+
+    print(f"\n  Ubicación:         {estado['bronze_dir']}")
+
+    # Decidir qué hacer
+    if args.check_only:
+        print("\n  📋 (modo verificación: sin descargar)")
+        print("=" * 70)
+        return 0 if estado["existe_completo"] else 1
+
+    if estado["existe_completo"] and not args.force:
+        print("\n  ✅ Bronze completo en caché — saltando descarga")
+        print("     (usa --force para re-descargar)")
+        print("=" * 70)
+        return 0
+
+    # Descargar
+    print("\n" + "-" * 70)
+    if args.force:
+        print("  🔄 Forzando descarga (por --force)")
+    elif estado["años_faltantes"]:
+        print(f"  📥 Faltan años {estado['años_faltantes']}: descargando")
+    else:
+        print("  🚀 Bronze no encontrado: descargando")
+    print("-" * 70 + "\n")
+
+    success, inventario = download_bronze(args.years, estado["manifest_path"])
+
+    if success:
+        estado_final = check_bronze_exists(years=args.years)
+        print("\n✅ Descarga completada")
+        print(f"   Años disponibles: {estado_final['años_locales']}")
+        print(f"   Tamaño total:    {estado_final['tamaño_mb']:.1f} MB")
+        print("=" * 70)
+        return 0
+    else:
+        print("\n❌ Fallo en la descarga")
+        print("=" * 70)
+        return 1
+
+
+if __name__ == "__main__":
+    sys.exit(main())

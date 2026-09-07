@@ -99,11 +99,23 @@ class YearSchema:
 
     @property
     def coverage(self) -> float:
-        """% de columnas del CSV documentadas en el diccionario."""
+        """% de columnas del CSV documentadas en el diccionario.
+
+        OJO: esto sólo mide si el NOMBRE de la columna está documentado, no si
+        el diccionario trae las etiquetas de valor (código → significado).
+        Un diccionario puede tener 100% de cobertura de nombres y 0 etiquetas
+        de valor (p. ej. si sólo documenta "nombre de campo" + "descripción").
+        Usa `n_variables_con_etiquetas` para lo segundo.
+        """
         if not self.csv_columns:
             return 0.0
         return round(100 * len(set(self.csv_columns) & set(self.dict_columns))
                      / len(self.csv_columns), 2)
+
+    @property
+    def n_variables_con_etiquetas(self) -> int:
+        """Cuántas variables tienen etiquetas código→significado extraídas."""
+        return sum(1 for labels in self.value_labels.values() if labels)
 
     def to_dict(self) -> Dict[str, Any]:
         return {
@@ -205,6 +217,18 @@ class ENEMDUSchemaAnalyzer:
                 }
             except Exception as exc:  # noqa: BLE001
                 log.error("Error leyendo diccionario %s: %s", schema.dict_path.name, exc)
+            else:
+                if schema.dict_columns and schema.n_variables_con_etiquetas == 0:
+                    log.error(
+                        "Año %s: el diccionario '%s' se leyó (%s variables documentadas) pero "
+                        "NINGUNA trae etiquetas de valor (código→significado) — probablemente "
+                        "sólo documenta nombre + descripción de campo, no categorías. TODO el "
+                        "mapeo semántico de sexo/condición de actividad/nivel de instrucción/etc. "
+                        "para este año depende ciegamente de los FALLBACK_* de enemdu_mappings.py, "
+                        "sin poder validarse contra un codebook real. Busca un 'Manual de usuario' "
+                        "o la versión .sav/.dta del microdato (trae las etiquetas embebidas) antes "
+                        "de confiar en las tasas derivadas de condicion_actividad.",
+                        year, schema.dict_path.name, len(schema.dict_columns))
         else:
             log.warning("Sin diccionario XLSX para %s", year)
 
@@ -360,6 +384,8 @@ class ENEMDUSchemaAnalyzer:
             "solo_en_csv": len(s.only_in_csv),
             "solo_en_dicc": len(s.only_in_dict),
             "cols_exclusivas": len(self.year_specific.get(y, [])),
+            "variables_con_etiquetas_valor": s.n_variables_con_etiquetas,
+            "mapeo_semantico_validable": s.n_variables_con_etiquetas > 0,
         } for y, s in sorted(self.schemas.items())])
 
     def save_report(self, path: Optional[Path] = None) -> Path:
