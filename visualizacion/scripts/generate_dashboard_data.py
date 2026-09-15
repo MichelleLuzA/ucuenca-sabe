@@ -232,24 +232,10 @@ def build_sobrecalificacion_module(data):
 
     por_ocupacion.sort(key=lambda x: x['participacion_pct'], reverse=True)
 
-    # CIUO mapping
-    ciuo_mapping = {
-        1: "Profesionales",
-        2: "Técnicos",
-        3: "Personal de apoyo",
-        4: "Empleados de oficina",
-        5: "Servicios y ventas",
-        6: "Agricultura",
-        7: "Oficios",
-        8: "Operarios",
-        9: "Trabajadores no calificados"
-    }
-
     return {
         "title": "Sobrecalificación — Graduados en Ocupaciones No Acordes",
         "tasa_general_por_anio": tasa_general,
         "por_ocupacion_2025": por_ocupacion,
-        "ciuo_mapping": ciuo_mapping,
         "metodologia": (
             "Sobrecalificado = graduado de educación superior ocupado en una ocupación "
             "(CIUO-08 grupos 4-9) que no requiere título superior. 'tasa_general_por_anio' "
