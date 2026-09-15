@@ -82,6 +82,32 @@ table enemdu
 		formatString: 0.00\ %;-0.00\ %;0.00\ %
 		lineageTag: 6d6b9760-322f-4688-a7a6-7ef5fdb6bd21
 
+	measure 'Ingreso Laboral Promedio' =
+			
+			DIVIDE(
+			    CALCULATE(
+			        SUMX(
+			            enemdu,
+			            enemdu[ingreso_laboral] * enemdu[factor_expansion]
+			        ),
+			        enemdu[es_ocupado] = TRUE()
+			    ),
+			    [Ocupados]
+			)
+		lineageTag: 6e501e44-ce1b-4ca8-b3fb-9e27962afdff
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Empleo Informal' =
+			
+			CALCULATE(
+			    SUM(enemdu[factor_expansion]),
+			    enemdu[es_ocupado] = TRUE(),
+			    enemdu[empleo_informal_cod] = TRUE()
+			)
+		formatString: 0
+		lineageTag: 1126d0b0-68d3-490f-a94b-2c5f6d64096d
+
 	column anio
 		dataType: int64
 		formatString: 0
@@ -543,6 +569,23 @@ table enemdu
 		annotation SummarizationSetBy = Automatic
 
 		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column nnivins_cod
+		dataType: int64
+		formatString: 0
+		lineageTag: dfbe6f9f-aa68-450a-b89e-77539f82ad6f
+		summarizeBy: sum
+		sourceColumn: nnivins_cod
+
+		annotation SummarizationSetBy = Automatic
+
+	column nnivins_nivel
+		dataType: string
+		lineageTag: 708dae54-8d1b-4a34-8397-bee2a511d217
+		summarizeBy: none
+		sourceColumn: nnivins_nivel
+
+		annotation SummarizationSetBy = Automatic
 
 	partition enemdu = m
 		mode: import

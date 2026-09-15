@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "timestamp": "2026-09-07T11:21:58.218146",
+    "timestamp": "2026-09-15T09:06:44.174766",
     "version": "1.0",
     "fuente": "data/gold/enemdu/*.parquet",
     "descripcion": "Dashboard Empleabilidad ENEMDU + Sobrecalificación"
@@ -1157,17 +1157,6 @@
           "ocupados_totales": 51548
         }
       ],
-      "ciuo_mapping": {
-        "1": "Profesionales",
-        "2": "Técnicos",
-        "3": "Personal de apoyo",
-        "4": "Empleados de oficina",
-        "5": "Servicios y ventas",
-        "6": "Agricultura",
-        "7": "Oficios",
-        "8": "Operarios",
-        "9": "Trabajadores no calificados"
-      },
       "metodologia": "Sobrecalificado = graduado de educación superior ocupado en una ocupación (CIUO-08 grupos 4-9) que no requiere título superior. 'tasa_general_por_anio' es la tasa real (sobrecalificados/ocupados, ponderada por fexp). 'por_ocupacion_2025.participacion_pct' es distinto: qué % de los graduados ocupados trabaja en cada grupo CIUO (no es, en sí, una tasa de sobrecalificación)."
     }
   }
