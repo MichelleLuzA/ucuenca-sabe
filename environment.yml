@@ -16,6 +16,9 @@ dependencies:
   # Scraping (investigacion_scraper_final.py, organizaciones_scraper.py)
   - selenium
 
+  # Fuzzy matching (02_fuzzy_matching_dspace.ipynb: nombre docente <-> DSpace)
+  - python-levenshtein  # backend en C para thefuzz, si no esta usa difflib (mas lento)
+
   # Jupyter para VS Code (Quitamos el meta-paquete jupyter para aligerar)
   - ipykernel=6.29.4
 
@@ -27,3 +30,4 @@ dependencies:
   - pip=24.0
   - pip:
     - kaggle>=2.2.4  # >=2.x requerido: soporta autenticación por KAGGLE_API_TOKEN (access token). La 1.5.16 solo lee KAGGLE_USERNAME/KAGGLE_KEY o kaggle.json y falla con tu .env actual.
+    - thefuzz==0.22.1
