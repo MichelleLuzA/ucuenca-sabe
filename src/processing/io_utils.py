@@ -50,11 +50,17 @@ _ROOT_MARKERS = ("src", "config", ".git", "pyproject.toml", "requirements.txt")
 
 
 def find_project_root(start: Optional[Path] = None) -> Path:
-    """Sube por el árbol de directorios hasta encontrar la raíz del proyecto.
+    """Raíz del proyecto: delega en `src.config.PROJECT_ROOT` (fuente única de
+    verdad) cuando ya es importable, y sólo recorre el árbol de directorios si
+    no lo es (por ejemplo, corriendo este módulo antes de que el llamador haya
+    puesto la raíz en sys.path)."""
+    try:
+        from src.config import PROJECT_ROOT  # type: ignore
 
-    Se apoya en marcadores conocidos (src/, config/, .git). Si no encuentra
-    nada, devuelve el directorio actual (comportamiento seguro en notebooks).
-    """
+        return PROJECT_ROOT
+    except Exception:
+        pass
+
     start = Path(start or Path.cwd()).resolve()
     for candidate in [start, *start.parents]:
         hits = sum((candidate / m).exists() for m in _ROOT_MARKERS)
