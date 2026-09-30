@@ -16,6 +16,10 @@ dependencies:
   # Scraping (investigacion_scraper_final.py, organizaciones_scraper.py)
   - selenium
 
+  # Scraping noticias economia (noticias_economia_scraper.py)
+  - requests
+  - beautifulsoup4
+
   # Fuzzy matching (02_fuzzy_matching_dspace.ipynb: nombre docente <-> DSpace)
   - python-levenshtein  # backend en C para thefuzz, si no esta usa difflib (mas lento)
 

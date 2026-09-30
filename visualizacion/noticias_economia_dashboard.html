@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Noticias de Economía — Sentimiento y Cobertura</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+</head>
+<body class="bg-gray-50 text-gray-900">
+    <div id="app" class="max-w-6xl mx-auto p-6"></div>
+
+    <script>
+        const colors = { navy: '#0B2341', red: '#D3272C', accent: '#1E4C82', gray: '#9CA3AF' };
+        const SENT_COLOR = { positivo: '#1E7A34', negativo: '#D3272C', neutro: '#9CA3AF' };
+
+        async function loadData() {
+            try {
+                const res = await fetch('static/noticias_data.json');
+                if (!res.ok) throw new Error(`HTTP ${res.status}`);
+                render(await res.json());
+            } catch (err) {
+                document.getElementById('app').innerHTML = `
+                    <div class="p-8 bg-white rounded-lg shadow text-center">
+                        <h1 class="text-xl font-bold text-red-600 mb-2">Error cargando static/noticias_data.json</h1>
+                        <p class="text-sm text-gray-500">${err.message}</p>
+                        <p class="text-sm text-gray-500 mt-2">Corre visualizacion/scripts/generate_noticias_data.py primero.</p>
+                    </div>`;
+            }
+        }
+
+        function pct(n, total) { return total ? ((n / total) * 100).toFixed(1) : '0.0'; }
+
+        function render(data) {
+            const total = data.metadata.total_noticias;
+            const sent = data.sentimiento_total;
+
+            document.getElementById('app').innerHTML = `
+                <div class="mb-2 text-xs inline-block bg-yellow-100 text-yellow-800 px-2 py-1 rounded">
+                    Prototipo standalone — pendiente integrar al dashboard único de UCuenca-SABE
+                </div>
+                <h1 class="text-2xl font-bold mb-1" style="color:${colors.navy}">Noticias de Economía — Sentimiento y Cobertura</h1>
+                <p class="text-sm text-gray-500 mb-6">Fuentes: Primicias, El Universo (sección Economía) · Generado ${new Date(data.metadata.timestamp).toLocaleString('es-EC')}</p>
+
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+                    ${kpiCard('Total noticias', total, colors.navy)}
+                    ${kpiCard('% Positivas', pct(sent.positivo || 0, total) + '%', SENT_COLOR.positivo)}
+                    ${kpiCard('% Negativas', pct(sent.negativo || 0, total) + '%', SENT_COLOR.negativo)}
+                    ${kpiCard('% Neutras', pct(sent.neutro || 0, total) + '%', SENT_COLOR.neutro)}
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                    <div class="bg-white p-4 rounded-lg shadow">
+                        <h2 class="font-semibold mb-2">Sentimiento general</h2>
+                        <canvas id="chartSentimiento"></canvas>
+                    </div>
+                    <div class="bg-white p-4 rounded-lg shadow">
+                        <h2 class="font-semibold mb-2">Sentimiento por medio</h2>
+                        <canvas id="chartSentimientoFuente"></canvas>
+                    </div>
+                    <div class="bg-white p-4 rounded-lg shadow">
+                        <h2 class="font-semibold mb-2">Noticias por medio</h2>
+                        <canvas id="chartFuente"></canvas>
+                    </div>
+                    <div class="bg-white p-4 rounded-lg shadow">
+                        <h2 class="font-semibold mb-2">Palabras más frecuentes en titulares</h2>
+                        <canvas id="chartPalabras"></canvas>
+                    </div>
+                </div>
+
+                <div class="bg-white p-4 rounded-lg shadow overflow-x-auto">
+                    <h2 class="font-semibold mb-2">Titulares (tabla estructurada)</h2>
+                    <table class="w-full text-sm">
+                        <thead>
+                            <tr class="text-left border-b">
+                                <th class="py-2 pr-4">Medio</th>
+                                <th class="py-2 pr-4">Título</th>
+                                <th class="py-2 pr-4">Sentimiento</th>
+                                <th class="py-2 pr-4">Fecha scrape</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${data.noticias.map(rowHtml).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            `;
+
+            drawSentimiento(sent);
+            drawSentimientoFuente(data.sentimiento_por_fuente);
+            drawFuente(data.por_fuente);
+            drawPalabras(data.top_palabras);
+        }
+
+        function kpiCard(label, value, color) {
+            return `<div class="bg-white p-4 rounded-lg shadow">
+                <p class="text-xs text-gray-500">${label}</p>
+                <p class="text-2xl font-bold" style="color:${color}">${value}</p>
+            </div>`;
+        }
+
+        function rowHtml(n) {
+            const badgeColor = SENT_COLOR[n.sentimiento] || colors.gray;
+            return `<tr class="border-b last:border-0">
+                <td class="py-2 pr-4 whitespace-nowrap">${n.fuente}</td>
+                <td class="py-2 pr-4"><a href="${n.url}" target="_blank" rel="noreferrer" class="hover:underline" style="color:${colors.accent}">${n.titulo}</a></td>
+                <td class="py-2 pr-4"><span class="px-2 py-0.5 rounded text-white text-xs" style="background:${badgeColor}">${n.sentimiento}</span></td>
+                <td class="py-2 pr-4 whitespace-nowrap text-gray-500">${n.fecha_scrape}</td>
+            </tr>`;
+        }
+
+        function drawSentimiento(sent) {
+            const labels = Object.keys(sent);
+            new Chart(document.getElementById('chartSentimiento'), {
+                type: 'doughnut',
+                data: { labels, datasets: [{ data: labels.map(l => sent[l]), backgroundColor: labels.map(l => SENT_COLOR[l]) }] }
+            });
+        }
+
+        function drawSentimientoFuente(porFuente) {
+            const fuentes = Object.keys(porFuente);
+            const categorias = ['positivo', 'neutro', 'negativo'];
+            new Chart(document.getElementById('chartSentimientoFuente'), {
+                type: 'bar',
+                data: {
+                    labels: fuentes,
+                    datasets: categorias.map(cat => ({
+                        label: cat,
+                        data: fuentes.map(f => porFuente[f][cat] || 0),
+                        backgroundColor: SENT_COLOR[cat]
+                    }))
+                },
+                options: { scales: { x: { stacked: true }, y: { stacked: true, beginAtZero: true } } }
+            });
+        }
+
+        function drawFuente(porFuente) {
+            const labels = Object.keys(porFuente);
+            new Chart(document.getElementById('chartFuente'), {
+                type: 'bar',
+                data: { labels, datasets: [{ data: labels.map(l => porFuente[l]), backgroundColor: colors.accent }] },
+                options: { plugins: { legend: { display: false } }, scales: { y: { beginAtZero: true } } }
+            });
+        }
+
+        function drawPalabras(top) {
+            new Chart(document.getElementById('chartPalabras'), {
+                type: 'bar',
+                data: {
+                    labels: top.map(p => p.palabra),
+                    datasets: [{ data: top.map(p => p.conteo), backgroundColor: colors.navy }]
+                },
+                options: { indexAxis: 'y', plugins: { legend: { display: false } } }
+            });
+        }
+
+        loadData();
+    </script>
+</body>
+</html>
