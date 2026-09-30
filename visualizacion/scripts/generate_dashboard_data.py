@@ -2,7 +2,7 @@
 # -*- coding: utf-8 -*-
 """
 Generador de datos JSON para Dashboard de Empleabilidad ENEMDU + Sobrecalificación
-Proyecto: UCuenca-SABE | Sistema de Inteligencia Territorial
+Proyecto: UCuenca-SABE!
 Última actualización: 2026-09-04
 """
 
