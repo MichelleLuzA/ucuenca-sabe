@@ -33,7 +33,7 @@ jobs:
           os.makedirs(os.path.dirname(out), exist_ok=True)
           if os.path.exists(path):
               noticias = json.load(open(path, encoding='utf-8'))['noticias']
-              df = pd.DataFrame(noticias)[['fuente', 'titulo', 'resumen', 'url', 'fecha_scrape']]
+              df = pd.DataFrame(noticias).reindex(columns=['fuente', 'titulo', 'resumen', 'url', 'fecha_scrape', 'fecha_publicacion'])
               df.to_csv(out, index=False, encoding='utf-8-sig')
               print(f'Bronze reconstruido: {len(df)} noticias previas')
           else:

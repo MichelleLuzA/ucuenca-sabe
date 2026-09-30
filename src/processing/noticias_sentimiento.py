@@ -66,13 +66,14 @@ def build_silver() -> pd.DataFrame:
     df = df.dropna(subset=["titulo", "url"]).drop_duplicates(subset="url", keep="first")
     df["resumen"] = df["resumen"].fillna("")
     df["fecha_scrape"] = pd.to_datetime(df["fecha_scrape"], utc=True, format="mixed")
+    df["fecha_publicacion"] = pd.to_datetime(df["fecha_publicacion"], utc=True, format="mixed", errors="coerce")
 
     texto = df["titulo"] + " " + df["resumen"]
     etiquetas = texto.map(score_sentimiento)
     df["sentimiento"] = etiquetas.map(lambda t: t[0])
     df["sentimiento_score"] = etiquetas.map(lambda t: t[1])
 
-    df = df.sort_values("fecha_scrape", ascending=False).reset_index(drop=True)
+    df = df.sort_values(["fecha_publicacion", "fecha_scrape"], ascending=False).reset_index(drop=True)
     SILVER_FILE.parent.mkdir(parents=True, exist_ok=True)
     df.to_parquet(SILVER_FILE, index=False)
     return df
