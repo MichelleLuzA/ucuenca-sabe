@@ -49,7 +49,10 @@ def build():
     noticias = df.sort_values("fecha_scrape", ascending=False)[
         ["fuente", "titulo", "resumen", "url", "sentimiento", "fecha_scrape"]
     ].copy()
-    noticias["fecha_scrape"] = noticias["fecha_scrape"].astype(str)
+    # ISO con 'T' (no el "YYYY-MM-DD HH:MM:SS+00:00" de str(Timestamp)): así el
+    # bronze reconstruido desde este JSON en CI queda en el mismo formato que
+    # escribe el scraper, y pd.to_datetime no choca con fechas mixtas.
+    noticias["fecha_scrape"] = noticias["fecha_scrape"].apply(lambda t: t.isoformat())
 
     return {
         "metadata": {
