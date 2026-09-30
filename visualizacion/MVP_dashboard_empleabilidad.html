@@ -35,7 +35,7 @@
                 const response = await fetch('static/data.json');
                 if (!response.ok) throw new Error(`HTTP ${response.status}`);
                 dashboardData = await response.json();
-                console.log('✅ Datos cargados:', dashboardData);
+                prepararCubos();
                 renderLanding();
             } catch (error) {
                 console.error('❌ Error cargando datos:', error);
@@ -63,11 +63,11 @@
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-2xl mx-auto px-4 mb-12">
-                        <button onclick="openModule('enemdu')" class="bg-white text-${colors.navy} px-8 py-6 rounded-lg font-bold text-lg hover:shadow-xl transform hover:scale-105 transition">
+                        <button onclick="openModule('enemdu')" style="color:${colors.navy}" class="bg-white px-8 py-6 rounded-lg font-bold text-lg hover:shadow-xl transform hover:scale-105 transition">
                             <div class="text-4xl mb-2">🏢</div>
                             Mercado Laboral ENEMDU
                         </button>
-                        <button onclick="openModule('sobrecalificacion')" class="bg-white text-${colors.navy} px-8 py-6 rounded-lg font-bold text-lg hover:shadow-xl transform hover:scale-105 transition">
+                        <button onclick="openModule('sobrecalificacion')" style="color:${colors.navy}" class="bg-white px-8 py-6 rounded-lg font-bold text-lg hover:shadow-xl transform hover:scale-105 transition">
                             <div class="text-4xl mb-2">📚</div>
                             Sobrecalificación
                         </button>
@@ -75,6 +75,10 @@
 
                     <div class="text-gray-300 text-sm">
                         <p>Última actualización: ${new Date(dashboardData.metadata.timestamp).toLocaleDateString('es-EC')}</p>
+                    </div>
+
+                    <div class="mt-10 pt-4 border-t border-white/20 text-center text-xs text-gray-300">
+                        Elaborado por <span class="font-semibold text-white">Econ. Michelle Luzuriaga</span> · Dirección de Proyectos Estratégicos · Universidad de Cuenca
                     </div>
                 </div>
             `;
@@ -86,30 +90,141 @@
             else if (moduleName === 'sobrecalificacion') renderSobrecalificacionModule();
         }
 
-        // Módulo ENEMDU / Empleabilidad Superior (mismo shape de datos, distinto segmento)
+        // ------------------------------------------------------------------
+        // Cubos aditivos (gold: cubo_empleabilidad, cubo_ocupacion_graduados).
+        // Toda cifra se recalcula aquí sumando las filas que pasan los filtros
+        // y aplicando las fórmulas de ENEMDUGoldBuilder._rates: las tasas no se
+        // promedian, las sumas ponderadas sí.
+        // ------------------------------------------------------------------
+        const SEXOS = ['Hombre', 'Mujer'];
+        const SEXO_COLOR = { Hombre: '#1E4C82', Mujer: '#C0417A' };
+        const filtrosEmp = { sexo: 'Todos', nivel: 'Todos' };
+        const filtrosSob = { sexo: 'Todos', provincia: 'Todas' };
+        let cubo = [], cuboOcup = [], ANIOS = [], ULTIMO = null, N_MIN = 30;
+
+        function desempacar(c) {
+            return c.rows.map(r => Object.fromEntries(c.cols.map((k, i) => [k, r[i]])));
+        }
+
+        function prepararCubos() {
+            const c = dashboardData.cubos;
+            cubo = desempacar(c.empleabilidad);
+            cuboOcup = desempacar(c.ocupacion_graduados);
+            ANIOS = [...new Set(cubo.map(r => r.anio))].sort();
+            ULTIMO = ANIOS[ANIOS.length - 1];
+            N_MIN = c.n_minimo;
+        }
+
+        function filtrar(rows, f) {
+            return rows.filter(r =>
+                (!f.graduados || r.es_graduado_superior)
+                && (!f.sexo || f.sexo === 'Todos' || r.sexo === f.sexo)
+                && (!f.nivel || f.nivel === 'Todos' || r.nivel_instruccion === f.nivel)
+                && (!f.provincia || f.provincia === 'Todas' || r.provincia === f.provincia)
+                && (!f.grupo_edad || r.grupo_edad === f.grupo_edad)
+                && (f.anio === undefined || r.anio === f.anio));
+        }
+
+        const CAMPOS = ['n_muestral', 'poblacion', 'pea', 'ocupados', 'desempleados', 'empleo_adecuado',
+                        'sobrecalificados', 'ocupados_con_ciuo', 'ingreso_pond', 'peso_ingreso'];
+        function metricas(rows) {
+            const s = Object.fromEntries(CAMPOS.map(k => [k, 0]));
+            rows.forEach(r => CAMPOS.forEach(k => { s[k] += r[k] || 0; }));
+            const pct = (a, b) => b ? 100 * a / b : null;
+            return {
+                n: s.n_muestral, poblacion: s.poblacion,
+                desempleo: pct(s.desempleados, s.pea),
+                adecuado: pct(s.empleo_adecuado, s.pea),
+                sobrecal: pct(s.sobrecalificados, s.ocupados_con_ciuo),
+                ingreso: s.peso_ingreso ? s.ingreso_pond / s.peso_ingreso : null
+            };
+        }
+        const m = (rows, f) => metricas(filtrar(rows, f));
+        // Celdas con muy pocas observaciones muestrales no se grafican (mismo umbral que gold)
+        const val = (met, k) => met.n >= N_MIN ? met[k] : null;
+        const fmt = (x, d = 1) => x == null ? '—' : x.toFixed(d);
+        const seriesSexo = sexo => sexo === 'Todos' ? SEXOS : [sexo];
+
+        function selectHtml(label, opciones, valor, onchange) {
+            return `<label class="text-sm text-gray-600 flex items-center gap-2">${label}
+                <select onchange="${onchange}" class="border border-gray-300 rounded px-2 py-1 bg-white text-gray-900">
+                    ${opciones.map(([v, t]) => `<option value="${v}" ${v === valor ? 'selected' : ''}>${t}</option>`).join('')}
+                </select></label>`;
+        }
+        const OPC_SEXO = [['Todos', 'Todos (desagregado por sexo)'], ['Hombre', 'Hombres'], ['Mujer', 'Mujeres']];
+
+        // KPI con su desagregación por sexo debajo cuando no hay filtro de sexo
+        function kpiHtml(valor, etiqueta, colorCls, porSexo) {
+            return `<div class="bg-white p-6 rounded-lg shadow text-center">
+                <div class="text-3xl font-bold ${colorCls}">${valor}</div>
+                <p class="text-gray-600 mt-2">${etiqueta}</p>
+                ${porSexo ? `<p class="text-xs mt-2">${porSexo.map(([s, v]) =>
+                    `<span style="color:${SEXO_COLOR[s]}">${s === 'Hombre' ? 'Hombres' : 'Mujeres'} ${v}</span>`).join(' · ')}</p>` : ''}
+            </div>`;
+        }
+
+        function headerHtml(titulo, subtitulo) {
+            return `<div style="background: linear-gradient(135deg, ${colors.navy} 0%, ${colors.accent} 100%);" class="text-white p-6 shadow-lg">
+                <div class="max-w-6xl mx-auto flex items-center justify-between">
+                    <div>
+                        <h1 class="text-3xl font-bold">${titulo}</h1>
+                        <p class="text-gray-200">${subtitulo}</p>
+                    </div>
+                    <button onclick="renderLanding()" class="bg-white px-4 py-2 rounded font-bold hover:bg-gray-200" style="color:${colors.navy}">← Volver</button>
+                </div>
+            </div>`;
+        }
+
+        function footerHtml() {
+            const fecha = new Date(dashboardData.metadata.timestamp).toLocaleDateString('es-EC');
+            return `<footer class="border-t-2 mt-10" style="border-color:${colors.navy}">
+                <div class="max-w-6xl mx-auto px-6 py-4 flex flex-col md:flex-row md:justify-between gap-1 text-xs text-gray-500">
+                    <span>Elaborado por <strong style="color:${colors.navy}">Econ. Michelle Luzuriaga</strong> · Dirección de Proyectos Estratégicos · Universidad de Cuenca</span>
+                    <span>Fuente: INEC, ENEMDU ${ANIOS[0]}–${ULTIMO} · Actualizado ${fecha}</span>
+                </div>
+            </footer>`;
+        }
+
+        const notaN = () => `<p class="text-xs text-gray-400 mt-2">† Menos de ${N_MIN} observaciones muestrales: cifra poco precisa (se omite en los gráficos).</p>`;
+
+        // Módulo ENEMDU / Empleabilidad Superior (mismo cubo, distinto segmento)
         function renderEnemduModule(moduleKey) {
             currentModule = moduleKey;
             const module = dashboardData.modules[moduleKey];
-            const kpi = module.kpi_latest;
-            const app = document.getElementById('app');
             const isGeneral = moduleKey === 'enemdu';
+            const orden = dashboardData.cubos.nivel_instruccion_orden;
+            const niveles = orden.filter(n => cubo.some(r => r.nivel_instruccion === n && (isGeneral || r.es_graduado_superior)));
+            if (!niveles.includes(filtrosEmp.nivel)) filtrosEmp.nivel = 'Todos';
 
-            app.innerHTML = `
+            const base = { graduados: !isGeneral, sexo: filtrosEmp.sexo, nivel: filtrosEmp.nivel };
+            const kpi = m(cubo, { ...base, anio: ULTIMO });
+            const kpiSexo = filtrosEmp.sexo === 'Todos'
+                ? SEXOS.map(s => [s, m(cubo, { ...base, sexo: s, anio: ULTIMO })]) : null;
+            const sub = (k, f) => kpiSexo && kpiSexo.map(([s, met]) => [s, f(met[k])]);
+
+            const provincias = [...new Set(cubo.map(r => r.provincia))]
+                .map(p => ({ provincia: p, ...m(cubo, { ...base, provincia: p, anio: ULTIMO }) }))
+                .sort((a, b) => (b.desempleo ?? -1) - (a.desempleo ?? -1));
+            const grupos = dashboardData.cubos.grupo_edad_orden;
+            const sexoEdad = grupos.map(g => ({
+                grupo: g,
+                Hombre: m(cubo, { ...base, sexo: 'Hombre', grupo_edad: g, anio: ULTIMO }),
+                Mujer: m(cubo, { ...base, sexo: 'Mujer', grupo_edad: g, anio: ULTIMO })
+            }));
+            const porNivel = niveles.map(n => ({ nivel: n, ...m(cubo, { ...base, nivel: n, anio: ULTIMO }) }));
+            const celda = (met, k, d, pre = '', suf = '%') =>
+                `${met.n < N_MIN ? '<span class="text-gray-400">' : '<span>'}${met[k] == null ? '—' : pre + met[k].toFixed(d) + suf}${met.n < N_MIN ? ' †' : ''}</span>`;
+
+            const filtroTxt = [filtrosEmp.sexo !== 'Todos' ? (filtrosEmp.sexo === 'Hombre' ? 'Hombres' : 'Mujeres') : null,
+                               filtrosEmp.nivel !== 'Todos' ? filtrosEmp.nivel : null].filter(Boolean).join(' · ');
+
+            document.getElementById('app').innerHTML = `
                 <div class="min-h-screen bg-gray-50">
-                    <!-- Header -->
-                    <div style="background: linear-gradient(135deg, ${colors.navy} 0%, ${colors.accent} 100%);" class="text-white p-6 shadow-lg">
-                        <div class="max-w-6xl mx-auto flex items-center justify-between">
-                            <div>
-                                <h1 class="text-3xl font-bold">${module.title}</h1>
-                                <p class="text-gray-200">Año: ${kpi.year} · Población: ${Math.round(kpi.poblacion).toLocaleString()}</p>
-                            </div>
-                            <button onclick="renderLanding()" class="bg-white text-${colors.navy} px-4 py-2 rounded font-bold hover:bg-gray-200">← Volver</button>
-                        </div>
-                    </div>
+                    ${headerHtml(module.title, `Año: ${ULTIMO} · Población${filtroTxt ? ' (' + filtroTxt + ')' : ''}: ${Math.round(kpi.poblacion).toLocaleString('es-EC')}`)}
 
                     <div class="max-w-6xl mx-auto p-6">
                         <!-- Selector de segmento -->
-                        <div class="flex gap-2 mb-6">
+                        <div class="flex gap-2 mb-4">
                             <button onclick="renderEnemduModule('enemdu')"
                                 class="px-5 py-2 rounded-full font-bold text-sm transition ${isGeneral ? 'text-white' : 'bg-white text-gray-600 hover:bg-gray-100'}"
                                 style="${isGeneral ? `background:${colors.navy}` : ''}">
@@ -122,26 +237,24 @@
                             </button>
                         </div>
 
+                        <!-- Filtros -->
+                        <div class="bg-white p-4 rounded-lg shadow mb-6 flex flex-wrap gap-6">
+                            ${selectHtml('Sexo', OPC_SEXO, filtrosEmp.sexo, `filtrosEmp.sexo=this.value;renderEnemduModule('${moduleKey}')`)}
+                            ${selectHtml('Nivel de instrucción', [['Todos', 'Todos'], ...niveles.map(n => [n, n])], filtrosEmp.nivel, `filtrosEmp.nivel=this.value;renderEnemduModule('${moduleKey}')`)}
+                        </div>
+
                         <!-- KPIs -->
                         <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
-                            <div class="bg-white p-6 rounded-lg shadow text-center">
-                                <div class="text-3xl font-bold text-red-600">${kpi.tasa_desempleo.toFixed(1)}%</div>
-                                <p class="text-gray-600 mt-2">Tasa Desempleo</p>
-                            </div>
-                            <div class="bg-white p-6 rounded-lg shadow text-center">
-                                <div class="text-3xl font-bold text-green-600">${kpi.tasa_empleo_adecuado.toFixed(1)}%</div>
-                                <p class="text-gray-600 mt-2">Empleo Adecuado</p>
-                            </div>
-                            <div class="bg-white p-6 rounded-lg shadow text-center">
-                                <div class="text-3xl font-bold text-blue-600">$${kpi.ingreso_laboral_medio.toFixed(0)}</div>
-                                <p class="text-gray-600 mt-2">Ingreso Laboral</p>
-                            </div>
+                            ${kpiHtml(fmt(kpi.desempleo) + '%', 'Tasa Desempleo', 'text-red-600', sub('desempleo', v => fmt(v) + '%'))}
+                            ${kpiHtml(fmt(kpi.adecuado) + '%', 'Empleo Adecuado', 'text-green-600', sub('adecuado', v => fmt(v) + '%'))}
+                            ${kpiHtml('$' + fmt(kpi.ingreso, 0), 'Ingreso Laboral', 'text-blue-600', sub('ingreso', v => '$' + fmt(v, 0)))}
                         </div>
 
                         <!-- Gráficos -->
                         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
                             <div class="bg-white p-6 rounded-lg shadow">
-                                <h3 class="text-lg font-bold mb-4">Evolución 2021-2025</h3>
+                                <h3 class="text-lg font-bold mb-1">Evolución ${ANIOS[0]}-${ULTIMO}</h3>
+                                <p class="text-xs text-gray-500 mb-2">Línea continua: desempleo · punteada: empleo adecuado</p>
                                 <div id="timeline-chart" style="height: 300px;"></div>
                             </div>
                             <div class="bg-white p-6 rounded-lg shadow">
@@ -152,7 +265,7 @@
 
                         <!-- Tabla Provincias -->
                         <div class="bg-white p-6 rounded-lg shadow">
-                            <h3 class="text-lg font-bold mb-4">Detalle por Provincia (${kpi.year})</h3>
+                            <h3 class="text-lg font-bold mb-4">Detalle por Provincia (${ULTIMO})</h3>
                             <div class="overflow-x-auto">
                                 <table class="w-full text-sm">
                                     <thead class="bg-gray-100">
@@ -164,23 +277,24 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        ${module.por_provincia.slice(0, 15).map(p => `
+                                        ${provincias.map(p => `
                                             <tr class="border-b hover:bg-gray-50">
                                                 <td class="px-4 py-2">${p.provincia}</td>
-                                                <td class="px-4 py-2 text-right">${p.tasa_desempleo.toFixed(1)}%</td>
-                                                <td class="px-4 py-2 text-right">${p.tasa_empleo_adecuado.toFixed(1)}%</td>
-                                                <td class="px-4 py-2 text-right">$${p.ingreso_laboral_medio.toFixed(0)}</td>
+                                                <td class="px-4 py-2 text-right">${celda(p, 'desempleo', 1)}</td>
+                                                <td class="px-4 py-2 text-right">${celda(p, 'adecuado', 1)}</td>
+                                                <td class="px-4 py-2 text-right">${celda(p, 'ingreso', 0, '$', '')}</td>
                                             </tr>
                                         `).join('')}
                                     </tbody>
                                 </table>
                             </div>
+                            ${notaN()}
                         </div>
 
                         <!-- Brecha de género -->
                         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-8">
                             <div class="bg-white p-6 rounded-lg shadow">
-                                <h3 class="text-lg font-bold mb-4">Brecha de Género en Desempleo (${kpi.year})</h3>
+                                <h3 class="text-lg font-bold mb-4">Brecha de Género en Desempleo (${ULTIMO})</h3>
                                 <p class="text-xs text-gray-500 mb-2">Puntos porcentuales, Mujer − Hombre, por grupo etario</p>
                                 <div id="brecha-genero-chart" style="height: 280px;"></div>
                             </div>
@@ -196,27 +310,22 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            ${[...new Set(module.por_sexo_edad.map(r => r.grupo_edad))].map(grupo => {
-                                                const h = module.por_sexo_edad.find(r => r.grupo_edad === grupo && r.sexo === 'Hombre');
-                                                const m = module.por_sexo_edad.find(r => r.grupo_edad === grupo && r.sexo === 'Mujer');
-                                                return `
+                                            ${sexoEdad.map(g => `
                                                 <tr class="border-b hover:bg-gray-50">
-                                                    <td class="px-3 py-2">${grupo}</td>
-                                                    <td class="px-3 py-2 text-right">${h ? h.tasa_desempleo.toFixed(1) : '—'}%</td>
-                                                    <td class="px-3 py-2 text-right">${m ? m.tasa_desempleo.toFixed(1) : '—'}%</td>
-                                                </tr>`;
-                                            }).join('')}
+                                                    <td class="px-3 py-2">${g.grupo}</td>
+                                                    <td class="px-3 py-2 text-right">${celda(g.Hombre, 'desempleo', 1)}</td>
+                                                    <td class="px-3 py-2 text-right">${celda(g.Mujer, 'desempleo', 1)}</td>
+                                                </tr>`).join('')}
                                         </tbody>
                                     </table>
                                 </div>
                             </div>
                         </div>
 
-                        ${module.por_nivel_instruccion ? `
                         <!-- Por nivel de instrucción -->
                         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-8">
                             <div class="bg-white p-6 rounded-lg shadow">
-                                <h3 class="text-lg font-bold mb-4">Desempleo por Nivel de Instrucción (${kpi.year})</h3>
+                                <h3 class="text-lg font-bold mb-4">Desempleo por Nivel de Instrucción (${ULTIMO})</h3>
                                 <div id="nivel-instruccion-chart" style="height: 320px;"></div>
                             </div>
                             <div class="bg-white p-6 rounded-lg shadow">
@@ -232,215 +341,201 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            ${module.por_nivel_instruccion.map(n => `
+                                            ${porNivel.map(n => `
                                                 <tr class="border-b hover:bg-gray-50">
-                                                    <td class="px-3 py-2">${n.nivel_instruccion}</td>
-                                                    <td class="px-3 py-2 text-right">${n.tasa_desempleo.toFixed(1)}%</td>
-                                                    <td class="px-3 py-2 text-right">${n.tasa_empleo_adecuado.toFixed(1)}%</td>
-                                                    <td class="px-3 py-2 text-right">${n.tasa_sobrecalificacion !== null ? n.tasa_sobrecalificacion.toFixed(1) + '%' : '—'}</td>
+                                                    <td class="px-3 py-2">${n.nivel}</td>
+                                                    <td class="px-3 py-2 text-right">${celda(n, 'desempleo', 1)}</td>
+                                                    <td class="px-3 py-2 text-right">${celda(n, 'adecuado', 1)}</td>
+                                                    <td class="px-3 py-2 text-right">${n.sobrecal ? celda(n, 'sobrecal', 1) : '—'}</td>
                                                 </tr>
                                             `).join('')}
                                         </tbody>
                                     </table>
                                 </div>
                             </div>
-                        </div>` : ''}
+                        </div>
                     </div>
+                    ${footerHtml()}
                 </div>
             `;
 
-            // Dibujar gráficos
             setTimeout(() => {
-                drawTimelineChart(moduleKey);
-                drawProvinciaChart(moduleKey);
-                drawBrechaGeneroChart(moduleKey);
-                if (module.por_nivel_instruccion) drawNivelInstruccionChart(moduleKey);
+                drawEvolucion('timeline-chart', cubo, base, [['desempleo', 'Desempleo'], ['adecuado', 'Empleo adecuado']]);
+                const top = provincias.filter(p => p.n >= N_MIN).slice(0, 10).map(p => p.provincia).reverse();
+                drawBarrasPorSexo('provincia-chart', cubo, base, top, c => ({ provincia: c, anio: ULTIMO }),
+                    'desempleo', { horizontal: true, titulo: 'Tasa Desempleo %', margin: { l: 150, r: 20, t: 40, b: 40 } });
+                drawBrechaGenero('brecha-genero-chart', base, grupos);
+                drawBarrasPorSexo('nivel-instruccion-chart', cubo, base, niveles, c => ({ nivel: c, anio: ULTIMO }),
+                    'desempleo', { titulo: 'Tasa Desempleo %', margin: { l: 50, r: 20, t: 40, b: 110 } });
             }, 100);
         }
 
-        // Módulo Sobrecalificación
+        // Módulo Sobrecalificación (sólo graduados de educación superior)
         function renderSobrecalificacionModule() {
             const module = dashboardData.modules.sobrecalificacion;
-            const kpi = module.tasa_general_por_anio;
-            const app = document.getElementById('app');
+            const base = { graduados: true, sexo: filtrosSob.sexo, provincia: filtrosSob.provincia };
+            const kpi = m(cubo, { ...base, anio: ULTIMO });
+            const kpiSexo = filtrosSob.sexo === 'Todos'
+                ? SEXOS.map(s => [s, fmt(m(cubo, { ...base, sexo: s, anio: ULTIMO }).sobrecal) + '%']) : null;
+            const provincias = [...new Set(cubo.map(r => r.provincia))].sort();
 
-            app.innerHTML = `
+            // Distribución de graduados ocupados por gran grupo CIUO, en % del
+            // total de la población filtrada (sexo/provincia): suma 100% por columna.
+            const participacion = sexo => {
+                const rows = filtrar(cuboOcup, { sexo, provincia: filtrosSob.provincia, anio: ULTIMO });
+                const total = rows.reduce((a, r) => a + r.ocupados, 0);
+                const out = {};
+                rows.forEach(r => {
+                    const o = out[r.ciuo_gran_grupo] ??= { ocupados: 0, n: 0, desc: r.ciuo_gran_grupo_desc };
+                    o.ocupados += r.ocupados; o.n += r.n_muestral;
+                });
+                Object.values(out).forEach(o => { o.pct = total ? 100 * o.ocupados / total : null; });
+                return out;
+            };
+            const partTotal = participacion(filtrosSob.sexo);
+            const partSexo = filtrosSob.sexo === 'Todos' ? Object.fromEntries(SEXOS.map(s => [s, participacion(s)])) : null;
+            const grupos = Object.keys(partTotal).map(Number).sort((a, b) => partTotal[b].pct - partTotal[a].pct);
+            const celdaPct = o => !o ? '—' : `${o.n < N_MIN ? '<span class="text-gray-400">' : '<span>'}${fmt(o.pct)}%${o.n < N_MIN ? ' †' : ''}</span>`;
+
+            const filtroTxt = [filtrosSob.sexo !== 'Todos' ? (filtrosSob.sexo === 'Hombre' ? 'Hombres' : 'Mujeres') : null,
+                               filtrosSob.provincia !== 'Todas' ? filtrosSob.provincia : null].filter(Boolean).join(' · ');
+
+            document.getElementById('app').innerHTML = `
                 <div class="min-h-screen bg-gray-50">
-                    <!-- Header -->
-                    <div style="background: linear-gradient(135deg, ${colors.navy} 0%, ${colors.accent} 100%);" class="text-white p-6 shadow-lg">
-                        <div class="max-w-6xl mx-auto flex items-center justify-between">
-                            <div>
-                                <h1 class="text-3xl font-bold">${module.title}</h1>
-                                <p class="text-gray-200">Graduados en ocupaciones no acordes a su formación</p>
-                            </div>
-                            <button onclick="renderLanding()" class="bg-white text-${colors.navy} px-4 py-2 rounded font-bold hover:bg-gray-200">← Volver</button>
-                        </div>
-                    </div>
+                    ${headerHtml(module.title, 'Graduados en ocupaciones no acordes a su formación' + (filtroTxt ? ' · ' + filtroTxt : ''))}
 
-                    <!-- KPI Principal -->
                     <div class="max-w-6xl mx-auto p-6">
-                        <div class="bg-white p-8 rounded-lg shadow text-center mb-8">
-                            <div class="text-5xl font-bold text-red-600">${kpi.tasa_sobrecalificacion[kpi.tasa_sobrecalificacion.length - 1].toFixed(1)}%</div>
-                            <p class="text-gray-600 mt-2 text-lg">Tasa de Sobrecalificación (2025)</p>
+                        <!-- Filtros -->
+                        <div class="bg-white p-4 rounded-lg shadow mb-6 flex flex-wrap gap-6">
+                            ${selectHtml('Sexo', OPC_SEXO, filtrosSob.sexo, 'filtrosSob.sexo=this.value;renderSobrecalificacionModule()')}
+                            ${selectHtml('Provincia', [['Todas', 'Todas (nacional)'], ...provincias.map(p => [p, p])], filtrosSob.provincia, 'filtrosSob.provincia=this.value;renderSobrecalificacionModule()')}
+                        </div>
+
+                        <!-- KPI Principal -->
+                        <div class="mb-8">
+                            ${kpiHtml(fmt(kpi.sobrecal) + '%' + (kpi.n < N_MIN ? ' †' : ''), `Tasa de Sobrecalificación (${ULTIMO})`, 'text-red-600 text-5xl', kpiSexo)}
                         </div>
 
                         <!-- Gráficos -->
                         <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
                             <div class="bg-white p-6 rounded-lg shadow">
-                                <h3 class="text-lg font-bold mb-4">Evolución 2021-2025</h3>
+                                <h3 class="text-lg font-bold mb-4">Evolución ${ANIOS[0]}-${ULTIMO}</h3>
                                 <div id="sobrecal-timeline-chart" style="height: 300px;"></div>
                             </div>
                             <div class="bg-white p-6 rounded-lg shadow">
-                                <h3 class="text-lg font-bold mb-4">Por Ocupación (CIUO-08)</h3>
-                                <div id="ocupacion-chart" style="height: 300px;"></div>
+                                <h3 class="text-lg font-bold mb-1">Por Ocupación (CIUO-08)</h3>
+                                <p class="text-xs text-gray-500 mb-2">% de graduados ocupados en cada gran grupo · ⚠ = ocupación que no requiere título superior</p>
+                                <div id="ocupacion-chart" style="height: 320px;"></div>
                             </div>
                         </div>
 
                         <!-- Tabla Ocupaciones -->
                         <div class="bg-white p-6 rounded-lg shadow">
-                            <h3 class="text-lg font-bold mb-4">Detalle por Ocupación</h3>
+                            <h3 class="text-lg font-bold mb-1">Detalle por Ocupación (${ULTIMO})</h3>
+                            <p class="text-xs text-gray-500 mb-4">Distribución de los graduados ocupados: cada columna suma 100%.</p>
                             <div class="overflow-x-auto">
                                 <table class="w-full text-sm">
                                     <thead class="bg-gray-100">
                                         <tr>
                                             <th class="px-4 py-2 text-left">Ocupación (CIUO-08)</th>
-                                            <th class="px-4 py-2 text-right">% Graduados Ocupados</th>
+                                            <th class="px-4 py-2 text-right">% Graduados ocupados</th>
+                                            ${partSexo ? `<th class="px-4 py-2 text-right" style="color:${SEXO_COLOR.Hombre}">% Hombres</th>
+                                                          <th class="px-4 py-2 text-right" style="color:${SEXO_COLOR.Mujer}">% Mujeres</th>` : ''}
                                             <th class="px-4 py-2 text-center">¿Sobrecalificado?</th>
-                                            <th class="px-4 py-2 text-right">Ocupados Totales</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        ${module.por_ocupacion_2025.map(o => `
+                                        ${grupos.map(g => `
                                             <tr class="border-b hover:bg-gray-50">
-                                                <td class="px-4 py-2">${o.ocupacion}</td>
-                                                <td class="px-4 py-2 text-right">${o.participacion_pct.toFixed(1)}%</td>
-                                                <td class="px-4 py-2 text-center">${o.sobrecalificado ? '⚠️ Sí' : '—'}</td>
-                                                <td class="px-4 py-2 text-right">${o.ocupados_totales.toLocaleString()}</td>
+                                                <td class="px-4 py-2">${partTotal[g].desc}</td>
+                                                <td class="px-4 py-2 text-right">${celdaPct(partTotal[g])}</td>
+                                                ${partSexo ? SEXOS.map(s => `<td class="px-4 py-2 text-right">${celdaPct(partSexo[s][g])}</td>`).join('') : ''}
+                                                <td class="px-4 py-2 text-center">${g >= 4 ? '⚠️ Sí' : '—'}</td>
                                             </tr>
                                         `).join('')}
                                     </tbody>
                                 </table>
                             </div>
+                            ${notaN()}
                         </div>
                     </div>
+                    ${footerHtml()}
                 </div>
             `;
 
-            // Dibujar gráficos
             setTimeout(() => {
-                drawSobrecalTimelineChart();
-                drawOcupacionChart();
+                drawEvolucion('sobrecal-timeline-chart', cubo, base, [['sobrecal', 'Sobrecalificación']]);
+                drawOcupacion('ocupacion-chart', grupos.slice(0, 9).reverse(), partTotal, partSexo);
             }, 100);
         }
 
         // Gráficos
-        function drawTimelineChart(moduleKey) {
-            const timeline = dashboardData.modules[moduleKey].timeline;
-            const trace1 = {
-                x: timeline.years,
-                y: timeline.tasa_desempleo,
-                name: 'Tasa Desempleo %',
-                type: 'scatter',
-                mode: 'lines+markers',
-                line: { color: colors.red, width: 3 }
-            };
-            const trace2 = {
-                x: timeline.years,
-                y: timeline.tasa_empleo_adecuado,
-                name: 'Empleo Adecuado %',
-                type: 'scatter',
-                mode: 'lines+markers',
-                line: { color: colors.accent, width: 3 }
-            };
-            Plotly.newPlot('timeline-chart', [trace1, trace2], { 
-                margin: { l: 50, r: 20, t: 20, b: 30 },
-                hovermode: 'x unified'
+        function drawEvolucion(el, rows, base, indicadores) {
+            const traces = [];
+            indicadores.forEach(([k, label], i) => seriesSexo(base.sexo).forEach(s => traces.push({
+                x: ANIOS,
+                y: ANIOS.map(a => val(m(rows, { ...base, sexo: s, anio: a }), k)),
+                name: `${label} · ${s === 'Hombre' ? 'Hombres' : 'Mujeres'}`,
+                type: 'scatter', mode: 'lines+markers',
+                line: { color: SEXO_COLOR[s], width: 3, dash: i ? 'dot' : 'solid' }
+            })));
+            Plotly.newPlot(el, traces, {
+                margin: { l: 50, r: 20, t: 10, b: 30 }, hovermode: 'x unified',
+                yaxis: { ticksuffix: '%' }, xaxis: { dtick: 1 },
+                legend: { orientation: 'h', y: -0.15 }
             }, { responsive: true });
         }
 
-        function drawProvinciaChart(moduleKey) {
-            const provincias = dashboardData.modules[moduleKey].por_provincia.slice(0, 10).reverse();
-            const trace = {
-                x: provincias.map(p => p.tasa_desempleo),
-                y: provincias.map(p => p.provincia),
-                type: 'bar',
-                orientation: 'h',
-                marker: { color: colors.red }
-            };
-            Plotly.newPlot('provincia-chart', [trace], {
-                margin: { l: 150, r: 20, t: 20, b: 30 },
-                xaxis: { title: 'Tasa Desempleo %' }
-            }, { responsive: true });
-        }
-
-        function drawBrechaGeneroChart(moduleKey) {
-            // Un valor de brecha_desempleo_pp por grupo_edad (viene repetido en
-            // Hombre y Mujer del mismo grupo; nos quedamos con uno solo).
-            const porSexoEdad = dashboardData.modules[moduleKey].por_sexo_edad;
-            const grupos = [...new Set(porSexoEdad.map(r => r.grupo_edad))];
-            const brechas = grupos.map(g => {
-                const row = porSexoEdad.find(r => r.grupo_edad === g && r.brecha_desempleo_pp !== null);
-                return row ? row.brecha_desempleo_pp : 0;
+        // Barras agrupadas por sexo (o una sola serie si hay filtro de sexo)
+        function drawBarrasPorSexo(el, rows, base, categorias, filtroCat, k, opts) {
+            const h = !!opts.horizontal;
+            const traces = seriesSexo(base.sexo).map(s => {
+                const valores = categorias.map(c => val(m(rows, { ...base, sexo: s, ...filtroCat(c) }), k));
+                return {
+                    type: 'bar', name: s === 'Hombre' ? 'Hombres' : 'Mujeres', orientation: h ? 'h' : 'v',
+                    x: h ? valores : categorias, y: h ? categorias : valores,
+                    marker: { color: SEXO_COLOR[s] }
+                };
             });
-            const trace = {
-                x: grupos,
-                y: brechas,
-                type: 'bar',
-                marker: { color: brechas.map(b => b >= 0 ? colors.red : colors.accent) }
-            };
-            Plotly.newPlot('brecha-genero-chart', [trace], {
+            Plotly.newPlot(el, traces, {
+                barmode: 'group', margin: opts.margin,
+                legend: { orientation: 'h', y: 1, yanchor: 'bottom' },
+                [h ? 'xaxis' : 'yaxis']: { title: opts.titulo, ticksuffix: '%' },
+                ...(h ? {} : { xaxis: { tickangle: -35 } })
+            }, { responsive: true });
+        }
+
+        function drawBrechaGenero(el, base, grupos) {
+            const brechas = grupos.map(g => {
+                const h = m(cubo, { ...base, sexo: 'Hombre', grupo_edad: g, anio: ULTIMO });
+                const mu = m(cubo, { ...base, sexo: 'Mujer', grupo_edad: g, anio: ULTIMO });
+                return h.n >= N_MIN && mu.n >= N_MIN ? mu.desempleo - h.desempleo : null;
+            });
+            Plotly.newPlot(el, [{
+                x: grupos, y: brechas, type: 'bar',
+                marker: { color: brechas.map(b => b >= 0 ? SEXO_COLOR.Mujer : SEXO_COLOR.Hombre) }
+            }], {
                 margin: { l: 50, r: 20, t: 20, b: 30 },
                 yaxis: { title: 'p.p. (Mujer − Hombre)', zeroline: true },
-                shapes: [{ type: 'line', x0: -0.5, x1: grupos.length - 0.5, y0: 0, y1: 0,
-                          line: { color: '#999', width: 1 } }]
+                shapes: [{ type: 'line', x0: -0.5, x1: grupos.length - 0.5, y0: 0, y1: 0, line: { color: '#999', width: 1 } }]
             }, { responsive: true });
         }
 
-        function drawNivelInstruccionChart(moduleKey) {
-            const niveles = dashboardData.modules[moduleKey].por_nivel_instruccion;
-            const trace = {
-                x: niveles.map(n => n.nivel_instruccion),
-                y: niveles.map(n => n.tasa_desempleo),
-                type: 'bar',
-                marker: { color: colors.accent }
-            };
-            Plotly.newPlot('nivel-instruccion-chart', [trace], {
-                margin: { l: 50, r: 20, t: 20, b: 100 },
-                yaxis: { title: 'Tasa Desempleo %' },
-                xaxis: { tickangle: -35 }
-            }, { responsive: true });
-        }
-
-        function drawSobrecalTimelineChart() {
-            const tasa = dashboardData.modules.sobrecalificacion.tasa_general_por_anio;
-            const trace = {
-                x: tasa.years,
-                y: tasa.tasa_sobrecalificacion,
-                name: 'Tasa Sobrecalificación %',
-                type: 'scatter',
-                mode: 'lines+markers',
-                line: { color: colors.red, width: 3 },
-                fill: 'tozeroy',
-                fillcolor: 'rgba(211, 39, 44, 0.2)'
-            };
-            Plotly.newPlot('sobrecal-timeline-chart', [trace], { 
-                margin: { l: 50, r: 20, t: 20, b: 30 },
-                hovermode: 'x unified'
-            }, { responsive: true });
-        }
-
-        function drawOcupacionChart() {
-            const ocupaciones = dashboardData.modules.sobrecalificacion.por_ocupacion_2025.slice(0, 8).reverse();
-            const trace = {
-                x: ocupaciones.map(o => o.participacion_pct),
-                y: ocupaciones.map(o => o.ocupacion),
-                type: 'bar',
-                orientation: 'h',
-                marker: { color: ocupaciones.map(o => o.sobrecalificado ? colors.red : colors.accent) }
-            };
-            Plotly.newPlot('ocupacion-chart', [trace], { 
-                margin: { l: 150, r: 20, t: 20, b: 30 },
-                xaxis: { title: 'Tasa Sobrecalificación %' }
+        function drawOcupacion(el, grupos, partTotal, partSexo) {
+            // Etiquetas CIUO largas: salto de línea en el primer espacio pasado el carácter 20
+            const etiqueta = g => ((g >= 4 ? '⚠ ' : '') + partTotal[g].desc).replace(/^(.{20,}?) /, '$1<br>');
+            const series = partSexo ? SEXOS.map(s => [s === 'Hombre' ? 'Hombres' : 'Mujeres', partSexo[s], SEXO_COLOR[s]])
+                                    : [[filtrosSob.sexo === 'Hombre' ? 'Hombres' : 'Mujeres', partTotal, SEXO_COLOR[filtrosSob.sexo]]];
+            Plotly.newPlot(el, series.map(([nombre, part, color]) => ({
+                type: 'bar', orientation: 'h', name: nombre,
+                y: grupos.map(etiqueta),
+                x: grupos.map(g => part[g] && part[g].n >= N_MIN ? part[g].pct : null),
+                marker: { color }
+            })), {
+                barmode: 'group', margin: { l: 10, r: 20, t: 40, b: 40 },
+                legend: { orientation: 'h', y: 1, yanchor: 'bottom' },
+                yaxis: { automargin: true },
+                xaxis: { title: '% de graduados ocupados', ticksuffix: '%' }
             }, { responsive: true });
         }
 
