@@ -14,6 +14,9 @@
     </style>
 </head>
 <body class="bg-gray-50 text-gray-900">
+    <div class="text-xs text-center py-1.5 px-4" style="background:#FEF3C7;color:#92400E;border-bottom:1px solid #FCD34D">
+        ⚠️ Versión preliminar en fase de validación: las cifras pueden ajustarse antes de su publicación oficial.
+    </div>
     <div id="app"></div>
 
     <script>
@@ -32,7 +35,8 @@
         // Cargar datos JSON
         async function loadData() {
             try {
-                const response = await fetch('static/data.json');
+                // no-store: sin esto el navegador reusa el data.json viejo (Pages lo cachea 10 min) tras cada actualización
+                const response = await fetch('static/data.json', { cache: 'no-store' });
                 if (!response.ok) throw new Error(`HTTP ${response.status}`);
                 dashboardData = await response.json();
                 prepararCubos();
@@ -78,7 +82,8 @@
                     </div>
 
                     <div class="mt-10 pt-4 border-t border-white/20 text-center text-xs text-gray-300">
-                        Elaborado por <span class="font-semibold text-white">Econ. Michelle Luzuriaga</span> · Dirección de Proyectos Estratégicos · Universidad de Cuenca
+                        Elaborado por <span class="font-semibold text-white">Econ. Michelle Luzuriaga</span> · Dirección de Proyectos Estratégicos · Universidad de Cuenca<br>
+                        <a href="mailto:karenm.luzuriaga@ucuenca.edu.ec" class="hover:underline">karenm.luzuriaga@ucuenca.edu.ec</a>
                     </div>
                 </div>
             `;
@@ -179,7 +184,7 @@
             const fecha = new Date(dashboardData.metadata.timestamp).toLocaleDateString('es-EC');
             return `<footer class="border-t-2 mt-10" style="border-color:${colors.navy}">
                 <div class="max-w-6xl mx-auto px-6 py-4 flex flex-col md:flex-row md:justify-between gap-1 text-xs text-gray-500">
-                    <span>Elaborado por <strong style="color:${colors.navy}">Econ. Michelle Luzuriaga</strong> · Dirección de Proyectos Estratégicos · Universidad de Cuenca</span>
+                    <span>Elaborado por <strong style="color:${colors.navy}">Econ. Michelle Luzuriaga</strong> · Dirección de Proyectos Estratégicos · Universidad de Cuenca · <a href="mailto:karenm.luzuriaga@ucuenca.edu.ec" class="hover:underline" style="color:${colors.accent}">karenm.luzuriaga@ucuenca.edu.ec</a></span>
                     <span>Fuente: INEC, ENEMDU ${ANIOS[0]}–${ULTIMO} · Actualizado ${fecha}</span>
                 </div>
             </footer>`;
