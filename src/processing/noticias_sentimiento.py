@@ -65,7 +65,7 @@ def build_silver() -> pd.DataFrame:
     df = pd.read_csv(BRONZE_FILE)
     df = df.dropna(subset=["titulo", "url"]).drop_duplicates(subset="url", keep="first")
     df["resumen"] = df["resumen"].fillna("")
-    df["fecha_scrape"] = pd.to_datetime(df["fecha_scrape"], utc=True)
+    df["fecha_scrape"] = pd.to_datetime(df["fecha_scrape"], utc=True, format="mixed")
 
     texto = df["titulo"] + " " + df["resumen"]
     etiquetas = texto.map(score_sentimiento)

@@ -1,0 +1,59 @@
+name: Scraping noticias economia
+
+"on":
+  schedule:
+    - cron: "0 */6 * * *"
+  workflow_dispatch: {}
+
+permissions:
+  contents: write
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - run: pip install requests beautifulsoup4 pandas pyarrow
+
+      # data/bronze/ no se versiona (política de privacidad del repo), así que
+      # en un runner nuevo no hay histórico. Lo reconstruimos a partir del
+      # último noticias_data.json publicado para no perder lo ya scrapeado.
+      - name: Reconstruir bronze desde el JSON publicado
+        run: |
+          python -c "
+          import json, os
+          import pandas as pd
+          path = 'visualizacion/static/noticias_data.json'
+          out = 'data/bronze/externas/noticias_economia/noticias_economia.csv'
+          os.makedirs(os.path.dirname(out), exist_ok=True)
+          if os.path.exists(path):
+              noticias = json.load(open(path, encoding='utf-8'))['noticias']
+              df = pd.DataFrame(noticias)[['fuente', 'titulo', 'resumen', 'url', 'fecha_scrape']]
+              df.to_csv(out, index=False, encoding='utf-8-sig')
+              print(f'Bronze reconstruido: {len(df)} noticias previas')
+          else:
+              print('No hay noticias_data.json previo, se arranca de cero')
+          "
+
+      - name: Scraper
+        run: python src/scrapers/noticias_economia_scraper.py
+
+      - name: Sentimiento (silver)
+        run: python src/processing/noticias_sentimiento.py
+
+      - name: Generar JSON del visualizador
+        working-directory: visualizacion/scripts
+        run: python generate_noticias_data.py
+
+      - name: Commit y push si hay cambios
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add visualizacion/static/noticias_data.json
+          git diff --cached --quiet || git commit -m "chore: actualizar noticias de economia (automatico)"
+          git push

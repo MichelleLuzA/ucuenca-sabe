@@ -1,22 +1,22 @@
 {
   "metadata": {
-    "timestamp": "2026-09-30T09:45:27.733397",
+    "timestamp": "2026-09-30T09:51:22.642136",
     "fuente": "../../data/silver/noticias_economia/noticias_economia_silver.parquet",
-    "total_noticias": 37
+    "total_noticias": 41
   },
   "por_fuente": {
-    "El Universo": 21,
+    "El Universo": 25,
     "Primicias": 16
   },
   "sentimiento_total": {
-    "neutro": 28,
+    "neutro": 32,
     "positivo": 5,
     "negativo": 4
   },
   "sentimiento_por_fuente": {
     "El Universo": {
       "negativo": 0,
-      "neutro": 17,
+      "neutro": 21,
       "positivo": 4
     },
     "Primicias": {
@@ -35,11 +35,15 @@
       "conteo": 4
     },
     {
-      "palabra": "electrica",
+      "palabra": "pais",
       "conteo": 3
     },
     {
       "palabra": "tres",
+      "conteo": 3
+    },
+    {
+      "palabra": "electrica",
       "conteo": 3
     },
     {
@@ -59,11 +63,15 @@
       "conteo": 3
     },
     {
-      "palabra": "hasta",
+      "palabra": "mano",
       "conteo": 2
     },
     {
-      "palabra": "pagar",
+      "palabra": "quito",
+      "conteo": 2
+    },
+    {
+      "palabra": "gobierno",
       "conteo": 2
     },
     {
@@ -71,86 +79,46 @@
       "conteo": 2
     },
     {
-      "palabra": "aduana",
+      "palabra": "reforzar",
       "conteo": 2
     },
     {
-      "palabra": "fabrica",
-      "conteo": 2
-    },
-    {
-      "palabra": "piezas",
-      "conteo": 2
-    },
-    {
-      "palabra": "poco",
+      "palabra": "benjamin",
       "conteo": 2
     }
   ],
   "noticias": [
     {
-      "fuente": "Primicias",
-      "titulo": "¿Hasta cuándo se debe pagar el décimo tercer sueldo en Ecuador cada año?",
-      "resumen": "El décimo tercer sueldo es conocido por los trabajadores como un 'bono navideño', y este 30 de septiembre, el Gobierno anunció que adelantará el pago de este beneficio solo para los empleados del sector público.",
-      "url": "https://www.primicias.ec/economia/decimo-tercer-sueldo-fecha-sector-privado-empresas-ecuador-133780/",
-      "sentimiento": "positivo",
-      "fecha_scrape": "2026-09-30 14:22:32+00:00"
-    },
-    {
-      "fuente": "Primicias",
-      "titulo": "El precio del diésel que importa Ecuador alcanzó su segundo nivel más alto de 2026 por la guerra en Medio Oriente",
-      "resumen": "El precio de importación del barril de diésel alcanzó en agosto uno de sus niveles más altos de 2026. Ecuador enfrenta además una mayor demanda del combustible, pues también se usa para la generación eléctrica de empresas, en medio del estiaje.",
-      "url": "https://www.primicias.ec/economia/precio-diesel-importado-ecuador-guerra-iran-estado-unidos-estiaje-133724/",
-      "sentimiento": "negativo",
-      "fecha_scrape": "2026-09-30 14:22:32+00:00"
-    },
-    {
-      "fuente": "Primicias",
-      "titulo": "Ecuador requiere 1.650 MW en nueva generación hasta 2027, más de lo que produce Coca Codo Sinclair",
-      "resumen": "El Ministerio de Ambiente y Energía advierte que la falta de incorporación de nueva generación de energía eléctrica, a cargo de Celec y Elecaustro, complica el abastecimiento de la demanda, a medida que avanza el estiaje.",
-      "url": "https://www.primicias.ec/economia/ecuador-nueva-generacion-electrica-coca-codo-sinclair-estiaje-cortes-luz-mazar-celec-133740/",
-      "sentimiento": "neutro",
-      "fecha_scrape": "2026-09-30 14:22:32+00:00"
-    },
-    {
-      "fuente": "Primicias",
-      "titulo": "Noboa reforma el reglamento a la Ley de Energía Eléctrica en medio del estiaje",
+      "fuente": "El Universo",
+      "titulo": "Por el Ecuador libre y próspero",
       "resumen": "",
-      "url": "https://www.primicias.ec/economia/reformas-reglamento-ley-energia-electrica-ecuador-estiaje-generacion-133758/",
-      "sentimiento": "negativo",
-      "fecha_scrape": "2026-09-30 14:22:32+00:00"
+      "url": "https://www.eluniverso.com/opinion/cartas-al-director/por-el-ecuador-libre-y-prospero-nota/",
+      "sentimiento": "neutro",
+      "fecha_scrape": "2026-09-30T14:50:26+00:00"
     },
     {
-      "fuente": "Primicias",
-      "titulo": "Una fábrica de cerámica se montaba en La Troncal con piezas importadas sin pagar impuestos, revela la Aduana",
+      "fuente": "El Universo",
+      "titulo": "¿Existe la “buena mano” para cortar el cabello? La historia detrás de Ali Akcha, las peluqueras otavaleñas que recorren el país",
       "resumen": "",
-      "url": "https://www.primicias.ec/economia/senae-aduana-fabrica-ceramica-latroncal-canar-impuestos-133762/",
+      "url": "https://www.eluniverso.com/noticias/ecuador/ali-akcha-las-buenas-manos-que-recorren-ecuador-nota/",
       "sentimiento": "neutro",
-      "fecha_scrape": "2026-09-30 14:22:32+00:00"
+      "fecha_scrape": "2026-09-30T14:50:26+00:00"
     },
     {
-      "fuente": "Primicias",
-      "titulo": "CNT presenta nuevos planes de internet móvil satelital en alianza con Starlink en Ecuador",
+      "fuente": "El Universo",
+      "titulo": "Ocho personas fueron asaltadas mientras esperaban el bus en el sur de Quito",
       "resumen": "",
-      "url": "https://www.primicias.ec/economia/empresas/cnt-starlink-planes-internet-movil-satelital-ecuador-satpower-133761/",
+      "url": "https://www.eluniverso.com/noticias/ecuador/quito-ecuador-municipio-de-quito-ocho-personas-robadas-en-quito-asaltan-una-parada-en-la-ferroviaria-alta-personas-esperan-en-un-sector-de-la-ferroviaria-alta-delincuentes-en-la-ferroviaria-alta-sur-de-quito-nota/",
       "sentimiento": "neutro",
-      "fecha_scrape": "2026-09-30 14:22:32+00:00"
+      "fecha_scrape": "2026-09-30T14:50:26+00:00"
     },
     {
-      "fuente": "Primicias",
-      "titulo": "Empresas de alto consumo en Ecuador tendrán 48 horas de desconexión de electricidad desde este 29 de septiembre de 2026",
-      "resumen": "",
-      "url": "https://www.primicias.ec/economia/empresas-alto-consumo-ecuador-cortes-luz-desconexion-electricidad-aumento-demanda-133747/",
+      "fuente": "El Universo",
+      "titulo": "EE. UU. concluye su misión en Irak",
+      "resumen": "La misión duró 12 años y se denominó Operación Inherent Resolve.",
+      "url": "https://www.eluniverso.com/noticias/internacional/ee-uu-concluye-su-mision-en-irak-nota/",
       "sentimiento": "neutro",
-      "fecha_scrape": "2026-09-30 14:22:32+00:00"
-    },
-    {
-      "fuente": "Primicias",
-      "titulo": "¿Cómo quedan las cuentas del Estado tras la salida de Sariha Moya y cuáles son los pendientes para Bernardo Cordovez?",
-      "resumen": "",
-      "url": "https://www.primicias.ec/economia/quedan-cuentas-estado-salida-sariha-moya-son-pendientes-bernardo-cordovez-133595/",
-      "sentimiento": "neutro",
-      "fecha_scrape": "2026-09-30 14:22:32+00:00"
+      "fecha_scrape": "2026-09-30T14:50:26+00:00"
     },
     {
       "fuente": "Primicias",
@@ -158,71 +126,7 @@
       "resumen": "",
       "url": "https://www.primicias.ec/economia/caudal-coca-codo-sinclair-diario-hidroelectrica-ecuador-envivo-133725/",
       "sentimiento": "neutro",
-      "fecha_scrape": "2026-09-30 14:22:32+00:00"
-    },
-    {
-      "fuente": "Primicias",
-      "titulo": "El caudal de Coca Codo Sinclair, la mayor hidroeléctrica de Ecuador, ha caído desde mediados de septiembre de 2026",
-      "resumen": "",
-      "url": "https://www.primicias.ec/economia/caudal-coca-codo-sinclair-generacion-energia-electricidad-cortes-luz-apagones-133620/",
-      "sentimiento": "neutro",
-      "fecha_scrape": "2026-09-30 14:22:32+00:00"
-    },
-    {
-      "fuente": "Primicias",
-      "titulo": "Ecuador reduce el IVA al 8% durante los tres días del feriado por el 9 de Octubre, conozca cómo se aplica",
-      "resumen": "",
-      "url": "https://www.primicias.ec/economia/ecuador-reduccion-iva-feriado-octubre-turismo-guayaquil-133715/",
-      "sentimiento": "negativo",
-      "fecha_scrape": "2026-09-30 14:22:32+00:00"
-    },
-    {
-      "fuente": "Primicias",
-      "titulo": "Riesgo país de Ecuador sube a 496 puntos tras la salida de Sariha Moya del Ministerio de Desarrollo Económico",
-      "resumen": "",
-      "url": "https://www.primicias.ec/economia/riesgo-pais-ecuador-supe-puntos-renuncia-sariha-moya-ministerio-133699/",
-      "sentimiento": "neutro",
-      "fecha_scrape": "2026-09-30 14:22:32+00:00"
-    },
-    {
-      "fuente": "Primicias",
-      "titulo": "Así está el embalse de Mazar este 29 de septiembre de 2026",
-      "resumen": "",
-      "url": "https://www.primicias.ec/economia/paute-ecuador-hidroelectrica-cota-embalse-mazar-estiaje-nivel-envivo-132362/",
-      "sentimiento": "neutro",
-      "fecha_scrape": "2026-09-30 14:22:32+00:00"
-    },
-    {
-      "fuente": "Primicias",
-      "titulo": "¿Cuáles son las diferencias entre el Anexo y la Proyección de Gastos Personales?",
-      "resumen": "",
-      "url": "https://www.primicias.ec/economia/diferencias-anexo-proyeccion-gastos-personales-impuesto-renta-87210/",
-      "sentimiento": "neutro",
-      "fecha_scrape": "2026-09-30 14:22:32+00:00"
-    },
-    {
-      "fuente": "Primicias",
-      "titulo": "Las claves para tener un 2025 con más ahorro y menos deudas",
-      "resumen": "",
-      "url": "https://www.primicias.ec/economia/consejos-ahorrar-endeudamiento-finanzas-personales-84856/",
-      "sentimiento": "neutro",
-      "fecha_scrape": "2026-09-30 14:22:32+00:00"
-    },
-    {
-      "fuente": "Primicias",
-      "titulo": "Crisis eléctrica: Respuestas a lo que todos los ecuatorianos se preguntan desde que comenzaron los cortes de luz",
-      "resumen": "",
-      "url": "https://www.primicias.ec/economia/respuestas-crisis-electrica-dudas-cortes-luz-apagones-81533/",
-      "sentimiento": "negativo",
-      "fecha_scrape": "2026-09-30 14:22:32+00:00"
-    },
-    {
-      "fuente": "El Universo",
-      "titulo": "La automatización e inteligencia artificial se analizan en Innova-T Latam en Guayaquil",
-      "resumen": "Los asistentes al evento pueden interactuar directamente con sus dispositivos para desarrollar en tiempo real un asistente virtual impulsado por IA.",
-      "url": "https://www.eluniverso.com/noticias/economia/innova-t-latam-foro-congreso-regional-guayaquil-empresarios-ia-automatizacion-ecuador-2026-nota/",
-      "sentimiento": "neutro",
-      "fecha_scrape": "2026-09-30 14:22:32+00:00"
+      "fecha_scrape": "2026-09-30T14:22:32+00:00"
     },
     {
       "fuente": "El Universo",
@@ -230,7 +134,63 @@
       "resumen": "",
       "url": "https://www.eluniverso.com/noticias/economia/daniel-noboa-anuncia-la-entrega-de-mas-tractores-y-camionetas-para-el-sector-agricola-nota/",
       "sentimiento": "neutro",
-      "fecha_scrape": "2026-09-30 14:22:32+00:00"
+      "fecha_scrape": "2026-09-30T14:22:32+00:00"
+    },
+    {
+      "fuente": "Primicias",
+      "titulo": "Ecuador reduce el IVA al 8% durante los tres días del feriado por el 9 de Octubre, conozca cómo se aplica",
+      "resumen": "",
+      "url": "https://www.primicias.ec/economia/ecuador-reduccion-iva-feriado-octubre-turismo-guayaquil-133715/",
+      "sentimiento": "negativo",
+      "fecha_scrape": "2026-09-30T14:22:32+00:00"
+    },
+    {
+      "fuente": "Primicias",
+      "titulo": "Noboa reforma el reglamento a la Ley de Energía Eléctrica en medio del estiaje",
+      "resumen": "",
+      "url": "https://www.primicias.ec/economia/reformas-reglamento-ley-energia-electrica-ecuador-estiaje-generacion-133758/",
+      "sentimiento": "negativo",
+      "fecha_scrape": "2026-09-30T14:22:32+00:00"
+    },
+    {
+      "fuente": "Primicias",
+      "titulo": "Una fábrica de cerámica se montaba en La Troncal con piezas importadas sin pagar impuestos, revela la Aduana",
+      "resumen": "",
+      "url": "https://www.primicias.ec/economia/senae-aduana-fabrica-ceramica-latroncal-canar-impuestos-133762/",
+      "sentimiento": "neutro",
+      "fecha_scrape": "2026-09-30T14:22:32+00:00"
+    },
+    {
+      "fuente": "Primicias",
+      "titulo": "CNT presenta nuevos planes de internet móvil satelital en alianza con Starlink en Ecuador",
+      "resumen": "",
+      "url": "https://www.primicias.ec/economia/empresas/cnt-starlink-planes-internet-movil-satelital-ecuador-satpower-133761/",
+      "sentimiento": "neutro",
+      "fecha_scrape": "2026-09-30T14:22:32+00:00"
+    },
+    {
+      "fuente": "Primicias",
+      "titulo": "Empresas de alto consumo en Ecuador tendrán 48 horas de desconexión de electricidad desde este 29 de septiembre de 2026",
+      "resumen": "",
+      "url": "https://www.primicias.ec/economia/empresas-alto-consumo-ecuador-cortes-luz-desconexion-electricidad-aumento-demanda-133747/",
+      "sentimiento": "neutro",
+      "fecha_scrape": "2026-09-30T14:22:32+00:00"
+    },
+    {
+      "fuente": "Primicias",
+      "titulo": "¿Cómo quedan las cuentas del Estado tras la salida de Sariha Moya y cuáles son los pendientes para Bernardo Cordovez?",
+      "resumen": "",
+      "url": "https://www.primicias.ec/economia/quedan-cuentas-estado-salida-sariha-moya-son-pendientes-bernardo-cordovez-133595/",
+      "sentimiento": "neutro",
+      "fecha_scrape": "2026-09-30T14:22:32+00:00"
+    },
+    {
+      "fuente": "Primicias",
+      "titulo": "El caudal de Coca Codo Sinclair, la mayor hidroeléctrica de Ecuador, ha caído desde mediados de septiembre de 2026",
+      "resumen": "",
+      "url": "https://www.primicias.ec/economia/caudal-coca-codo-sinclair-generacion-energia-electricidad-cortes-luz-apagones-133620/",
+      "sentimiento": "neutro",
+      "fecha_scrape": "2026-09-30T14:22:32+00:00"
     },
     {
       "fuente": "El Universo",
@@ -238,7 +198,15 @@
       "resumen": "",
       "url": "https://www.eluniverso.com/patrocinado/banco-del-austro-lanza-bda-rewards-un-programa-para-acumular-puntos-con-tarjetas-de-credito/",
       "sentimiento": "neutro",
-      "fecha_scrape": "2026-09-30 14:22:32+00:00"
+      "fecha_scrape": "2026-09-30T14:22:32+00:00"
+    },
+    {
+      "fuente": "Primicias",
+      "titulo": "Riesgo país de Ecuador sube a 496 puntos tras la salida de Sariha Moya del Ministerio de Desarrollo Económico",
+      "resumen": "",
+      "url": "https://www.primicias.ec/economia/riesgo-pais-ecuador-supe-puntos-renuncia-sariha-moya-ministerio-133699/",
+      "sentimiento": "neutro",
+      "fecha_scrape": "2026-09-30T14:22:32+00:00"
     },
     {
       "fuente": "El Universo",
@@ -246,135 +214,55 @@
       "resumen": "",
       "url": "https://www.eluniverso.com/noticias/economia/operacion-de-bloque-petrolero-en-orellana-generara-mas-de-51-millones-de-inversion-privada-nota/",
       "sentimiento": "positivo",
-      "fecha_scrape": "2026-09-30 14:22:32+00:00"
+      "fecha_scrape": "2026-09-30T14:22:32+00:00"
     },
     {
-      "fuente": "El Universo",
-      "titulo": "Gobierno incorporará 145 megavatios adicionales desde Guayaquil para reforzar el sistema eléctrico",
+      "fuente": "Primicias",
+      "titulo": "Así está el embalse de Mazar este 29 de septiembre de 2026",
       "resumen": "",
-      "url": "https://www.eluniverso.com/noticias/economia/incorporacion-145-megavatios-centrales-termoelectricas-trinitaria-y-anibal-santos-gobierno-ecuador-2026-nota/",
+      "url": "https://www.primicias.ec/economia/paute-ecuador-hidroelectrica-cota-embalse-mazar-estiaje-nivel-envivo-132362/",
       "sentimiento": "neutro",
-      "fecha_scrape": "2026-09-30 14:22:32+00:00"
+      "fecha_scrape": "2026-09-30T14:22:32+00:00"
     },
     {
-      "fuente": "El Universo",
-      "titulo": "Aduana frenó evasión: una fábrica de cerámicas se instalaba con piezas que entraron poco a poco al país",
-      "resumen": "Según la Aduana, una empresa extranjera fragmentó el ingreso de componentes para una planta cerámica en un predio agrícola sin permiso para uso industrial.",
-      "url": "https://www.eluniverso.com/noticias/economia/evasion-tributaria-importacion-fragmentada-fabrica-ceramica-delito-senae-ecuador-2026-nota/",
-      "sentimiento": "neutro",
-      "fecha_scrape": "2026-09-30 14:22:32+00:00"
-    },
-    {
-      "fuente": "El Universo",
-      "titulo": "Gobierno invierte $ 1,35 millones para reforzar la infraestructura eléctrica en Azuay",
-      "resumen": "Los trabajos abarcan el cambio de líneas de distribución, mejoras en subestaciones y la renovación del sistema de transporte de datos MPLS y Metro.",
-      "url": "https://www.eluniverso.com/noticias/economia/inversion-reforzamiento-electrico-azuay-gobierno-ecuador-2026-nota/",
-      "sentimiento": "neutro",
-      "fecha_scrape": "2026-09-30 14:22:32+00:00"
-    },
-    {
-      "fuente": "El Universo",
-      "titulo": "IVA bajará al 8 % durante el feriado del 9 octubre para actividades turísticas",
-      "resumen": "La medida estará vigente durante tres días: viernes 9, sábado 10 y domingo 11 de octubre de 2026.",
-      "url": "https://www.eluniverso.com/noticias/politica/iva-bajara-al-8-durante-el-feriado-del-9-octubre-para-actividades-turisticas-nota/",
-      "sentimiento": "neutro",
-      "fecha_scrape": "2026-09-30 14:22:32+00:00"
-    },
-    {
-      "fuente": "El Universo",
-      "titulo": "Ecuador cubre demanda internacional ante problemas en bananeras de otros países y sus exportaciones suben casi al 10 %",
-      "resumen": "Sector capitaliza la escasez de fruta en el mercado mundial y aumenta inversiones en infraestructura y fumigación como prevención por lluvias.",
-      "url": "https://www.eluniverso.com/noticias/economia/banano-exportaciones-crecimiento-964-de-enero-a-agosto-impacto-clima-competidores-acorbanec-ecuador-2026-nota/",
-      "sentimiento": "neutro",
-      "fecha_scrape": "2026-09-30 14:22:32+00:00"
-    },
-    {
-      "fuente": "El Universo",
-      "titulo": "Con apoyo europeo se presentan protocolos técnicos en tres puntos clave de exportación para blindar carga ecuatoriana",
-      "resumen": "Programa Serpaz, impulsado por Corpei, Fedexpor y socios europeos, implementa sellos estandarizados y alertas tempranas para proteger productos perecederos.",
-      "url": "https://www.eluniverso.com/noticias/economia/programa-serpaz-presentacion-protocolos-finales-tecnicos-combate-narcotrafico-corpei-fedexpor-union-europea-paises-bajos-belgica-ecuador-2026-nota/",
-      "sentimiento": "positivo",
-      "fecha_scrape": "2026-09-30 14:22:32+00:00"
-    },
-    {
-      "fuente": "El Universo",
-      "titulo": "Mi Casa Propia: estos son los requisitos para acceder al crédito",
-      "resumen": "El financiamiento está dirigido a quienes buscan adquirir su primera vivienda VIS o VIP y cumplen requisitos de ingresos y documentación.",
-      "url": "https://www.eluniverso.com/patrocinado/mi-casa-propia-estos-son-los-requisitos-para-acceder-al-credito/",
-      "sentimiento": "neutro",
-      "fecha_scrape": "2026-09-30 14:22:32+00:00"
-    },
-    {
-      "fuente": "El Universo",
-      "titulo": "Ecuador prepara exportación de carne de pollo y cerdo a Emiratos Árabes y analiza China",
-      "resumen": "Pronaca busca superar costos de producción local para abrir el mercado asiático, respaldada por prácticas de economía circular y alianzas multilaterales.",
-      "url": "https://www.eluniverso.com/noticias/economia/pronaca-analisis-apertura-mercado-china-barreras-costos-politica-laboral-rodrigo-santacruz-gerente-regional-de-pronaca-ecuador-2026-nota/",
-      "sentimiento": "positivo",
-      "fecha_scrape": "2026-09-30 14:22:32+00:00"
-    },
-    {
-      "fuente": "El Universo",
-      "titulo": "Comercio, minería y manufactura: los tres ‘focos calientes’ que encenderán el crecimiento del PIB en 2026",
-      "resumen": "El economista Alberto Acosta Burneo presentó un análisis sobre la previsión de crecimiento del país, estimada por el Banco Central en 2,7 %.",
-      "url": "https://www.eluniverso.com/noticias/economia/comercio-mineria-y-manufactura-los-tres-focos-calientes-que-encenderan-el-crecimiento-del-pib-en-2026-nota/",
-      "sentimiento": "positivo",
-      "fecha_scrape": "2026-09-30 14:22:32+00:00"
-    },
-    {
-      "fuente": "El Universo",
-      "titulo": "Las declaraciones de Benjamin Netanyahu que pudieron anticipar el atentado frustrado contra un avión de Flydubai",
-      "resumen": "Netanyahu advierte de ataques en Israel antes de las elecciones, la oposición lo rechaza.",
-      "url": "https://www.eluniverso.com/noticias/internacional/las-declaraciones-de-benjamin-netanyahu-que-pudieron-anticipar-el-atentado-frustrado-contra-un-avion-de-flydubai-nota/",
-      "sentimiento": "neutro",
-      "fecha_scrape": "2026-09-30 14:22:32+00:00"
-    },
-    {
-      "fuente": "El Universo",
-      "titulo": "Tennessee ejecutará este miércoles a Christa Pike, primera mujer en recibir la pena capital en más de dos siglos en ese estado",
+      "fuente": "Primicias",
+      "titulo": "¿Cuáles son las diferencias entre el Anexo y la Proyección de Gastos Personales?",
       "resumen": "",
-      "url": "https://www.eluniverso.com/noticias/internacional/tennessee-ejecutara-este-miercoles-a-christa-pike-primera-mujer-en-recibir-la-pena-capital-en-mas-de-dos-siglos-en-ese-estado-nota/",
+      "url": "https://www.primicias.ec/economia/diferencias-anexo-proyeccion-gastos-personales-impuesto-renta-87210/",
       "sentimiento": "neutro",
-      "fecha_scrape": "2026-09-30 14:22:32+00:00"
+      "fecha_scrape": "2026-09-30T14:22:32+00:00"
+    },
+    {
+      "fuente": "Primicias",
+      "titulo": "Las claves para tener un 2025 con más ahorro y menos deudas",
+      "resumen": "",
+      "url": "https://www.primicias.ec/economia/consejos-ahorrar-endeudamiento-finanzas-personales-84856/",
+      "sentimiento": "neutro",
+      "fecha_scrape": "2026-09-30T14:22:32+00:00"
+    },
+    {
+      "fuente": "Primicias",
+      "titulo": "Crisis eléctrica: Respuestas a lo que todos los ecuatorianos se preguntan desde que comenzaron los cortes de luz",
+      "resumen": "",
+      "url": "https://www.primicias.ec/economia/respuestas-crisis-electrica-dudas-cortes-luz-apagones-81533/",
+      "sentimiento": "negativo",
+      "fecha_scrape": "2026-09-30T14:22:32+00:00"
     },
     {
       "fuente": "El Universo",
-      "titulo": "Proyecto CEELA aplica criterios de eficiencia energética en el campus de la PUCE en Manta",
-      "resumen": "",
-      "url": "https://www.eluniverso.com/noticias/ecuador/proyecto-ceela-aplica-criterios-de-eficiencia-energetica-en-el-campus-de-la-puce-en-manta-nota/",
+      "titulo": "La automatización e inteligencia artificial se analizan en Innova-T Latam en Guayaquil",
+      "resumen": "Los asistentes al evento pueden interactuar directamente con sus dispositivos para desarrollar en tiempo real un asistente virtual impulsado por IA.",
+      "url": "https://www.eluniverso.com/noticias/economia/innova-t-latam-foro-congreso-regional-guayaquil-empresarios-ia-automatizacion-ecuador-2026-nota/",
       "sentimiento": "neutro",
-      "fecha_scrape": "2026-09-30 14:22:32+00:00"
+      "fecha_scrape": "2026-09-30T14:22:32+00:00"
     },
     {
-      "fuente": "El Universo",
-      "titulo": "Ecuador y los recursos internacionales",
-      "resumen": "",
-      "url": "https://www.eluniverso.com/opinion/cartas-al-director/ecuador-y-los-recursos-internacionales-nota/",
+      "fuente": "Primicias",
+      "titulo": "Ecuador requiere 1.650 MW en nueva generación hasta 2027, más de lo que produce Coca Codo Sinclair",
+      "resumen": "El Ministerio de Ambiente y Energía advierte que la falta de incorporación de nueva generación de energía eléctrica, a cargo de Celec y Elecaustro, complica el abastecimiento de la demanda, a medida que avanza el estiaje.",
+      "url": "https://www.primicias.ec/economia/ecuador-nueva-generacion-electrica-coca-codo-sinclair-estiaje-cortes-luz-mazar-celec-133740/",
       "sentimiento": "neutro",
-      "fecha_scrape": "2026-09-30 14:22:32+00:00"
-    },
-    {
-      "fuente": "El Universo",
-      "titulo": "Con machete en mano, hombre se parqueó en ciclovía y amenazó a transeúntes en el norte de Quito",
-      "resumen": "",
-      "url": "https://www.eluniverso.com/noticias/ecuador/quito-ecuador-municipio-de-quito-politecnica-salesiana-ciclovia-machete-en-mano-que-paso-en-el-norte-de-quito-ciclovias-norte-de-quito-machete-en-mano-hombre-amenaza-a-transeuntes-agencia-metropolitana-de-transito-nota/",
-      "sentimiento": "neutro",
-      "fecha_scrape": "2026-09-30 14:22:32+00:00"
-    },
-    {
-      "fuente": "El Universo",
-      "titulo": "Catherine Zeta-Jones, de Morticia Addams a una extraficante de drogas: la actriz estrena la serie de suspense ‘Kill Jackie’",
-      "resumen": "",
-      "url": "https://www.eluniverso.com/entretenimiento/cine/catherine-zeta-jones-de-morticia-addams-a-una-extraficante-de-drogas-la-actriz-estrena-la-serie-de-suspense-kill-jackie-nota/",
-      "sentimiento": "neutro",
-      "fecha_scrape": "2026-09-30 14:22:32+00:00"
-    },
-    {
-      "fuente": "El Universo",
-      "titulo": "Benjamin Netanyahu apunta a que uno de los pilotos intentó estrellar el avión de FlyDubai",
-      "resumen": "",
-      "url": "https://www.eluniverso.com/noticias/internacional/benjamin-netanyahu-apunta-a-que-uno-de-los-pilotos-intento-estrellar-el-avion-de-flydubai-nota/",
-      "sentimiento": "neutro",
-      "fecha_scrape": "2026-09-30 14:22:32+00:00"
+      "fecha_scrape": "2026-09-30T14:22:32+00:00"
     },
     {
       "fuente": "El Universo",
@@ -382,7 +270,151 @@
       "resumen": "",
       "url": "https://www.eluniverso.com/opinion/cartas-al-director/reincidencia-de-falla-en-lampara-de-alumbrado-publico-nota/",
       "sentimiento": "neutro",
-      "fecha_scrape": "2026-09-30 14:22:32+00:00"
+      "fecha_scrape": "2026-09-30T14:22:32+00:00"
+    },
+    {
+      "fuente": "Primicias",
+      "titulo": "El precio del diésel que importa Ecuador alcanzó su segundo nivel más alto de 2026 por la guerra en Medio Oriente",
+      "resumen": "El precio de importación del barril de diésel alcanzó en agosto uno de sus niveles más altos de 2026. Ecuador enfrenta además una mayor demanda del combustible, pues también se usa para la generación eléctrica de empresas, en medio del estiaje.",
+      "url": "https://www.primicias.ec/economia/precio-diesel-importado-ecuador-guerra-iran-estado-unidos-estiaje-133724/",
+      "sentimiento": "negativo",
+      "fecha_scrape": "2026-09-30T14:22:32+00:00"
+    },
+    {
+      "fuente": "El Universo",
+      "titulo": "Benjamin Netanyahu apunta a que uno de los pilotos intentó estrellar el avión de FlyDubai",
+      "resumen": "",
+      "url": "https://www.eluniverso.com/noticias/internacional/benjamin-netanyahu-apunta-a-que-uno-de-los-pilotos-intento-estrellar-el-avion-de-flydubai-nota/",
+      "sentimiento": "neutro",
+      "fecha_scrape": "2026-09-30T14:22:32+00:00"
+    },
+    {
+      "fuente": "El Universo",
+      "titulo": "Comercio, minería y manufactura: los tres ‘focos calientes’ que encenderán el crecimiento del PIB en 2026",
+      "resumen": "El economista Alberto Acosta Burneo presentó un análisis sobre la previsión de crecimiento del país, estimada por el Banco Central en 2,7 %.",
+      "url": "https://www.eluniverso.com/noticias/economia/comercio-mineria-y-manufactura-los-tres-focos-calientes-que-encenderan-el-crecimiento-del-pib-en-2026-nota/",
+      "sentimiento": "positivo",
+      "fecha_scrape": "2026-09-30T14:22:32+00:00"
+    },
+    {
+      "fuente": "El Universo",
+      "titulo": "Gobierno invierte $ 1,35 millones para reforzar la infraestructura eléctrica en Azuay",
+      "resumen": "Los trabajos abarcan el cambio de líneas de distribución, mejoras en subestaciones y la renovación del sistema de transporte de datos MPLS y Metro.",
+      "url": "https://www.eluniverso.com/noticias/economia/inversion-reforzamiento-electrico-azuay-gobierno-ecuador-2026-nota/",
+      "sentimiento": "neutro",
+      "fecha_scrape": "2026-09-30T14:22:32+00:00"
+    },
+    {
+      "fuente": "El Universo",
+      "titulo": "Las declaraciones de Benjamin Netanyahu que pudieron anticipar el atentado frustrado contra un avión de Flydubai",
+      "resumen": "Netanyahu advierte de ataques en Israel antes de las elecciones, la oposición lo rechaza.",
+      "url": "https://www.eluniverso.com/noticias/internacional/las-declaraciones-de-benjamin-netanyahu-que-pudieron-anticipar-el-atentado-frustrado-contra-un-avion-de-flydubai-nota/",
+      "sentimiento": "neutro",
+      "fecha_scrape": "2026-09-30T14:22:32+00:00"
+    },
+    {
+      "fuente": "El Universo",
+      "titulo": "IVA bajará al 8 % durante el feriado del 9 octubre para actividades turísticas",
+      "resumen": "La medida estará vigente durante tres días: viernes 9, sábado 10 y domingo 11 de octubre de 2026.",
+      "url": "https://www.eluniverso.com/noticias/politica/iva-bajara-al-8-durante-el-feriado-del-9-octubre-para-actividades-turisticas-nota/",
+      "sentimiento": "neutro",
+      "fecha_scrape": "2026-09-30T14:22:32+00:00"
+    },
+    {
+      "fuente": "El Universo",
+      "titulo": "Ecuador cubre demanda internacional ante problemas en bananeras de otros países y sus exportaciones suben casi al 10 %",
+      "resumen": "Sector capitaliza la escasez de fruta en el mercado mundial y aumenta inversiones en infraestructura y fumigación como prevención por lluvias.",
+      "url": "https://www.eluniverso.com/noticias/economia/banano-exportaciones-crecimiento-964-de-enero-a-agosto-impacto-clima-competidores-acorbanec-ecuador-2026-nota/",
+      "sentimiento": "neutro",
+      "fecha_scrape": "2026-09-30T14:22:32+00:00"
+    },
+    {
+      "fuente": "El Universo",
+      "titulo": "Con apoyo europeo se presentan protocolos técnicos en tres puntos clave de exportación para blindar carga ecuatoriana",
+      "resumen": "Programa Serpaz, impulsado por Corpei, Fedexpor y socios europeos, implementa sellos estandarizados y alertas tempranas para proteger productos perecederos.",
+      "url": "https://www.eluniverso.com/noticias/economia/programa-serpaz-presentacion-protocolos-finales-tecnicos-combate-narcotrafico-corpei-fedexpor-union-europea-paises-bajos-belgica-ecuador-2026-nota/",
+      "sentimiento": "positivo",
+      "fecha_scrape": "2026-09-30T14:22:32+00:00"
+    },
+    {
+      "fuente": "El Universo",
+      "titulo": "Mi Casa Propia: estos son los requisitos para acceder al crédito",
+      "resumen": "El financiamiento está dirigido a quienes buscan adquirir su primera vivienda VIS o VIP y cumplen requisitos de ingresos y documentación.",
+      "url": "https://www.eluniverso.com/patrocinado/mi-casa-propia-estos-son-los-requisitos-para-acceder-al-credito/",
+      "sentimiento": "neutro",
+      "fecha_scrape": "2026-09-30T14:22:32+00:00"
+    },
+    {
+      "fuente": "El Universo",
+      "titulo": "Ecuador prepara exportación de carne de pollo y cerdo a Emiratos Árabes y analiza China",
+      "resumen": "Pronaca busca superar costos de producción local para abrir el mercado asiático, respaldada por prácticas de economía circular y alianzas multilaterales.",
+      "url": "https://www.eluniverso.com/noticias/economia/pronaca-analisis-apertura-mercado-china-barreras-costos-politica-laboral-rodrigo-santacruz-gerente-regional-de-pronaca-ecuador-2026-nota/",
+      "sentimiento": "positivo",
+      "fecha_scrape": "2026-09-30T14:22:32+00:00"
+    },
+    {
+      "fuente": "El Universo",
+      "titulo": "Proyecto CEELA aplica criterios de eficiencia energética en el campus de la PUCE en Manta",
+      "resumen": "",
+      "url": "https://www.eluniverso.com/noticias/ecuador/proyecto-ceela-aplica-criterios-de-eficiencia-energetica-en-el-campus-de-la-puce-en-manta-nota/",
+      "sentimiento": "neutro",
+      "fecha_scrape": "2026-09-30T14:22:32+00:00"
+    },
+    {
+      "fuente": "Primicias",
+      "titulo": "¿Hasta cuándo se debe pagar el décimo tercer sueldo en Ecuador cada año?",
+      "resumen": "El décimo tercer sueldo es conocido por los trabajadores como un 'bono navideño', y este 30 de septiembre, el Gobierno anunció que adelantará el pago de este beneficio solo para los empleados del sector público.",
+      "url": "https://www.primicias.ec/economia/decimo-tercer-sueldo-fecha-sector-privado-empresas-ecuador-133780/",
+      "sentimiento": "positivo",
+      "fecha_scrape": "2026-09-30T14:22:32+00:00"
+    },
+    {
+      "fuente": "El Universo",
+      "titulo": "Tennessee ejecutará este miércoles a Christa Pike, primera mujer en recibir la pena capital en más de dos siglos en ese estado",
+      "resumen": "",
+      "url": "https://www.eluniverso.com/noticias/internacional/tennessee-ejecutara-este-miercoles-a-christa-pike-primera-mujer-en-recibir-la-pena-capital-en-mas-de-dos-siglos-en-ese-estado-nota/",
+      "sentimiento": "neutro",
+      "fecha_scrape": "2026-09-30T14:22:32+00:00"
+    },
+    {
+      "fuente": "El Universo",
+      "titulo": "Aduana frenó evasión: una fábrica de cerámicas se instalaba con piezas que entraron poco a poco al país",
+      "resumen": "Según la Aduana, una empresa extranjera fragmentó el ingreso de componentes para una planta cerámica en un predio agrícola sin permiso para uso industrial.",
+      "url": "https://www.eluniverso.com/noticias/economia/evasion-tributaria-importacion-fragmentada-fabrica-ceramica-delito-senae-ecuador-2026-nota/",
+      "sentimiento": "neutro",
+      "fecha_scrape": "2026-09-30T14:22:32+00:00"
+    },
+    {
+      "fuente": "El Universo",
+      "titulo": "Ecuador y los recursos internacionales",
+      "resumen": "",
+      "url": "https://www.eluniverso.com/opinion/cartas-al-director/ecuador-y-los-recursos-internacionales-nota/",
+      "sentimiento": "neutro",
+      "fecha_scrape": "2026-09-30T14:22:32+00:00"
+    },
+    {
+      "fuente": "El Universo",
+      "titulo": "Con machete en mano, hombre se parqueó en ciclovía y amenazó a transeúntes en el norte de Quito",
+      "resumen": "",
+      "url": "https://www.eluniverso.com/noticias/ecuador/quito-ecuador-municipio-de-quito-politecnica-salesiana-ciclovia-machete-en-mano-que-paso-en-el-norte-de-quito-ciclovias-norte-de-quito-machete-en-mano-hombre-amenaza-a-transeuntes-agencia-metropolitana-de-transito-nota/",
+      "sentimiento": "neutro",
+      "fecha_scrape": "2026-09-30T14:22:32+00:00"
+    },
+    {
+      "fuente": "El Universo",
+      "titulo": "Catherine Zeta-Jones, de Morticia Addams a una extraficante de drogas: la actriz estrena la serie de suspense ‘Kill Jackie’",
+      "resumen": "",
+      "url": "https://www.eluniverso.com/entretenimiento/cine/catherine-zeta-jones-de-morticia-addams-a-una-extraficante-de-drogas-la-actriz-estrena-la-serie-de-suspense-kill-jackie-nota/",
+      "sentimiento": "neutro",
+      "fecha_scrape": "2026-09-30T14:22:32+00:00"
+    },
+    {
+      "fuente": "El Universo",
+      "titulo": "Gobierno incorporará 145 megavatios adicionales desde Guayaquil para reforzar el sistema eléctrico",
+      "resumen": "",
+      "url": "https://www.eluniverso.com/noticias/economia/incorporacion-145-megavatios-centrales-termoelectricas-trinitaria-y-anibal-santos-gobierno-ecuador-2026-nota/",
+      "sentimiento": "neutro",
+      "fecha_scrape": "2026-09-30T14:22:32+00:00"
     }
   ]
 }
