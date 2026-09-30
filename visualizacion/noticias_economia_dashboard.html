@@ -63,8 +63,8 @@
                         <canvas id="chartFuente"></canvas>
                     </div>
                     <div class="bg-white p-4 rounded-lg shadow">
-                        <h2 class="font-semibold mb-2">Palabras más frecuentes en titulares</h2>
-                        <canvas id="chartPalabras"></canvas>
+                        <h2 class="font-semibold mb-2">Sentimiento por sector productivo</h2>
+                        <canvas id="chartSector"></canvas>
                     </div>
                 </div>
 
@@ -89,7 +89,7 @@
             drawSentimiento(sent);
             drawSentimientoFuente(data.sentimiento_por_fuente);
             drawFuente(data.por_fuente);
-            drawPalabras(data.top_palabras);
+            drawSector(data.sentimiento_por_sector);
         }
 
         function kpiCard(label, value, color) {
@@ -143,14 +143,21 @@
             });
         }
 
-        function drawPalabras(top) {
-            new Chart(document.getElementById('chartPalabras'), {
+        function drawSector(porSector) {
+            // "Otros" (sin sector productivo) siempre al final, el resto por total desc
+            const tot = k => Object.values(porSector[k]).reduce((a, b) => a + b, 0);
+            const sectores = Object.keys(porSector).sort((a, b) => (a === 'Otros') - (b === 'Otros') || tot(b) - tot(a));
+            new Chart(document.getElementById('chartSector'), {
                 type: 'bar',
                 data: {
-                    labels: top.map(p => p.palabra),
-                    datasets: [{ data: top.map(p => p.conteo), backgroundColor: colors.navy }]
+                    labels: sectores,
+                    datasets: ['positivo', 'neutro', 'negativo'].map(cat => ({
+                        label: cat,
+                        data: sectores.map(s => porSector[s][cat] || 0),
+                        backgroundColor: SENT_COLOR[cat]
+                    }))
                 },
-                options: { indexAxis: 'y', plugins: { legend: { display: false } } }
+                options: { indexAxis: 'y', scales: { x: { stacked: true, beginAtZero: true }, y: { stacked: true } } }
             });
         }
 
