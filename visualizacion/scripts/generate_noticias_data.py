@@ -60,13 +60,20 @@ def build():
         df.groupby(["sector", "sentimiento"]).size().unstack(fill_value=0).to_dict(orient="index")
     )
 
-    noticias = df.sort_values("fecha_scrape", ascending=False)[
-        ["fuente", "titulo", "resumen", "url", "sentimiento", "fecha_scrape"]
+    # Día de publicación en hora de Ecuador; las noticias sin fecha (NaT) quedan fuera.
+    dia = df["fecha_publicacion"].dt.tz_convert("America/Guayaquil").dt.strftime("%Y-%m-%d")
+    sentimiento_por_dia = (
+        df.groupby([dia, "sentimiento"]).size().unstack(fill_value=0).sort_index().to_dict(orient="index")
+    )
+
+    noticias = df[
+        ["fuente", "titulo", "resumen", "url", "sentimiento", "fecha_scrape", "fecha_publicacion"]
     ].copy()
     # ISO con 'T' (no el "YYYY-MM-DD HH:MM:SS+00:00" de str(Timestamp)): así el
     # bronze reconstruido desde este JSON en CI queda en el mismo formato que
     # escribe el scraper, y pd.to_datetime no choca con fechas mixtas.
-    noticias["fecha_scrape"] = noticias["fecha_scrape"].apply(lambda t: t.isoformat())
+    for col in ["fecha_scrape", "fecha_publicacion"]:
+        noticias[col] = noticias[col].apply(lambda t: t.isoformat() if pd.notna(t) else None)
 
     return {
         "metadata": {
@@ -78,6 +85,7 @@ def build():
         "sentimiento_total": sentimiento_total,
         "sentimiento_por_fuente": sentimiento_por_fuente,
         "sentimiento_por_sector": sentimiento_por_sector,
+        "sentimiento_por_dia": sentimiento_por_dia,
         "noticias": noticias.to_dict(orient="records"),
     }
 

@@ -16,7 +16,8 @@
 
         async function loadData() {
             try {
-                const res = await fetch('static/noticias_data.json');
+                // no-store: el JSON se reescribe cada 6 h, sin esto el navegador sirve la versión vieja
+                const res = await fetch('static/noticias_data.json', { cache: 'no-store' });
                 if (!res.ok) throw new Error(`HTTP ${res.status}`);
                 render(await res.json());
             } catch (err) {
@@ -66,6 +67,10 @@
                         <h2 class="font-semibold mb-2">Sentimiento por sector productivo</h2>
                         <canvas id="chartSector"></canvas>
                     </div>
+                    <div class="bg-white p-4 rounded-lg shadow md:col-span-2">
+                        <h2 class="font-semibold mb-2">Noticias por día de publicación (últimos 30 días)</h2>
+                        <canvas id="chartDia" height="90"></canvas>
+                    </div>
                 </div>
 
                 <div class="bg-white p-4 rounded-lg shadow overflow-x-auto">
@@ -76,7 +81,7 @@
                                 <th class="py-2 pr-4">Medio</th>
                                 <th class="py-2 pr-4">Título</th>
                                 <th class="py-2 pr-4">Sentimiento</th>
-                                <th class="py-2 pr-4">Fecha scrape</th>
+                                <th class="py-2 pr-4">Publicación</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -90,6 +95,7 @@
             drawSentimientoFuente(data.sentimiento_por_fuente);
             drawFuente(data.por_fuente);
             drawSector(data.sentimiento_por_sector);
+            drawDia(data.sentimiento_por_dia);
         }
 
         function kpiCard(label, value, color) {
@@ -105,7 +111,7 @@
                 <td class="py-2 pr-4 whitespace-nowrap">${n.fuente}</td>
                 <td class="py-2 pr-4"><a href="${n.url}" target="_blank" rel="noreferrer" class="hover:underline" style="color:${colors.accent}">${n.titulo}</a></td>
                 <td class="py-2 pr-4"><span class="px-2 py-0.5 rounded text-white text-xs" style="background:${badgeColor}">${n.sentimiento}</span></td>
-                <td class="py-2 pr-4 whitespace-nowrap text-gray-500">${n.fecha_scrape}</td>
+                <td class="py-2 pr-4 whitespace-nowrap text-gray-500">${n.fecha_publicacion ? new Date(n.fecha_publicacion).toLocaleString('es-EC') : '—'}</td>
             </tr>`;
         }
 
@@ -158,6 +164,25 @@
                     }))
                 },
                 options: { indexAxis: 'y', scales: { x: { stacked: true, beginAtZero: true }, y: { stacked: true } } }
+            });
+        }
+
+        function drawDia(porDia) {
+            // Las portadas a veces enlazan notas viejas (2024...): ventana de 30 días hasta la fecha más reciente
+            const todos = Object.keys(porDia).sort();
+            const desde = new Date(new Date(todos[todos.length - 1]) - 30 * 864e5).toISOString().slice(0, 10);
+            const dias = todos.filter(d => d >= desde);
+            new Chart(document.getElementById('chartDia'), {
+                type: 'bar',
+                data: {
+                    labels: dias,
+                    datasets: ['positivo', 'neutro', 'negativo'].map(cat => ({
+                        label: cat,
+                        data: dias.map(d => porDia[d][cat] || 0),
+                        backgroundColor: SENT_COLOR[cat]
+                    }))
+                },
+                options: { scales: { x: { stacked: true }, y: { stacked: true, beginAtZero: true, ticks: { precision: 0 } } } }
             });
         }
 

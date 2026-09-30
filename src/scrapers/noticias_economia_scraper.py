@@ -94,6 +94,17 @@ def scrape() -> pd.DataFrame:
     return df
 
 
+def fecha_publicacion(url: str) -> str:
+    """Lee <meta property="article:published_time"> del artículo ('' si falla)."""
+    try:
+        resp = requests.get(url, headers=HEADERS, timeout=20)
+        resp.raise_for_status()
+    except requests.RequestException:
+        return ""
+    meta = BeautifulSoup(resp.text, "html.parser").select_one('meta[property="article:published_time"]')
+    return meta["content"] if meta else ""
+
+
 def guardar(df_nuevo: pd.DataFrame) -> pd.DataFrame:
     if OUTPUT_FILE.exists():
         df_previo = pd.read_csv(OUTPUT_FILE)
@@ -101,6 +112,12 @@ def guardar(df_nuevo: pd.DataFrame) -> pd.DataFrame:
     else:
         df_total = df_nuevo
     df_total = df_total.drop_duplicates(subset="url", keep="first")
+    # Una request extra solo por noticia sin fecha (las nuevas de esta corrida o
+    # las que fallaron antes), no por todo el histórico.
+    if "fecha_publicacion" not in df_total:
+        df_total["fecha_publicacion"] = ""
+    faltan = df_total["fecha_publicacion"].fillna("") == ""
+    df_total.loc[faltan, "fecha_publicacion"] = df_total.loc[faltan, "url"].map(fecha_publicacion)
     df_total.to_csv(OUTPUT_FILE, index=False, encoding="utf-8-sig")
     return df_total
 
