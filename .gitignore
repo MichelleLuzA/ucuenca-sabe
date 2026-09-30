@@ -5,6 +5,7 @@
 *.json
 !config/*.json
 !visualizacion/static/data.json
+!visualizacion/static/noticias_data.json
 
 # === Almacenamiento de Datos (Bloqueo total) ===
 data/
