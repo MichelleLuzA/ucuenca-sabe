@@ -1,6 +1,6 @@
 # 📊 Visualizacion — MVP Dashboard de Empleabilidad
 
-**Módulo:** Sistema de Inteligencia Territorial | UCuenca-SABE  
+**Módulo:** UCuenca-SABE!  
 **Componente:** Dashboard interactivo ENEMDU + Sobrecalificación  
 **Versión:** 1.0  
 **Última actualización:** 2026-09-04  

@@ -166,7 +166,7 @@ start MVP_dashboard_empleabilidad.html
 
 **Checklist:**
 - [ ] Página carga sin error (no aparece página blanca)
-- [ ] Puedo leer texto "UCUENCA" y "Observatorio Institucional"
+- [ ] Puedo leer texto "UCUENCA" y "UCuenca-SABE!"
 - [ ] Hay 2 botones grandes
 - [ ] Puedo leer la fecha de sincronización
 

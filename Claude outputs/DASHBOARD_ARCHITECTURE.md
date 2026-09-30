@@ -1,6 +1,6 @@
 # 🏗️ Arquitectura Técnica — Dashboard Empleabilidad ENEMDU
 
-**Proyecto:** UCuenca-SABE | Sistema de Inteligencia Territorial  
+**Proyecto:** UCuenca-SABE!  
 **Componente:** MVP Dashboard de Empleabilidad  
 **Versión:** 1.0  
 **Fecha:** 2026-09-04  
