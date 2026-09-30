@@ -68,6 +68,8 @@ class GoldResult:
     sobrecalificacion_ocupacion: pd.DataFrame
     por_rama: pd.DataFrame
     comparativo_nivel: pd.DataFrame
+    cubo: pd.DataFrame
+    cubo_ocupacion: pd.DataFrame
     paths: Dict[str, str] = field(default_factory=dict)
 
     def as_dict(self) -> Dict[str, pd.DataFrame]:
@@ -79,6 +81,8 @@ class GoldResult:
             "sobrecalificacion_ocupacion": self.sobrecalificacion_ocupacion,
             "graduados_rama_actividad": self.por_rama,
             "comparativo_nivel_instruccion": self.comparativo_nivel,
+            "cubo_empleabilidad": self.cubo,
+            "cubo_ocupacion_graduados": self.cubo_ocupacion,
         }
 
 
@@ -280,6 +284,17 @@ class ENEMDUGoldBuilder:
         comparativo.loc[~comparativo["nivel_instruccion"].isin(NIVELES_SUPERIOR),
                         "tasa_sobrecalificacion"] = np.nan
 
+        # Cubos ADITIVOS (sumas ponderadas, sin tasas) para que el dashboard
+        # filtre por cualquier combinación de dimensiones y recalcule las tasas
+        # con las mismas fórmulas de _rates: las tasas no se pueden promediar,
+        # las sumas sí.
+        cubo = self._aggregate(self.df, ["anio", "provincia", "sexo", "grupo_edad",
+                                         "nivel_instruccion", "es_graduado_superior"])
+        cubo_ocupacion = self._aggregate(graduados_ocupados, ["anio", "provincia", "sexo",
+                                                              "ciuo_gran_grupo", "ciuo_gran_grupo_desc"])
+        cubo_ocupacion = cubo_ocupacion[["anio", "provincia", "sexo", "ciuo_gran_grupo",
+                                         "ciuo_gran_grupo_desc", "n_muestral", "ocupados"]]
+
         result = GoldResult(
             hechos=hechos,
             kpi_anual=kpi_anual,
@@ -288,6 +303,8 @@ class ENEMDUGoldBuilder:
             sobrecalificacion_ocupacion=sobre_ocup,
             por_rama=por_rama,
             comparativo_nivel=comparativo,
+            cubo=cubo,
+            cubo_ocupacion=cubo_ocupacion,
         )
         return result
 

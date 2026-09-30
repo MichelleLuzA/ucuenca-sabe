@@ -36,13 +36,21 @@ def read_gold_data():
         comparativo_nivel_instruccion = pd.read_parquet(f"{base_path}/comparativo_nivel_instruccion.parquet")
         print(f"  ✓ comparativo_nivel_instruccion: {len(comparativo_nivel_instruccion)} filas")
 
+        cubo_empleabilidad = pd.read_parquet(f"{base_path}/cubo_empleabilidad.parquet")
+        print(f"  ✓ cubo_empleabilidad: {len(cubo_empleabilidad)} filas")
+
+        cubo_ocupacion = pd.read_parquet(f"{base_path}/cubo_ocupacion_graduados.parquet")
+        print(f"  ✓ cubo_ocupacion_graduados: {len(cubo_ocupacion)} filas")
+
         return {
             'kpi_anual': kpi_anual,
             'empleabilidad_provincia': empleabilidad_provincia,
             'empleabilidad_sexo_edad': empleabilidad_sexo_edad,
             'graduados_rama_actividad': graduados_rama_actividad,
             'sobrecalificacion_ocupacion': sobrecalificacion_ocupacion,
-            'comparativo_nivel_instruccion': comparativo_nivel_instruccion
+            'comparativo_nivel_instruccion': comparativo_nivel_instruccion,
+            'cubo_empleabilidad': cubo_empleabilidad,
+            'cubo_ocupacion': cubo_ocupacion
         }
     except Exception as e:
         print(f"❌ Error al leer Parquet: {e}")
@@ -245,6 +253,17 @@ def build_sobrecalificacion_module(data):
         )
     }
 
+def cubo_compacto(df):
+    """Cubo aditivo como {cols, rows} (sin repetir nombres de columna por fila).
+    Las sumas ponderadas se redondean a entero; dimensiones nulas -> null."""
+    df = df.copy()
+    for c in df.columns:
+        if pd.api.types.is_float_dtype(df[c]):
+            df[c] = df[c].round(0).astype("Int64")
+    df = df.astype(object).where(df.notna(), None)
+    return {"cols": list(df.columns), "rows": df.values.tolist()}
+
+
 def build_dashboard_json(data):
     """Construye el JSON completo del dashboard"""
     return {
@@ -262,6 +281,15 @@ def build_dashboard_json(data):
                 data, "educacion_superior",
                 "Empleabilidad — Graduados de Educación Superior (2021-2025)"),
             "sobrecalificacion": build_sobrecalificacion_module(data)
+        },
+        # Los filtros (sexo, nivel, provincia) del dashboard se calculan en el
+        # navegador sumando estos cubos y aplicando las fórmulas de _rates.
+        "cubos": {
+            "empleabilidad": cubo_compacto(data['cubo_empleabilidad']),
+            "ocupacion_graduados": cubo_compacto(data['cubo_ocupacion']),
+            "nivel_instruccion_orden": NIVEL_INSTRUCCION_ORDEN,
+            "grupo_edad_orden": GRUPO_EDAD_ORDEN,
+            "n_minimo": 30
         }
     }
 
@@ -273,7 +301,7 @@ def main():
         os.makedirs("../static", exist_ok=True)
         output_path = "../static/data.json"
         with open(output_path, 'w', encoding='utf-8') as f:
-            json.dump(dashboard_data, f, ensure_ascii=False, indent=2)
+            json.dump(dashboard_data, f, ensure_ascii=False, separators=(",", ":"))
         file_size = os.path.getsize(output_path) / 1024
         print(f"\n✅ JSON generado: {os.path.abspath(output_path)}")
         print(f"   Tamaño: {file_size:.1f} KB")
