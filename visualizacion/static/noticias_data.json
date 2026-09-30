@@ -1,6 +1,6 @@
 {
   "metadata": {
-    "timestamp": "2026-09-30T09:51:22.642136",
+    "timestamp": "2026-09-30T10:22:41.902611",
     "fuente": "../../data/silver/noticias_economia/noticias_economia_silver.parquet",
     "total_noticias": 41
   },
@@ -25,68 +25,38 @@
       "positivo": 1
     }
   },
-  "top_palabras": [
-    {
-      "palabra": "desde",
-      "conteo": 4
+  "sentimiento_por_sector": {
+    "Agro y comercio exterior": {
+      "negativo": 0,
+      "neutro": 3,
+      "positivo": 2
     },
-    {
-      "palabra": "septiembre",
-      "conteo": 4
+    "Energía y minería": {
+      "negativo": 3,
+      "neutro": 8,
+      "positivo": 2
     },
-    {
-      "palabra": "pais",
-      "conteo": 3
+    "Finanzas y sector público": {
+      "negativo": 1,
+      "neutro": 8,
+      "positivo": 1
     },
-    {
-      "palabra": "tres",
-      "conteo": 3
+    "Industria y manufactura": {
+      "negativo": 0,
+      "neutro": 1,
+      "positivo": 0
     },
-    {
-      "palabra": "electrica",
-      "conteo": 3
+    "Otros": {
+      "negativo": 0,
+      "neutro": 11,
+      "positivo": 0
     },
-    {
-      "palabra": "puntos",
-      "conteo": 3
-    },
-    {
-      "palabra": "coca",
-      "conteo": 3
-    },
-    {
-      "palabra": "codo",
-      "conteo": 3
-    },
-    {
-      "palabra": "sinclair",
-      "conteo": 3
-    },
-    {
-      "palabra": "mano",
-      "conteo": 2
-    },
-    {
-      "palabra": "quito",
-      "conteo": 2
-    },
-    {
-      "palabra": "gobierno",
-      "conteo": 2
-    },
-    {
-      "palabra": "millones",
-      "conteo": 2
-    },
-    {
-      "palabra": "reforzar",
-      "conteo": 2
-    },
-    {
-      "palabra": "benjamin",
-      "conteo": 2
+    "Telecom y tecnología": {
+      "negativo": 0,
+      "neutro": 1,
+      "positivo": 0
     }
-  ],
+  },
   "noticias": [
     {
       "fuente": "El Universo",

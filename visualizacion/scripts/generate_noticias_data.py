@@ -10,7 +10,6 @@ import json
 import os
 import re
 import unicodedata
-from collections import Counter
 from datetime import datetime
 
 import pandas as pd
@@ -18,17 +17,32 @@ import pandas as pd
 SILVER_FILE = "../../data/silver/noticias_economia/noticias_economia_silver.parquet"
 OUTPUT_FILE = "../static/noticias_data.json"
 
-STOPWORDS = {
-    "el", "la", "los", "las", "de", "del", "en", "y", "a", "que", "un", "una",
-    "para", "por", "con", "su", "se", "al", "es", "no", "mas", "más", "como",
-    "sobre", "entre", "sus", "le", "lo", "este", "esta", "ecuador",
+# Sector -> prefijos de palabras (sin tildes, minúscula). Gana el primer sector que coincida.
+# ponytail: clasificación por palabras clave; migrar a un clasificador si los titulares dejan de calzar.
+SECTORES = {
+    "Energía y minería": ["energ", "electric", "hidroelectric", "coca codo", "caudal", "embalse", "estiaje",
+                          "petrol", "diesel", "mineri", "megavat", "generacion", "apagon", r"cortes de luz"],
+    "Finanzas y sector público": [r"iva\b", "impuesto", "banco", "credito", "riesgo pais", "cuentas del estado",
+                                  "deuda", "ahorro", "tarjeta", "sueldo", "gastos personales", "ministerio", "gobierno"],
+    "Agro y comercio exterior": ["exporta", "importa", "banan", "agricol", "tractor", "carne", "aduana", "camaron", "cacao"],
+    "Industria y manufactura": ["fabrica", "ceramic", "manufactur", "automatizacion", "industria"],
+    "Turismo y comercio": ["turis", "feriado", "comercio", "hotel"],
+    "Telecom y tecnología": ["internet", "starlink", r"cnt\b", "inteligencia artificial", "telecom"],
+    "Vivienda": ["casa propia", "vivienda", "inmobiliar"],
 }
 
 
-def _tokens(texto: str) -> list[str]:
+def _norm(texto: str) -> str:
     nfkd = unicodedata.normalize("NFKD", texto.lower())
-    limpio = "".join(c for c in nfkd if not unicodedata.combining(c))
-    return [p for p in re.findall(r"[a-z]+", limpio) if len(p) > 3 and p not in STOPWORDS]
+    return "".join(c for c in nfkd if not unicodedata.combining(c))
+
+
+def _sector(titulo: str) -> str:
+    t = _norm(titulo)
+    for sector, kws in SECTORES.items():
+        if any(re.search(r"\b" + k, t) for k in kws):
+            return sector
+    return "Otros"
 
 
 def build():
@@ -41,10 +55,10 @@ def build():
         df.groupby(["fuente", "sentimiento"]).size().unstack(fill_value=0).to_dict(orient="index")
     )
 
-    palabras = Counter()
-    for titulo in df["titulo"]:
-        palabras.update(_tokens(titulo))
-    top_palabras = palabras.most_common(15)
+    df["sector"] = df["titulo"].apply(_sector)
+    sentimiento_por_sector = (
+        df.groupby(["sector", "sentimiento"]).size().unstack(fill_value=0).to_dict(orient="index")
+    )
 
     noticias = df.sort_values("fecha_scrape", ascending=False)[
         ["fuente", "titulo", "resumen", "url", "sentimiento", "fecha_scrape"]
@@ -63,7 +77,7 @@ def build():
         "por_fuente": por_fuente,
         "sentimiento_total": sentimiento_total,
         "sentimiento_por_fuente": sentimiento_por_fuente,
-        "top_palabras": [{"palabra": p, "conteo": c} for p, c in top_palabras],
+        "sentimiento_por_sector": sentimiento_por_sector,
         "noticias": noticias.to_dict(orient="records"),
     }
 
