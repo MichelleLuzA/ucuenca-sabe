@@ -35,6 +35,15 @@
         function render(data) {
             const total = data.metadata.total_noticias;
             const sent = data.sentimiento_total;
+            // La tabla muestra solo el día (hora de Ecuador); si aún no hay noticias de hoy, la última fecha disponible.
+            const diaEc = f => new Date(f).toLocaleDateString('en-CA', { timeZone: 'America/Guayaquil' });
+            const hoy = diaEc(new Date());
+            const conFecha = data.noticias.filter(n => n.fecha_publicacion);
+            const ultimo = conFecha.map(n => diaEc(n.fecha_publicacion)).sort().pop();
+            const esHoy = conFecha.some(n => diaEc(n.fecha_publicacion) === hoy);
+            const diaTabla = esHoy ? hoy : ultimo;
+            const noticiasDia = conFecha.filter(n => diaEc(n.fecha_publicacion) === diaTabla);
+            const meses = [...new Set(Object.keys(data.sentimiento_por_dia).map(d => d.slice(0, 7)))].sort().reverse();
 
             document.getElementById('app').innerHTML = `
                 <div class="mb-2 text-xs inline-block bg-yellow-100 text-yellow-800 px-2 py-1 rounded">
@@ -68,13 +77,19 @@
                         <canvas id="chartSector"></canvas>
                     </div>
                     <div class="bg-white p-4 rounded-lg shadow md:col-span-2">
-                        <h2 class="font-semibold mb-2">Noticias por día de publicación (últimos 30 días)</h2>
+                        <div class="flex justify-between items-center mb-2">
+                            <h2 class="font-semibold">Noticias por día de publicación</h2>
+                            <select id="selMes" class="border rounded px-2 py-1 text-sm">
+                                <option value="">Últimos 30 días</option>
+                                ${meses.map(m => `<option value="${m}">${m}</option>`).join('')}
+                            </select>
+                        </div>
                         <canvas id="chartDia" height="90"></canvas>
                     </div>
                 </div>
 
                 <div class="bg-white p-4 rounded-lg shadow overflow-x-auto">
-                    <h2 class="font-semibold mb-2">Titulares (tabla estructurada)</h2>
+                    <h2 class="font-semibold mb-2">Titulares de ${esHoy ? 'hoy' : 'la última fecha con noticias'} (${diaTabla})</h2>
                     <table class="w-full text-sm">
                         <thead>
                             <tr class="text-left border-b">
@@ -85,7 +100,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            ${data.noticias.map(rowHtml).join('')}
+                            ${noticiasDia.map(rowHtml).join('') || '<tr><td colspan="4" class="py-4 text-gray-500">Sin noticias.</td></tr>'}
                         </tbody>
                     </table>
                 </div>
@@ -100,7 +115,8 @@
             drawSentimientoFuente(data.sentimiento_por_fuente);
             drawFuente(data.por_fuente);
             drawSector(data.sentimiento_por_sector);
-            drawDia(data.sentimiento_por_dia);
+            drawDia(data.sentimiento_por_dia, '');
+            document.getElementById('selMes').onchange = e => drawDia(data.sentimiento_por_dia, e.target.value);
         }
 
         function kpiCard(label, value, color) {
@@ -172,11 +188,12 @@
             });
         }
 
-        function drawDia(porDia) {
+        function drawDia(porDia, mes) {
             // Las portadas a veces enlazan notas viejas (2024...): ventana de 30 días hasta la fecha más reciente
             const todos = Object.keys(porDia).sort();
             const desde = new Date(new Date(todos[todos.length - 1]) - 30 * 864e5).toISOString().slice(0, 10);
-            const dias = todos.filter(d => d >= desde);
+            const dias = mes ? todos.filter(d => d.startsWith(mes)) : todos.filter(d => d >= desde);
+            Chart.getChart('chartDia')?.destroy();
             new Chart(document.getElementById('chartDia'), {
                 type: 'bar',
                 data: {
