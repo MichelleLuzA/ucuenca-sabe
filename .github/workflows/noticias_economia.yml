@@ -18,7 +18,7 @@ jobs:
         with:
           python-version: "3.11"
 
-      - run: pip install requests beautifulsoup4 pandas pyarrow
+      - run: pip install requests beautifulsoup4 pandas pyarrow pyyaml python-dotenv
 
       # data/bronze/ no se versiona (política de privacidad del repo), así que
       # en un runner nuevo no hay histórico. Lo reconstruimos a partir del
