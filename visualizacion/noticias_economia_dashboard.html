@@ -14,16 +14,26 @@
         const colors = { navy: '#0B2341', red: '#D3272C', accent: '#1E4C82', gray: '#9CA3AF' };
         const SENT_COLOR = { positivo: '#1E7A34', negativo: '#D3272C', neutro: '#9CA3AF' };
 
-        async function loadData() {
+        // no-store: los JSON se reescriben cada 6 h, sin esto el navegador sirve la versión vieja
+        async function getJson(path) {
+            const res = await fetch(`static/noticias/${path}`, { cache: 'no-store' });
+            if (!res.ok) throw new Error(`${path}: HTTP ${res.status}`);
+            return res.json();
+        }
+
+        // Escala: resumen.json (liviano) + un archivo por mes, que se baja solo al elegirlo.
+        const meses = {};
+        async function loadData(sel = '') {
             try {
-                // no-store: el JSON se reescribe cada 6 h, sin esto el navegador sirve la versión vieja
-                const res = await fetch('static/noticias_data.json', { cache: 'no-store' });
-                if (!res.ok) throw new Error(`HTTP ${res.status}`);
-                render(await res.json());
+                const res = await getJson('resumen.json');
+                for (const m of [res.meses[0], sel].filter(Boolean)) {
+                    meses[m] ??= await getJson(`noticias_${m}.json`);
+                }
+                render(res, meses[res.meses[0]], sel, sel ? meses[sel] : res);
             } catch (err) {
                 document.getElementById('app').innerHTML = `
                     <div class="p-8 bg-white rounded-lg shadow text-center">
-                        <h1 class="text-xl font-bold text-red-600 mb-2">Error cargando static/noticias_data.json</h1>
+                        <h1 class="text-xl font-bold text-red-600 mb-2">Error cargando static/noticias/</h1>
                         <p class="text-sm text-gray-500">${err.message}</p>
                         <p class="text-sm text-gray-500 mt-2">Corre visualizacion/scripts/generate_noticias_data.py primero.</p>
                     </div>`;
@@ -32,25 +42,32 @@
 
         function pct(n, total) { return total ? ((n / total) * 100).toFixed(1) : '0.0'; }
 
-        function render(data) {
-            const total = data.metadata.total_noticias;
+        // res: resumen global · ult: archivo del mes más reciente (tabla del día) · sel: mes elegido ('' = todos) · data: agregados a graficar
+        function render(res, ult, sel, data) {
+            const total = data.total_noticias;
             const sent = data.sentimiento_total;
             // La tabla muestra solo el día (hora de Ecuador); si aún no hay noticias de hoy, la última fecha disponible.
             const diaEc = f => new Date(f).toLocaleDateString('en-CA', { timeZone: 'America/Guayaquil' });
             const hoy = diaEc(new Date());
-            const conFecha = data.noticias.filter(n => n.fecha_publicacion);
+            const conFecha = ult.noticias.filter(n => n.fecha_publicacion);
             const ultimo = conFecha.map(n => diaEc(n.fecha_publicacion)).sort().pop();
             const esHoy = conFecha.some(n => diaEc(n.fecha_publicacion) === hoy);
             const diaTabla = esHoy ? hoy : ultimo;
             const noticiasDia = conFecha.filter(n => diaEc(n.fecha_publicacion) === diaTabla);
-            const meses = [...new Set(Object.keys(data.sentimiento_por_dia).map(d => d.slice(0, 7)))].sort().reverse();
-
+            
             document.getElementById('app').innerHTML = `
                 <div class="mb-2 text-xs inline-block bg-yellow-100 text-yellow-800 px-2 py-1 rounded">
                     ⚠️ Versión preliminar en fase de validación: las cifras pueden ajustarse antes de su publicación oficial.
                 </div>
                 <h1 class="text-2xl font-bold mb-1" style="color:${colors.navy}">Noticias de Economía — Sentimiento y Cobertura</h1>
-                <p class="text-sm text-gray-500 mb-6">Fuentes: Primicias, El Universo (sección Economía) · Generado ${new Date(data.metadata.timestamp).toLocaleString('es-EC')}</p>
+                <p class="text-sm text-gray-500 mb-6">Fuentes: Primicias, El Universo (sección Economía) · Generado ${new Date(res.metadata.timestamp).toLocaleString('es-EC')}</p>
+
+                <div class="mb-4 text-sm">Periodo:
+                    <select id="selMes" class="border rounded px-2 py-1 ml-1">
+                        <option value="">Todos los meses</option>
+                        ${res.meses.map(m => `<option value="${m}" ${m === sel ? 'selected' : ''}>${m}</option>`).join('')}
+                    </select>
+                </div>
 
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
                     ${kpiCard('Total noticias', total, colors.navy)}
@@ -77,13 +94,7 @@
                         <canvas id="chartSector"></canvas>
                     </div>
                     <div class="bg-white p-4 rounded-lg shadow md:col-span-2">
-                        <div class="flex justify-between items-center mb-2">
-                            <h2 class="font-semibold">Noticias por día de publicación</h2>
-                            <select id="selMes" class="border rounded px-2 py-1 text-sm">
-                                <option value="">Últimos 30 días</option>
-                                ${meses.map(m => `<option value="${m}">${m}</option>`).join('')}
-                            </select>
-                        </div>
+                        <h2 class="font-semibold mb-2">Noticias por día de publicación${sel ? '' : ' (últimos 30 días)'}</h2>
                         <canvas id="chartDia" height="90"></canvas>
                     </div>
                 </div>
@@ -115,8 +126,8 @@
             drawSentimientoFuente(data.sentimiento_por_fuente);
             drawFuente(data.por_fuente);
             drawSector(data.sentimiento_por_sector);
-            drawDia(data.sentimiento_por_dia, '');
-            document.getElementById('selMes').onchange = e => drawDia(data.sentimiento_por_dia, e.target.value);
+            drawDia(data.sentimiento_por_dia, sel);
+            document.getElementById('selMes').onchange = e => loadData(e.target.value);
         }
 
         function kpiCard(label, value, color) {
@@ -193,7 +204,6 @@
             const todos = Object.keys(porDia).sort();
             const desde = new Date(new Date(todos[todos.length - 1]) - 30 * 864e5).toISOString().slice(0, 10);
             const dias = mes ? todos.filter(d => d.startsWith(mes)) : todos.filter(d => d >= desde);
-            Chart.getChart('chartDia')?.destroy();
             new Chart(document.getElementById('chartDia'), {
                 type: 'bar',
                 data: {
