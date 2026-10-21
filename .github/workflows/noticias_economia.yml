@@ -22,22 +22,22 @@ jobs:
 
       # data/bronze/ no se versiona (política de privacidad del repo), así que
       # en un runner nuevo no hay histórico. Lo reconstruimos a partir del
-      # último noticias_data.json publicado para no perder lo ya scrapeado.
+      # último JSON mensual publicado para no perder lo ya scrapeado.
       - name: Reconstruir bronze desde el JSON publicado
         run: |
           python -c "
-          import json, os
+          import glob, json, os
           import pandas as pd
-          path = 'visualizacion/static/noticias_data.json'
+          archivos = sorted(glob.glob('visualizacion/static/noticias/noticias_*.json'))
           out = 'data/bronze/externas/noticias_economia/noticias_economia.csv'
           os.makedirs(os.path.dirname(out), exist_ok=True)
-          if os.path.exists(path):
-              noticias = json.load(open(path, encoding='utf-8'))['noticias']
+          if archivos:
+              noticias = [n for a in archivos for n in json.load(open(a, encoding='utf-8'))['noticias']]
               df = pd.DataFrame(noticias).reindex(columns=['fuente', 'titulo', 'resumen', 'url', 'fecha_scrape', 'fecha_publicacion'])
               df.to_csv(out, index=False, encoding='utf-8-sig')
               print(f'Bronze reconstruido: {len(df)} noticias previas')
           else:
-              print('No hay noticias_data.json previo, se arranca de cero')
+              print('No hay JSON mensual previo, se arranca de cero')
           "
 
       - name: Scraper
@@ -54,6 +54,6 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add visualizacion/static/noticias_data.json
+          git add visualizacion/static/noticias
           git diff --cached --quiet || git commit -m "chore: actualizar noticias de economia (automatico)"
           git push
