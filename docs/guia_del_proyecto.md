@@ -49,7 +49,7 @@ ucuenca-sabe/
 ├── docs/                         ← documentación (esta guía, README del pipeline)
 ├── environment.yml               ← entorno conda reproducible
 ├── .env.example                  ← plantilla de secretos (el .env real NO se sube)
-└── excel.py, generar_mapa.py     ← utilidades sueltas (plantilla Excel, mapa de investigadores)
+└── scripts/                      ← orquestador ENEMDU, mapa D3 y plantilla Excel
 ```
 
 **Idea central:** el código vive en `src/`; los datos viven en `data/` (que git ignora); lo que se publica en la web vive en `visualizacion/`. Los datos fluyen de izquierda a derecha: fuente externa → Bronze → Silver → Gold → JSON → página web.
@@ -115,7 +115,7 @@ El entorno se define en [environment.yml](../environment.yml) (conda, Python 3.1
 | **pandas** | Tablas (DataFrames): leer, limpiar, agrupar | Todo el procesamiento |
 | **numpy** | Cálculo numérico, valores `NaN` | ENEMDU Silver/Gold |
 | **pyarrow** | Leer/escribir Parquet (lo usa pandas por debajo) | Silver y Gold |
-| **openpyxl** | Leer/escribir Excel `.xlsx` | Docentes, `excel.py` |
+| **openpyxl** | Leer/escribir Excel `.xlsx` | Docentes, `scripts/generar_plantilla_contratos.py` |
 | **pyreadstat** | Leer archivos `.sav` (formato SPSS del INEC) | Notebook de revisión de etiquetas |
 | **selenium** | Controlar un navegador Chrome para scrapear páginas dinámicas | Scrapers de investigadores y organizaciones |
 | **requests** | Pedir páginas web por HTTP (rápido, sin navegador) | Scraper de noticias |
@@ -260,9 +260,9 @@ Objetivo: saber **qué docentes produjeron cada tesis/artículo/publicación**.
 - Columnas resultantes: `CEDULA_MATCH`, `METODO_MATCH_DOCENTE`, `FUZZY_SCORE`.
 - **Límite real:** el catastro solo tiene docentes **actuales** (1175 personas); un director de tesis que ya se retiró nunca coincidirá. Cobertura de tesis medida: ~27 %. Mejorarla requiere ampliar la fuente de datos, no ajustar los umbrales.
 
-### 5.6 Utilidades sueltas
-- `generar_mapa.py`: lee `silver_catastropure.xlsx` y genera `visualizacion/mapa_investigacion.html` (visualización con D3). Tiene **rutas absolutas fijas** en la parte superior; hay que editarlas si cambia la ubicación.
-- `excel.py`: construye una plantilla Excel con formato institucional (colores, validaciones de datos desplegables, hoja de instrucciones) usando `openpyxl`.
+### 5.6 Utilidades en `scripts/`
+- `scripts/generar_mapa.py`: lee `data/silver/silver_catastropure.xlsx` (con resolución dinámica de rutas y soporte de argumentos CLI) y genera `visualizacion/mapa_investigacion.html` (visualización con D3).
+- `scripts/generar_plantilla_contratos.py`: construye una plantilla Excel con formato institucional (colores, validaciones de datos desplegables, hoja de instrucciones) usando `openpyxl`.
 
 ---
 
@@ -342,7 +342,7 @@ Todos están en `visualizacion/` y son **páginas estáticas** (HTML + JavaScrip
 | `index.html` | Portada con enlaces a todo | — |
 | `MVP_dashboard_empleabilidad.html` | ENEMDU: mercado laboral, empleabilidad de graduados, sobrecalificación | `static/data.json` |
 | `noticias_economia_dashboard.html` | Sentimiento y cobertura de noticias | `static/noticias/*.json` |
-| `mapa_investigacion.html` | Mapa de investigadores (D3) | datos incrustados (los genera `generar_mapa.py`) |
+| `mapa_investigacion.html` | Mapa de investigadores (D3) | datos incrustados (los genera `scripts/generar_mapa.py`) |
 | `catastro_docentes.html`, `oferta_posgrados.html` | Tableros de Power BI incrustados con `<iframe>` | Power BI Service |
 | `20260611_hoja_de_ruta_...html` | Documento de hoja de ruta | estático |
 | `presentaci_n_ejecutiva_arquitecturamedallon.html` | Presentación de la arquitectura | estático |

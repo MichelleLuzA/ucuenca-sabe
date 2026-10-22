@@ -17,6 +17,9 @@ data/
 *.csv
 *.parquet
 *.sav
+*.pptx
+*.docx
+!Docs_adicionales/**
 
 # === Archivos del Sistema, Cache e IDEs ===
 .ipynb_checkpoints/
