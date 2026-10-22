@@ -1,9 +1,26 @@
+import argparse
+import os
+from pathlib import Path
+import sys
 import pandas as pd
 from openpyxl import Workbook
 from openpyxl.styles import PatternFill, Font, Alignment, Border, Side
-from openpyxl.worksheet.datavalidation import DataValidation  # ¡CORREGIDO!
+from openpyxl.worksheet.datavalidation import DataValidation
 from datetime import datetime
-import os
+
+# Asegurar codificación UTF-8 en stdout de Windows
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+
+ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.append(str(ROOT))
+
+try:
+    from src.config import SILVER_DIR
+    DEFAULT_SALIDA = SILVER_DIR / "matriz_contratos_ucuenca.xlsx"
+except ImportError:
+    DEFAULT_SALIDA = ROOT / "data" / "silver" / "matriz_contratos_ucuenca.xlsx"
 
 # ============================================================
 # CONFIGURACIÓN DE COLORES INSTITUCIONALES UCUENCA
@@ -496,17 +513,28 @@ def crear_hoja_instructivo(wb):
     ws_inst.column_dimensions['G'].width = 20
 
     return ws_inst
-crear_hoja_instructivo(wb)
-# ============================================================
-# 9. GUARDAR ARCHIVO
-# ============================================================
-nombre_archivo = "matriz_contratos_ucuenca.xlsx"
-wb.save(nombre_archivo)
-print(f"✅ Excel generado exitosamente: {nombre_archivo}")
-print(f"📁 Ubicación: {os.path.abspath(nombre_archivo)}")
-print("\n📊 Características del archivo:")
-print("  • 16 columnas (2 servicios por contrato)")
-print("  • Listas desplegables en columnas amarillas")
-print("  • Colores institucionales UCUENCA (#003366)")
-print("  • Formato de montos, fechas y porcentajes")
-print("  • 5 filas de ejemplo para referencia")
+
+
+def main():
+    parser = argparse.ArgumentParser(description="Generador de Plantilla Excel Institucional - UCuenca")
+    parser.add_argument("--output", default=str(DEFAULT_SALIDA), help="Ruta de guardado del archivo .xlsx")
+    args = parser.parse_args()
+
+    crear_hoja_instructivo(wb)
+
+    out_path = Path(args.output)
+    out_path.parent.mkdir(parents=True, exist_ok=True)
+    wb.save(str(out_path))
+
+    print(f"✅ Excel generado exitosamente: {out_path.name}")
+    print(f"📁 Ubicación: {out_path.resolve()}")
+    print("\n📊 Características del archivo:")
+    print("  • 16 columnas (2 servicios por contrato)")
+    print("  • Listas desplegables en columnas amarillas")
+    print("  • Colores institucionales UCUENCA (#003366)")
+    print("  • Formato de montos, fechas y porcentajes")
+    print("  • 5 filas de ejemplo para referencia")
+
+
+if __name__ == "__main__":
+    main()

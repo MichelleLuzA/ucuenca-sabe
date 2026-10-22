@@ -1,31 +1,40 @@
-import pandas as pd
+import argparse
 import os 
 from pathlib import Path
+import sys
+import pandas as pd
 
-# ============================================================
-# CONFIGURACIÓN - Cambia estas rutas según tu proyecto
-# ============================================================
+# Asegurar codificación UTF-8 en stdout de Windows
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
-RUTA_EXCEL = r"C:\Users\michu\Documents\ucuenca-sabe\data\silver\silver_catastropure.xlsx"
-HOJA = None
-CARPETA_SALIDA = r"C:\Users\michu\Documents\ucuenca-sabe\visualizacion"
+# Resolver raíz del proyecto dinámicamente
+ROOT = Path(__file__).resolve().parents[1]
+if str(ROOT) not in sys.path:
+    sys.path.append(str(ROOT))
+
+try:
+    from src.config import PROJECT_ROOT, SILVER_DIR
+    DEFAULT_EXCEL = SILVER_DIR / "silver_catastropure.xlsx"
+    DEFAULT_SALIDA = PROJECT_ROOT / "visualizacion"
+except ImportError:
+    DEFAULT_EXCEL = ROOT / "data" / "silver" / "silver_catastropure.xlsx"
+    DEFAULT_SALIDA = ROOT / "visualizacion"
+
 NOMBRE_HTML = "mapa_investigacion.html"
-
-# ============================================================
-# FIN DE CONFIGURACIÓN
-# ============================================================
 
 def cargar_datos_excel(ruta_excel, hoja=None):
     """Carga el Excel exportado de Power BI."""
-    print(f"📂 Leyendo: {ruta_excel}")
+    ruta_str = str(ruta_excel)
+    print(f"📂 Leyendo: {ruta_str}")
     
-    if ruta_excel.endswith('.csv'):
-        df = pd.read_csv(ruta_excel, sep=';', encoding='utf-8')
+    if ruta_str.endswith('.csv'):
+        df = pd.read_csv(ruta_str, sep=';', encoding='utf-8')
     else:
         if hoja:
-            df = pd.read_excel(ruta_excel, sheet_name=hoja)
+            df = pd.read_excel(ruta_str, sheet_name=hoja)
         else:
-            df = pd.read_excel(ruta_excel)
+            df = pd.read_excel(ruta_str)
     
     print(f"   ✅ {len(df)} registros cargados")
     return df
@@ -497,23 +506,34 @@ def generar_html(csv_texto, total_investigadores, ruta_salida):
 
 
 def main():
+    parser = argparse.ArgumentParser(description="Generador de Mapa de Investigación D3 - UCuenca-SABE!")
+    parser.add_argument("--input", default=str(DEFAULT_EXCEL), help="Ruta al archivo Excel o CSV")
+    parser.add_argument("--hoja", default=None, help="Nombre de la hoja de Excel")
+    parser.add_argument("--output-dir", default=str(DEFAULT_SALIDA), help="Carpeta de salida para el HTML")
+    parser.add_argument("--no-open", action="store_true", help="No abrir automáticamente en el navegador")
+    args = parser.parse_args()
+
     print("=" * 50)
     print("   GENERADOR DE MAPA MENTAL - UCUENCA")
     print("=" * 50)
     print()
     
-    df = cargar_datos_excel(RUTA_EXCEL, HOJA)
+    df = cargar_datos_excel(args.input, args.hoja)
     df_limpio = seleccionar_columnas(df)
     csv_texto = convertir_a_csv_texto(df_limpio)
     total_investigadores = df_limpio['investigador'].nunique()
     print(f"🧮 Total investigadores únicos (para el encabezado): {total_investigadores}")
     
-    os.makedirs(CARPETA_SALIDA, exist_ok=True)
-    ruta_html = os.path.join(CARPETA_SALIDA, NOMBRE_HTML)
+    os.makedirs(args.output_dir, exist_ok=True)
+    ruta_html = os.path.join(args.output_dir, NOMBRE_HTML)
     generar_html(csv_texto, total_investigadores, ruta_html)
     
-    print(f"\n🚀 Abriendo en el navegador...")
-    os.startfile(ruta_html)
+    if not args.no_open:
+        print(f"\n🚀 Abriendo en el navegador...")
+        try:
+            os.startfile(ruta_html)
+        except (AttributeError, OSError):
+            print(f"   ℹ️ Archivo generado en: {ruta_html}")
     
     print("\n✅ ¡Listo! Cada vez que ejecutes este script:")
     print("   1. Lee los datos actualizados")
