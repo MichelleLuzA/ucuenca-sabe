@@ -86,9 +86,15 @@ def _self_test() -> None:
 def scrape() -> pd.DataFrame:
     rows = []
     for url, parser in SOURCES:
-        resp = requests.get(url, headers=HEADERS, timeout=20)
-        resp.raise_for_status()
+        try:
+            resp = requests.get(url, headers=HEADERS, timeout=20)
+            resp.raise_for_status()
+        except requests.RequestException as e:
+            print(f"AVISO: se omite {url}: {e}")
+            continue
         rows.extend(parser(resp.text))
+    if not rows:
+        raise RuntimeError("Ninguna fuente respondió; no hay noticias que guardar")
     df = pd.DataFrame(rows)
     df["fecha_scrape"] = datetime.now(timezone.utc).isoformat(timespec="seconds")
     return df
