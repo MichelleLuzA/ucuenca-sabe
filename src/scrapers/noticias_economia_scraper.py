@@ -96,6 +96,9 @@ def scrape() -> pd.DataFrame:
     if not rows:
         raise RuntimeError("Ninguna fuente respondió; no hay noticias que guardar")
     df = pd.DataFrame(rows)
+    # Las páginas de sección incluyen widgets laterales (lo más leído, deportes...);
+    # solo cuenta lo que vive bajo /economia/.
+    df = df[df["url"].str.contains("/economia/")]
     df["fecha_scrape"] = datetime.now(timezone.utc).isoformat(timespec="seconds")
     return df
 
@@ -118,6 +121,7 @@ def guardar(df_nuevo: pd.DataFrame) -> pd.DataFrame:
     else:
         df_total = df_nuevo
     df_total = df_total.drop_duplicates(subset="url", keep="first")
+    df_total = df_total[df_total["url"].str.contains("/economia/")]  # limpia histórico contaminado
     # Una request extra solo por noticia sin fecha (las nuevas de esta corrida o
     # las que fallaron antes), no por todo el histórico.
     if "fecha_publicacion" not in df_total:
