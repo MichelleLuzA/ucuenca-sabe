@@ -27,3 +27,6 @@ __pycache__/
 *.pyc
 .vscode/
 .idea/
+# === Cachés de Power BI (contienen datos importados; protección de datos personales) ===
+*.abf
+**/.pbi/cache.abf
